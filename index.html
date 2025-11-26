@@ -1,269 +1,415 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英泰自動控制行 - 電子報價單系統</title>
-    <style>
-        /* 基礎設定 */
-        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; padding: 20px; background-color: #f0f0f5; }
-        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        
-        /* 輸入介面樣式 */
-        input, textarea { border: 1px solid #ddd; padding: 5px; width: 100%; box-sizing: border-box; font-size: 16px; }
-        .header-info input { margin-bottom: 5px; }
-        
-        /* 按鈕樣式 (列印時會隱藏) */
-        .no-print { margin-bottom: 20px; padding: 15px; background: #e8f4ff; border-radius: 8px; border: 1px solid #b6d4fe; }
-        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; margin-right: 10px; }
-        button:hover { background-color: #0056b3; }
-        button.delete-btn { background-color: #dc3545; padding: 5px 10px; font-size: 14px; }
-        button.clear-sign { background-color: #6c757d; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>報價單 / 現場簽名 PDF 產生器</title>
 
-        /* 表格樣式 */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: center; vertical-align: middle; }
-        th { background-color: #f2f2f2; }
-        .text-left { text-align: left; }
-        
-        /* 簽名板 */
-        #signature-pad { border: 2px dashed #ccc; background: #fffbe6; touch-action: none; cursor: crosshair; }
-        
-        /* --- 報價單專屬排版 (依照原始 PDF) --- */
-        .company-title { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 10px; text-decoration: underline; }
-        .company-details { text-align: center; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-        .bill-title { font-size: 24px; text-align: center; border: 2px solid #000; display: inline-block; padding: 5px 30px; margin: 0 auto; }
-        .bill-title-wrapper { text-align: center; margin: 20px 0; }
-        
-        .client-section { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: flex-end; }
-        .client-info { width: 60%; }
-        .date-info { width: 30%; text-align: right; }
+<!-- Google font (可換) -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
 
-        .terms-section { margin-top: 20px; font-size: 14px; }
-        .terms-section p { margin: 5px 0; }
-        
-        .footer-sign { margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .sign-box { width: 45%; border-bottom: 1px solid #000; padding-bottom: 5px; }
-        .sign-img { max-height: 80px; display: block; }
-
-        /* --- 列印模式 (轉 PDF 時的樣子) --- */
-        @media print {
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; padding: 0; margin: 0; width: 100%; max-width: 100%; }
-            .no-print, .delete-btn { display: none !important; }
-            input, textarea { border: none; background: transparent; padding: 0; font-family: inherit; resize: none; }
-            /* 強制顯示邊框顏色 */
-            th, td { border: 1px solid #000 !important; -webkit-print-color-adjust: exact; }
-            #signature-pad { display: none; } /* 隱藏畫布，改顯示圖片 */
-            #signature-display { display: block !important; }
-        }
-    </style>
+<style>
+  body { font-family: "Noto Sans TC", sans-serif; margin: 12px; color:#111; }
+  .container { max-width:980px; margin:0 auto; }
+  h1 { margin:8px 0 16px; font-size:20px; }
+  .flex { display:flex; gap:12px; align-items:center; }
+  label { display:block; font-size:13px; margin-bottom:6px; color:#333 }
+  input[type="text"], input[type="date"], input[type="number"], textarea, select {
+    width:100%; padding:8px; box-sizing:border-box; border:1px solid #ccc; border-radius:6px;
+  }
+  .card { padding:14px; border:1px solid #e3e3e3; border-radius:10px; background:#fff; margin-bottom:12px; }
+  .items-table { width:100%; border-collapse:collapse; margin-top:8px; }
+  .items-table th, .items-table td { border:1px solid #ddd; padding:8px; text-align:left; font-size:13px; }
+  .items-table th { background:#f6f6f6; }
+  button { background:#0b69ff; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; }
+  button.ghost { background:#eee; color:#333; }
+  .right { text-align:right }
+  #signature-pad { border:1px solid #ccc; border-radius:8px; background:white; width:100%; height:160px; }
+  /* 報表樣式（用於轉PDF） */
+  #invoice-preview { width:210mm; min-height:297mm; padding:18mm; box-sizing:border-box; background:white; color:#000; font-size:13px; display:none; }
+  .inv-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+  .inv-head h2{ margin:0; }
+  .inv-items { width:100%; border-collapse:collapse; margin-top:8px; }
+  .inv-items th, .inv-items td { border:1px solid #aaa; padding:6px; }
+  .small { font-size:12px; color:#666; }
+  @media (min-width:900px){ #invoice-preview { display:block; } }
+  /* 小螢幕不顯示預覽時用 */
+  @media (max-width:900px){ #invoice-preview { display:none; } }
+</style>
 </head>
 <body>
-
 <div class="container">
-    <div class="no-print">
-        <h3>操作面板</h3>
-        <p>1. 輸入客戶資料與明細 -> 2. 請客戶在下方簽名 -> 3. 點擊生成報價單</p>
-        <button onclick="addRow()">+ 新增項目</button>
-        <button onclick="printPDF()">🖨️ 生成報價單 (PDF)</button>
+  <h1>報價單產生器（現場簽名 / 直接產生 PDF）</h1>
+
+  <div class="card">
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:220px;">
+        <label>公司名稱</label>
+        <input id="company-name" type="text" value="英泰自動控制行">
+      </div>
+      <div style="width:200px;">
+        <label>統編 / 電話</label>
+        <input id="company-info" type="text" value="統編:45229579 / 0935-435757">
+      </div>
+      <div style="width:200px;">
+        <label>報價單日期</label>
+        <input id="doc-date" type="date">
+      </div>
     </div>
 
-    <div class="company-title">英泰自動控制行</div>
-    <div class="company-details">
-        地址:彰化縣員林鎮員集路2段493巷4弄10號<br>
-        電話:04-8356923 &nbsp; 傳真:04-8341151<br>
-        手機:0935-435757 &nbsp; 統編:45229579
+    <hr style="margin:12px 0; border:none; border-top:1px solid #eee;">
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:250px;">
+        <label>TO（客戶）</label>
+        <input id="to-customer" type="text" placeholder="客戶名稱或公司">
+      </div>
+      <div style="width:150px;">
+        <label>聯絡人</label>
+        <input id="contact-person" type="text" placeholder="承辦人">
+      </div>
+      <div style="width:150px;">
+        <label>電話</label>
+        <input id="contact-phone" type="text" placeholder="手機">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <strong>維修 / 報價明細</strong>
+      <div>
+        <button id="add-row">＋ 新增項目</button>
+        <button id="clear-rows" class="ghost">清空項目</button>
+      </div>
     </div>
 
-    <div class="bill-title-wrapper">
-        <div class="bill-title">報 價 單</div>
+    <table class="items-table" id="items-table">
+      <thead>
+        <tr><th style="width:34%">品名 / 規格</th><th style="width:10%">數量</th><th style="width:16%">單價</th><th style="width:16%">小計</th><th style="width:24%">備註</th><th style="width:4%"></th></tr>
+      </thead>
+      <tbody id="items-body">
+        <!-- dynamic -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="right small">小計</td>
+          <td id="sum-sub" class="right">0.00</td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td colspan="3" class="right small">營業稅 (5%)</td>
+          <td id="tax" class="right">0.00</td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td colspan="3" class="right"><strong>總計</strong></td>
+          <td id="sum-total" class="right"><strong>0.00</strong></td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="card">
+    <label>備註（印在報價單上）</label>
+    <textarea id="notes" rows="3" placeholder="例如：本報價單有效期 1 個月；不含營業稅等。"></textarea>
+
+    <div style="margin-top:12px;">
+      <label>客戶簽名（請在下方簽名框簽名）</label>
+      <canvas id="signature-pad"></canvas>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button id="clear-sign">清除簽名</button>
+        <button id="generate-pdf">產生 PDF 並下載</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="small">提示：可在上方欄位輸入後直接按「產生 PDF 並下載」。此頁面不會自動傳送資料。</p>
+
+  <!-- 預覽（這個區塊會被轉成 PDF） -->
+  <div id="invoice-preview" class="card" style="background:white;">
+    <div class="inv-head">
+      <div>
+        <h2 id="inv-company">英泰自動控制行</h2>
+        <div class="small" id="inv-company-info">地址 / 電話 / 統編</div>
+      </div>
+      <div>
+        <div>報價單</div>
+        <div class="small" id="inv-date">2025-11-26</div>
+      </div>
     </div>
 
-    <div class="client-section">
-        <div class="client-info">
-            TO: <input type="text" placeholder="輸入客戶名稱" value="" style="font-size: 18px; font-weight: bold; width: 80%; display: inline-block; border-bottom: 1px solid #000;">
-            <br><br>
-            關於: <input type="text" placeholder="例如：可程式控制器一事" value="可程式控制器一事" style="width: 80%; border-bottom: 1px solid #000;">
-        </div>
-        <div class="date-info">
-            日期: <input type="text" id="dateField" value="">
-        </div>
+    <div style="margin-bottom:6px;">
+      <strong>TO：</strong> <span id="inv-to">客戶名稱</span><br>
+      <span class="small">聯絡人：<span id="inv-contact">承辦人</span>　電話：<span id="inv-phone">電話</span></span>
     </div>
 
-    <table id="quoteTable">
-        <thead>
-            <tr>
-                <th style="width: 5%">項次</th>
-                <th style="width: 25%">名 稱</th>
-                <th style="width: 20%">規 格</th>
-                <th style="width: 8%">數量</th>
-                <th style="width: 12%">單 價</th>
-                <th style="width: 15%">總 價</th>
-                <th style="width: 10%">備 註</th>
-                <th class="no-print" style="width: 5%">操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td><input type="text" placeholder="品名"></td>
-                <td><input type="text" placeholder="規格"></td>
-                <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
-                <td><input type="number" class="price" placeholder="0" oninput="calcTotal(this)"></td>
-                <td><input type="text" class="total" readonly value="0"></td>
-                <td><input type="text"></td>
-                <td class="no-print"><button class="delete-btn" onclick="deleteRow(this)">刪</button></td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" style="text-align: right; font-weight: bold;">合計:</td>
-                <td colspan="2"><input type="text" id="grandTotal" style="text-align: center; font-weight: bold;" readonly value="0"></td>
-                <td></td>
-                <td class="no-print"></td>
-            </tr>
-        </tfoot>
+    <table class="inv-items" id="inv-items">
+      <thead>
+        <tr><th>項次</th><th>品名 / 規格</th><th>數量</th><th>單價</th><th>小計</th><th>備註</th></tr>
+      </thead>
+      <tbody>
+        <!-- generated -->
+      </tbody>
     </table>
 
-    <div class="terms-section">
-        <p><strong>說明:</strong></p>
-        <p>1. 本報價單有效日期: 1個月內</p>
-        <p>2. 本報價不含營業稅</p>
-        <p>3. 本報價含交通費及住宿費</p>
-        <p>4. 訂貨交期: 約15日</p>
-        <p>5. 如欲訂購請簽名回傳確認</p>
+    <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+      <table style="border-collapse:collapse">
+        <tr><td class="small">小計</td><td id="inv-sub" style="padding-left:12px; text-align:right; min-width:120px">0.00</td></tr>
+        <tr><td class="small">營業稅 5%</td><td id="inv-tax" style="padding-left:12px; text-align:right">0.00</td></tr>
+        <tr><td><strong>總計</strong></td><td id="inv-total" style="padding-left:12px; text-align:right"><strong>0.00</strong></td></tr>
+      </table>
     </div>
 
-    <div class="footer-sign">
-        <div class="sign-box">
-            <span>客戶簽名:</span>
-            <img id="signature-display" class="sign-img" style="display:none;" />
-            <div class="no-print">
-                <canvas id="signature-pad" width="300" height="100"></canvas>
-                <br>
-                <button type="button" class="clear-sign" onclick="clearSignature()" style="margin-top:5px; font-size:12px; padding: 5px;">清除重簽</button>
-            </div>
-        </div>
-        
-        <div class="sign-box">
-            承辦人: <input type="text" value="" placeholder="輸入承辦人" style="display:inline; width: 60%; border:none;">
-        </div>
+    <div style="margin-top:14px;">
+      <div class="small">說明：</div>
+      <div class="small" id="inv-notes">1. 本報價單有效日期: 1 個月內；2. 本報價不含營業稅；3. 本報價含交通費及住宿費；4. 訂貨交期:約 15日；5. 如欲訂購請簽名回傳確認。</div>
     </div>
+
+    <div style="margin-top:26px; display:flex; gap:18px;">
+      <div style="flex:1">
+        <div class="small">客戶簽名：</div>
+        <div id="inv-sign" style="border:1px solid #ccc; min-height:80px; border-radius:6px; background:#fff"></div>
+      </div>
+      <div style="width:240px;">
+        <div class="small">承辦人：</div>
+        <div style="height:80px; border:1px dashed #ddd; border-radius:6px; padding:8px;">
+          <div id="inv-contact-person" class="small">承辦人： </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- html2pdf (基於 html2canvas + jsPDF) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script>
-    // 初始化日期 
-    const today = new Date();
-    const year = today.getFullYear() - 1911; // 民國年
-    document.getElementById('dateField').value = `${year}年${today.getMonth() + 1}月${today.getDate()}日`;
+(function(){
+  // DOM elements
+  const itemsBody = document.getElementById('items-body');
+  const addRowBtn = document.getElementById('add-row');
+  const clearRowsBtn = document.getElementById('clear-rows');
+  const sumSubEl = document.getElementById('sum-sub');
+  const taxEl = document.getElementById('tax');
+  const totalEl = document.getElementById('sum-total');
 
-    // 簽名板功能
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
+  const invPreview = document.getElementById('invoice-preview');
+  const invItemsTbody = document.querySelector('#inv-items tbody');
+  const invSub = document.getElementById('inv-sub');
+  const invTax = document.getElementById('inv-tax');
+  const invTotal = document.getElementById('inv-total');
+  const invTo = document.getElementById('inv-to');
+  const invContact = document.getElementById('inv-contact');
+  const invPhone = document.getElementById('inv-phone');
+  const invDate = document.getElementById('inv-date');
+  const invNotes = document.getElementById('inv-notes');
+  const invSign = document.getElementById('inv-sign');
+  const invCompany = document.getElementById('inv-company');
+  const invCompanyInfo = document.getElementById('inv-company-info');
+  const invContactPerson = document.getElementById('inv-contact-person');
 
-    // 支援滑鼠與觸控
-    function getPos(canvas, evt) {
-        const rect = canvas.getBoundingClientRect();
-        const x = (evt.clientX || evt.touches[0].clientX) - rect.left;
-        const y = (evt.clientY || evt.touches[0].clientY) - rect.top;
-        return { x, y };
+  // signature pad
+  const canvas = document.getElementById('signature-pad');
+  function resizeCanvasToDisplaySize(canvas) {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+    canvas.width = w * ratio;
+    canvas.height = h * ratio;
+    canvas.getContext("2d").scale(ratio, ratio);
+  }
+  resizeCanvasToDisplaySize(canvas);
+  window.addEventListener('resize', ()=> resizeCanvasToDisplaySize(canvas));
+  const signaturePad = new SignaturePad(canvas, {
+    backgroundColor: 'rgba(255,255,255,0)',
+    penColor: 'black'
+  });
+
+  document.getElementById('clear-sign').addEventListener('click', ()=> {
+    signaturePad.clear();
+  });
+
+  // helpers
+  function formatNumber(n){
+    // 以數字運算並固定兩位小數（避免浮點誤差）
+    const v = Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+    return v.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function createRow(data){
+    const tr = document.createElement('tr');
+
+    const tdName = document.createElement('td');
+    const nameInput = document.createElement('input');
+    nameInput.type='text'; nameInput.value = data?.name || '';
+    tdName.appendChild(nameInput);
+
+    const tdQty = document.createElement('td');
+    const qtyInput = document.createElement('input');
+    qtyInput.type='number'; qtyInput.min='0'; qtyInput.step='1'; qtyInput.value = data?.qty ?? 1;
+    tdQty.appendChild(qtyInput);
+
+    const tdUnit = document.createElement('td');
+    const unitInput = document.createElement('input');
+    unitInput.type='number'; unitInput.min='0'; unitInput.step='0.01'; unitInput.value = data?.unit ?? 0;
+    tdUnit.appendChild(unitInput);
+
+    const tdSubtotal = document.createElement('td');
+    tdSubtotal.className='right';
+    tdSubtotal.textContent = formatNumber((qtyInput.value||0) * (unitInput.value||0));
+
+    const tdNote = document.createElement('td');
+    const noteInput = document.createElement('input');
+    noteInput.type='text'; noteInput.value = data?.note || '';
+    tdNote.appendChild(noteInput);
+
+    const tdDel = document.createElement('td');
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '刪除'; delBtn.className='ghost';
+    tdDel.appendChild(delBtn);
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdQty);
+    tr.appendChild(tdUnit);
+    tr.appendChild(tdSubtotal);
+    tr.appendChild(tdNote);
+    tr.appendChild(tdDel);
+
+    function recompute(){
+      const qty = parseFloat(qtyInput.value) || 0;
+      const unit = parseFloat(unitInput.value) || 0;
+      const sub = Math.round((qty * unit + Number.EPSILON) * 100) / 100;
+      tdSubtotal.textContent = formatNumber(sub);
+      computeTotals();
     }
 
-    // 開始畫
-    const startDraw = (e) => {
-        e.preventDefault();
-        isDrawing = true;
-        const pos = getPos(canvas, e);
-        ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y);
+    qtyInput.addEventListener('input', recompute);
+    unitInput.addEventListener('input', recompute);
+    delBtn.addEventListener('click', ()=> { tr.remove(); computeTotals(); });
+
+    itemsBody.appendChild(tr);
+    recompute();
+  }
+
+  function computeTotals(){
+    // 小計
+    let sub = 0;
+    Array.from(itemsBody.querySelectorAll('tr')).forEach(tr=>{
+      const qty = parseFloat(tr.querySelector('input[type="number"]').value) || 0;
+      const unit = parseFloat(tr.querySelectorAll('input[type="number"]')[1].value) || 0;
+      // careful arithmetic
+      const line = Math.round((qty * unit + Number.EPSILON) * 100) / 100;
+      sub += line;
+    });
+    sub = Math.round((sub + Number.EPSILON) * 100) / 100;
+    const tax = Math.round((sub * 0.05 + Number.EPSILON) * 100) / 100;
+    const total = Math.round((sub + tax + Number.EPSILON) * 100) / 100;
+
+    sumSubEl.textContent = formatNumber(sub);
+    taxEl.textContent = formatNumber(tax);
+    totalEl.textContent = formatNumber(total);
+  }
+
+  // events
+  addRowBtn.addEventListener('click', ()=> createRow());
+  clearRowsBtn.addEventListener('click', ()=> {
+    itemsBody.innerHTML = '';
+    computeTotals();
+  });
+
+  // create one default row
+  createRow({name:'維修工時', qty:1, unit:1500, note:'人工'});
+  createRow({name:'耗材', qty:1, unit:300, note:'更換零件'});
+
+  // generate PDF
+  document.getElementById('generate-pdf').addEventListener('click', async ()=>{
+    // 更新預覽內容
+    invCompany.textContent = document.getElementById('company-name').value || '公司名稱';
+    invCompanyInfo.textContent = document.getElementById('company-info').value || '';
+    invTo.textContent = document.getElementById('to-customer').value || '';
+    invContact.textContent = document.getElementById('contact-person').value || '';
+    invPhone.textContent = document.getElementById('contact-phone').value || '';
+    const dt = document.getElementById('doc-date').value;
+    invDate.textContent = dt ? dt : new Date().toLocaleDateString();
+
+    // fill items
+    invItemsTbody.innerHTML = '';
+    let index = 1;
+    let sum = 0;
+    Array.from(itemsBody.querySelectorAll('tr')).forEach(tr=>{
+      const name = tr.querySelector('td:nth-child(1) input').value || '';
+      const qty = parseFloat(tr.querySelector('td:nth-child(2) input').value) || 0;
+      const unit = parseFloat(tr.querySelector('td:nth-child(3) input').value) || 0;
+      const note = tr.querySelector('td:nth-child(5) input').value || '';
+      const subtotal = Math.round((qty * unit + Number.EPSILON) * 100) / 100;
+      sum = Math.round((sum + subtotal + Number.EPSILON) * 100) / 100;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `<td style="width:6%">${index}</td>
+                       <td>${escapeHtml(name)}</td>
+                       <td style="text-align:right">${qty}</td>
+                       <td style="text-align:right">${formatNumber(unit)}</td>
+                       <td style="text-align:right">${formatNumber(subtotal)}</td>
+                       <td>${escapeHtml(note)}</td>`;
+      invItemsTbody.appendChild(row);
+      index++;
+    });
+
+    const tax = Math.round((sum * 0.05 + Number.EPSILON) * 100) / 100;
+    const total = Math.round((sum + tax + Number.EPSILON) * 100) / 100;
+
+    invSub.textContent = formatNumber(sum);
+    invTax.textContent = formatNumber(tax);
+    invTotal.textContent = formatNumber(total);
+
+    invNotes.textContent = document.getElementById('notes').value || invNotes.textContent;
+
+    // signature: 把 canvas 轉成圖片放到 invSign
+    invSign.innerHTML = '';
+    if (!signaturePad.isEmpty()){
+      const dataUrl = signaturePad.toDataURL('image/png');
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.style.maxWidth = '100%';
+      img.style.maxHeight = '120px';
+      invSign.appendChild(img);
+    } else {
+      invSign.textContent = '(未簽名)';
+      invSign.style.color = '#666';
+    }
+
+    invContactPerson.textContent = document.getElementById('contact-person').value || '';
+
+    // 確保預覽塊可視且以 A4 尺寸匯出
+    // 使用 html2pdf
+    const opt = {
+      margin: [10, 10, 10, 10], // mm
+      filename: (document.getElementById('to-customer').value || '報價單') + '_' + (document.getElementById('doc-date').value || new Date().toISOString().slice(0,10)) + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS:true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // 畫圖中
-    const draw = (e) => {
-        if (!isDrawing) return;
-        e.preventDefault();
-        const pos = getPos(canvas, e);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-    };
+    // briefly show preview block (in case hidden on mobile)
+    invPreview.style.display = 'block';
+    // generate and download
+    html2pdf().set(opt).from(invPreview).save().then(()=>{
+      // optional: hide preview again on small screens
+      //invPreview.style.display = window.innerWidth >= 900 ? 'block' : 'none';
+    });
+  });
 
-    // 結束畫圖
-    const endDraw = () => { isDrawing = false; };
-
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('touchstart', startDraw);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', endDraw);
-
-    function clearSignature() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        document.getElementById('signature-display').src = "";
-    }
-
-    // 自動計算功能 
-    function calcTotal(element) {
-        const row = element.closest('tr');
-        const qty = parseFloat(row.querySelector('.qty').value) || 0;
-        const price = parseFloat(row.querySelector('.price').value) || 0;
-        const total = qty * price;
-        row.querySelector('.total').value = Math.round(total);
-        calcGrandTotal();
-    }
-
-    function calcGrandTotal() {
-        let sum = 0;
-        document.querySelectorAll('.total').forEach(el => {
-            sum += parseFloat(el.value) || 0;
-        });
-        document.getElementById('grandTotal').value = sum;
-    }
-
-    // 新增列
-    function addRow() {
-        const tbody = document.querySelector('#quoteTable tbody');
-        const rowCount = tbody.rows.length + 1;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${rowCount}</td>
-            <td><input type="text"></td>
-            <td><input type="text"></td>
-            <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
-            <td><input type="number" class="price" placeholder="0" oninput="calcTotal(this)"></td>
-            <td><input type="text" class="total" readonly value="0"></td>
-            <td><input type="text"></td>
-            <td class="no-print"><button class="delete-btn" onclick="deleteRow(this)">刪</button></td>
-        `;
-        tbody.appendChild(tr);
-    }
-
-    // 刪除列
-    function deleteRow(btn) {
-        const row = btn.closest('tr');
-        row.remove();
-        // 重新編號
-        const rows = document.querySelectorAll('#quoteTable tbody tr');
-        rows.forEach((r, index) => {
-            r.cells[0].innerText = index + 1;
-        });
-        calcGrandTotal();
-    }
-
-    // 列印/轉PDF 功能
-    function printPDF() {
-        // 1. 把簽名板的內容轉成圖片，這樣列印時才看得到
-        const dataUrl = canvas.toDataURL();
-        // 只有當有簽名時才設定圖片
-        // 簡單判斷畫布是否為空（這裡簡單處理，只要按列印就轉圖）
-        document.getElementById('signature-display').src = dataUrl;
-
-        // 2. 呼叫瀏覽器列印
-        window.print();
-    }
+  // small helper to escape html for placing into table cells
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
+  }
+})();
 </script>
-
 </body>
 </html>
