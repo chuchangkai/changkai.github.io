@@ -18,13 +18,13 @@
         
         /* --- 表頭資訊 --- */
         .header { text-align: center; position: relative; margin-bottom: 20px; }
-        .en-title { font-size: 18px; font-weight: bold; letter-spacing: 2px; }
+        .en-title { font-size: 25px; font-weight: bold; letter-spacing: 2px; }
         
         /* 修改點：標題加大 */
-        .ch-title { font-size: 34px; font-weight: 900; margin: 5px 0; text-decoration: underline; letter-spacing: 2px; }
+        .ch-title { font-size: 30px; font-weight: 900; margin: 5px 0; letter-spacing: 2px; }
         
-        .company-info { font-size: 13px; line-height: 1.5; }
-        .order-no { position: absolute; right: 0; top: 0; font-size: 14px; text-align: right; }
+        .company-info { font-size: 20px; line-height: 1.5; }
+        .order-no { position: absolute; right: 0; top: 0; font-size: 20px; text-align: right; }
         .order-no input { width: 100px; text-align: center; font-weight: bold; color: red; border: 1px solid #ccc; }
 
         /* --- 主表格結構 --- */
@@ -113,13 +113,13 @@
 
     <div class="header">
         <div class="order-no">
-            維修單號: <input type="text" value="003502">
+            維修單號: <input type="text" id="orderNo" value="">
         </div>
         <div class="en-title">INTAI AUTO CONTROL</div>
         <div class="ch-title">英泰自動控制行</div>
         <div class="company-info">
-            地址:彰化縣員林市員集路2段493巷4弄10號<br>
-            電話:04-8356923 &nbsp; 手機:0935-435757 &nbsp; 傳真:04-8341151 &nbsp; 統編:45229579
+            地址：彰化縣員林市員集路2段493巷4弄10號<br>
+            電話：04-8356923 &nbsp; 手機：0935-435757 &nbsp; 傳真：04-8341151 &nbsp; 統編：45229579
         </div>
     </div>
 
@@ -221,6 +221,13 @@
 <script>
     // 1. 初始化日期
     document.getElementById('dateField').valueAsDate = new Date();
+
+    // 自動產生維修單號（今天日期格式）
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('orderNo').value = `${year}${month}${day}`;
 
     // 2. 自動計算邏輯
     function calcTotal(input) {
