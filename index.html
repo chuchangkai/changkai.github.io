@@ -1,506 +1,384 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英泰自動控制行 - 數位維修單</title>
+    <title>暈碳 Carb Coma - 餐後嗜睡的科學真相</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* =========================================
-           1. 視覺系統與配色 (Color & Variables)
-           ========================================= */
-        :root {
-            --primary-blue: #007AFF;
-            --primary-grad: linear-gradient(135deg, #007AFF 0%, #0055b3 100%);
-            --accent-green: #34C759;
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --card-bg: rgba(255, 255, 255, 0.5);
-            --header-bg: rgba(235, 245, 255, 0.6); /* 淺藍色區塊背景 */
-            --text-main: #1d1d1f;
-            --shadow-soft: 0 8px 30px rgba(0,0,0,0.12);
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-            color: var(--text-main);
-            /* 背景：柔和多彩極光，不刺眼 */
-            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            min-height: 100vh;
-            -webkit-print-color-adjust: exact; /* 強制列印背景色 */
-            print-color-adjust: exact;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000;
+            color: #f5f5f7;
+            overflow-x: hidden;
         }
-
-        /* =========================================
-           2. 主體玻璃容器 (The Glass Paper)
-           ========================================= */
-        .paper {
-            width: 210mm;
-            min-height: 297mm;
-            margin: 0 auto;
-            padding: 8mm 8mm;
-            box-sizing: border-box;
-            
-            /* Liquid Glass 質感 */
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 20px;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(255, 255, 255, 1);
-            position: relative;
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
         }
-
-        /* =========================================
-           3. 抬頭設計 (Header) - 公司大，維修單小
-           ========================================= */
-        .header {
-            border-bottom: 2px solid rgba(0,0,0,0.05);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            position: relative;
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+        .img-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 100%);
         }
-
-        .company-block h1 {
-            margin: 0;
-            font-size: 30px; /* 公司名加大 */
-            font-weight: 800;
-            background: linear-gradient(45deg, #007AFF, #00C6FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .en-title {
-            font-size: 14px;
-            color: #888;
-            font-weight: 600;
-            letter-spacing: 3px;
-            margin-top: 5px;
-            text-transform: uppercase;
-        }
-
-        .doc-badge {
-            background: var(--primary-blue);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,122,255,0.3);
-            display: inline-block;
-        }
-
-        .company-info {
-            margin-top: 15px;
-            font-size: 15px; /* 字體加大 */
-            color: #444;
-            line-height: 1.8;
-            font-weight: 500;
-            background: rgba(255,255,255,0.5);
-            padding: 10px;
-            border-radius: 10px;
-        }
-        
-        .info-icon { margin-right: 5px; font-size: 16px; }
-
-        .meta-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .meta-box {
-            background: #f2f2f7;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-        }
-        .meta-box input { background: transparent; width: 110px; text-align: right; font-weight: bold; padding: 0;}
-
-        /* =========================================
-           4. 彩色區塊卡片 (Colorful Sections)
-           ========================================= */
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.8);
-            /* 讓每個區塊有點顏色 */
-            background: linear-gradient(to bottom right, rgba(235, 245, 255, 0.7), rgba(255, 255, 255, 0.4));
-        }
-
-        /* 特別為故障區塊換個色調 */
-        .section-card.issue-card {
-            background: linear-gradient(to bottom right, rgba(255, 240, 240, 0.7), rgba(255, 255, 255, 0.4));
-        }
-
-        .card-title {
-            font-size: 14px;
-            color: #555;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-        }
-        .card-title::before {
-            content: '';
-            display: inline-block;
-            width: 4px; height: 16px;
-            background: var(--primary-blue);
-            margin-right: 8px;
-            border-radius: 2px;
-        }
-
-        /* 輸入框樣式 */
-        input, textarea {
-            width: 100%;
-            border: 1px solid rgba(0,0,0,0.05);
-            background: rgba(255,255,255,0.6);
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: inherit;
-            color: #333;
-            transition: all 0.3s;
-            box-sizing: border-box;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(0,122,255,0.2);
-            border-color: var(--primary-blue);
-        }
-
-        /* 客戶資料 Grid */
-        .client-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        /* 故障表格 */
-        .desc-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        .desc-table td.label { 
-            width: 80px; font-weight: bold; color: #444; vertical-align: top; padding-top: 10px; 
-            text-align: right; padding-right: 15px;
-        }
-        .desc-table textarea { min-height: 50px; }
-
-        /* 零件表 */
-        .parts-container {
-            background: white;
-            border-radius: 16px;
-            padding: 5px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .parts-table { width: 100%; border-collapse: collapse; }
-        .parts-table th {
-            background: #f2f2f7;
-            color: #555;
-            padding: 10px;
-            font-size: 13px;
-            text-align: center;
-        }
-        .parts-table th:first-child { border-radius: 10px 0 0 10px; }
-        .parts-table th:last-child { border-radius: 0 10px 10px 0; }
-        
-        .parts-table td { padding: 5px; }
-        .parts-table input { text-align: center; background: transparent; border: none; border-bottom: 1px dashed #ddd; border-radius: 0; }
-        .parts-table input:focus { background: #f9f9f9; border-bottom: 1px solid var(--primary-blue); box-shadow: none; }
-        
-        .total-area {
-            text-align: right;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            border-top: 2px dashed #eee;
-            margin-top: 10px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        #grandTotal { 
-            width: 150px; font-size: 24px; color: var(--primary-blue); 
-            background: transparent; border: none; text-align: right;
-            font-weight: 800;
-        }
-
-        /* 簽名區 */
-        .footer { display: flex; justify-content: space-between; margin-top: 30px; gap: 20px; }
-        .sign-box {
-            flex: 1;
-            background: rgba(255,255,255,0.5);
-            border: 2px solid #e5e5ea;
-            border-radius: 12px;
-            padding: 15px;
-            position: relative;
-        }
-        .sign-title { font-size: 14px; font-weight: bold; color: #555; margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px;}
-        .sign-line { border-bottom: 1px dashed #aaa; height: 40px; margin-top: 10px;}
-
-        /* 按鈕 */
-        .btn-del { 
-            color: red; cursor: pointer; font-weight: bold; font-size: 18px; 
-            display: flex; justify-content: center; width: 30px;
-        }
-        .toolbar { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 15px; }
-        .btn-float {
-            background: var(--primary-grad);
-            color: white; border: none; padding: 12px 24px;
-            border-radius: 30px; font-size: 16px; font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,122,255,0.3);
-            cursor: pointer; transition: transform 0.2s;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .btn-float:hover { transform: translateY(-2px); }
-
-        /* =========================================
-           5. 彩色 PDF 列印設定 (Print)
-           ========================================= */
-        @media print {
-            body { 
-                background: white; 
-                -webkit-print-color-adjust: exact !important; /* 關鍵：強制列印色彩 */
-                print-color-adjust: exact !important;
-            }
-            .toolbar, .btn-del { display: none !important; }
-            
-            .paper {
-                box-shadow: none; margin: 0; width: 100%; border: none;
-                /* 列印時保持淡色背景，增加質感 */
-                background: white;
-            }
-
-            /* 確保區塊的顏色被印出來 */
-            .section-card {
-                background-color: rgba(235, 245, 255, 0.4) !important;
-                border: 1px solid #ddd !important;
-            }
-            .section-card.issue-card {
-                background-color: rgba(255, 240, 240, 0.4) !important;
-            }
-            .parts-table th { background-color: #f2f2f7 !important; }
-
-            /* 輸入框去框線 */
-            input, textarea { 
-                border: none !important; 
-                background: transparent !important; 
-                box-shadow: none !important;
-            }
-            
-            /* 公司名漸層轉純藍 (防止老印表機印不出漸層) */
-            .company-block h1 { 
-                background: none; 
-                -webkit-text-fill-color: #007AFF; 
-                color: #007AFF; 
-            }
+        .myth-gradient {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
         }
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-gray-700 selection:text-white">
 
-    <div class="toolbar">
-        <button class="btn-float" onclick="addPartRow()"><span>+</span> 新增項目</button>
-        <button class="btn-float" style="background: var(--accent-green);" onclick="printWithFilename()"><span>🖨</span> 彩色 PDF</button>
-    </div>
+    <!-- 頂部導航 -->
+    <nav class="fixed w-full z-50 top-0 bg-black/80 backdrop-blur-lg border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-sm font-bold text-gray-400">
+            <a href="#hero" class="hover:text-white transition text-lg tracking-wider"> Carb Coma Research</a>
+            <div class="hidden md:flex space-x-10">
+                <a href="#what" class="hover:text-white transition">WHAT 定義</a>
+                <a href="#when" class="hover:text-white transition">WHEN 時機</a>
+                <a href="#who" class="hover:text-white transition">WHO 族群</a>
+                <a href="#why" class="hover:text-white transition">WHY 機制</a>
+                <a href="#how" class="hover:text-white transition">HOW 破解</a>
+            </div>
+        </div>
+    </nav>
 
-    <div class="paper">
+    <!-- 首圖英雄區 (Hero) -->
+    <section id="hero" class="relative h-screen flex flex-col justify-center items-center text-center px-4">
+        <div class="absolute inset-0 z-0">
+            <img src="images/hero.jpg" alt="Tired at work" class="w-full h-full object-cover opacity-30">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black"></div>
+        </div>
         
-        <!-- 表頭 -->
-        <div class="header">
-            <div class="header-top">
-                <div class="company-block">
-                    <h1>英泰自動控制行</h1>
-                    <div class="en-title">INTAI AUTO CONTROL</div>
+        <div class="relative z-10 max-w-7xl reveal mt-20 w-full">
+            <div class="text-7xl md:text-8xl mb-8 animate-bounce">😴🔋</div>
+            <h2 class="text-gray-300 text-2xl md:text-4xl font-bold mb-6 tracking-widest">Carb Coma</h2>
+            
+            <!-- 標題漸層改為更淡、明度更高的顏色 (blue-200 -> purple-200 -> pink-200) 確保在黑底超清晰 -->
+            <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 whitespace-normal md:whitespace-nowrap drop-shadow-lg">
+                午餐後的自動關機
+            </h1>
+            
+            <p class="text-2xl md:text-3xl text-gray-300 font-medium leading-relaxed max-w-4xl mx-auto">
+                你以為是吃太飽、是昨晚沒睡好、是自己意志力不足？<br>
+                其實，這是一場由「精緻碳水化合物」引發的生理學風暴。
+            </p>
+        </div>
+    </section>
+
+    <!-- WHAT 區塊 1：定義 -->
+    <section id="what" class="py-32 bg-black">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="order-2 md:order-1 reveal relative rounded-3xl overflow-hidden group">
+                <img src="images/food.jpg" alt="High Carb Food" class="w-full h-[600px] object-cover group-hover:scale-105 transition duration-700">
+                <div class="absolute inset-0 img-overlay flex flex-col justify-end p-8">
+                    <p class="text-white text-lg font-black tracking-widest mb-2">THE CULPRIT</p>
+                    <p class="text-gray-200 text-2xl font-bold">高升糖指數 (High GI) 食物是觸發此現象的關鍵。</p>
                 </div>
-                <div style="text-align: right;">
-                    <div class="doc-badge">維修單</div>
-                    <div class="meta-row">
-                        <div class="meta-box">
-                            No. <input type="text" id="orderNo">
-                        </div>
-                        <div class="meta-box">
-                            Date. <input type="date" id="dateField">
-                        </div>
+            </div>
+            <div class="order-1 md:order-2 reveal">
+                <!-- 高光重點改放到大標題上 -->
+                <h3 class="text-6xl md:text-7xl font-black leading-tight mb-10 text-white">
+                    這不是懶惰，<br>是
+                    <span class="bg-blue-600/30 text-blue-300 px-4 py-2 rounded-2xl border-2 border-blue-500/50 inline-block mt-4 mx-2">「餐後嗜睡」</span>。
+                </h3>
+                <p class="text-2xl md:text-3xl text-gray-300 font-medium leading-relaxed">
+                    在學術上，暈碳被稱為 <strong>餐後嗜睡 (Postprandial Somnolence)</strong>。
+                    當我們攝取大量碳水化合物後，身體會出現強烈的疲倦感、專注力斷崖式下降，甚至是不可抗拒的睡眠衝動。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT 區塊 2：迷思破解 -->
+    <section id="myth" class="py-32 myth-gradient">
+        <div class="max-w-7xl mx-auto px-6 text-center reveal mb-16">
+            <h2 class="text-6xl md:text-7xl font-black text-white mb-6">迷思破解 🚫</h2>
+            <p class="text-3xl text-gray-400 font-bold">你可能一直都誤會你的身體了。</p>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <div class="bg-red-950/20 p-10 rounded-3xl border-2 border-red-500/60 mb-8 shadow-[0_0_20px_rgba(239,68,68,0.15)]">
+                    <h4 class="text-red-500 text-xl font-black tracking-widest mb-4">FALSE (錯誤觀念)</h4>
+                    <p class="text-3xl font-medium text-white leading-relaxed line-through decoration-red-500 decoration-4">
+                        「吃太飽導致血液都流向胃部去消化，所以大腦缺血缺氧才會想睡覺。」
+                    </p>
+                </div>
+                <div class="bg-blue-900/20 p-10 rounded-3xl border border-blue-500/30">
+                    <h4 class="text-blue-400 text-xl font-black tracking-widest mb-4">TRUTH (科學真相)</h4>
+                    <p class="text-3xl font-medium text-blue-50 leading-relaxed">
+                        暈碳是精緻碳水化合物引發體內 <strong class="text-white">血糖與胰島素劇烈波動</strong>，進而影響大腦清醒神經元的真實生理反應。
+                    </p>
+                </div>
+            </div>
+            <div class="reveal rounded-3xl overflow-hidden shadow-2xl h-[500px]">
+                <img src="images/myth.jpg" alt="Digestive System vs Brain" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </section>
+
+    <!-- WHEN 區塊 -->
+    <section id="when" class="py-32 bg-[#111111] text-center px-6">
+        <div class="max-w-5xl mx-auto reveal">
+            <h2 class="text-xl font-black tracking-widest text-gray-500 mb-6">TIMING IS EVERYTHING</h2>
+            <h3 class="text-6xl md:text-8xl font-black mb-12 text-white leading-tight">斷電潛伏期：<br>
+                <span class="inline-block bg-yellow-500/20 border-2 border-yellow-500/50 text-yellow-400 px-6 py-2 rounded-2xl mt-4 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
+                    飯後 30 到 90 分鐘
+                </span>
+            </h3>
+            <p class="text-3xl text-gray-300 font-medium leading-relaxed">
+                吃下白白飯、麵條或手搖飲後，疲倦感不會立刻發生。<br>
+                它會等待葡萄糖湧入血液，在上述時間點達到高峰。
+            </p>
+        </div>
+    </section>
+
+    <!-- 升級版！雙重斷電方程式 (加入圖片與超大時間) -->
+    <section id="equation" class="py-32 relative text-center px-6 border-y border-white/10">
+        <div class="absolute inset-0 z-0">
+            <img src="images/clock_bright.jpg" alt="Clock Background" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#111111] via-transparent to-black"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10 reveal">
+            <h2 class="text-5xl md:text-7xl font-black text-white mb-16">致命的「雙重斷電」打擊</h2>
+            
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-6">
+                
+                <!-- 條件一：高碳水 (加入圖片) -->
+                <div class="bg-black/80 backdrop-blur-md border border-gray-700 rounded-3xl w-full lg:w-1/3 shadow-xl overflow-hidden flex flex-col h-[480px]">
+                    <div class="h-1/2 w-full">
+                        <img src="images/food.jpg" alt="High Carb" class="w-full h-full object-cover opacity-90">
+                    </div>
+                    <div class="p-8 flex flex-col justify-center flex-grow">
+                        <h3 class="text-4xl font-black text-white mb-4">高碳水午餐</h3>
+                        <p class="text-xl text-gray-400 font-bold">血糖像雲霄飛車般飆升，<br>大腦能量供應開始不穩。</p>
+                    </div>
+                </div>
+                
+                <div class="text-6xl font-black text-gray-500 my-4 lg:my-0">+</div>
+                
+                <!-- 條件二：午後低潮 (超大時間標示) -->
+                <div class="bg-black/80 backdrop-blur-md border border-gray-700 rounded-3xl w-full lg:w-1/3 shadow-xl flex flex-col h-[480px] justify-center p-8 relative overflow-hidden">
+                    <h3 class="text-4xl font-black text-white mb-6 relative z-10">午後低潮期</h3>
+                    
+                    <!-- 超大字體的 14:00 - 17:00 -->
+                    <div class="relative z-10 my-4">
+                        <p class="text-6xl md:text-7xl text-yellow-400 font-black tracking-wider drop-shadow-[0_0_15px_rgba(250,204,21,0.4)]">
+                            14:00<br>
+                            <span class="text-4xl text-yellow-600">|</span><br>
+                            17:00
+                        </p>
+                    </div>
+                    
+                    <p class="text-xl text-gray-400 font-bold mt-6 relative z-10">人體自然生理時鐘下降，<br>本身就容易感到睡意。</p>
+                </div>
+                
+                <div class="text-6xl font-black text-gray-500 my-4 lg:my-0">=</div>
+                
+                <!-- 結果：徹底斷電 (加入圖片，並放大整個區塊) -->
+                <div class="bg-red-950/80 backdrop-blur-md border-2 border-red-500 rounded-3xl w-full lg:w-1/3 transform lg:scale-110 shadow-[0_0_40px_rgba(239,68,68,0.4)] overflow-hidden flex flex-col h-[520px]">
+                    <div class="h-1/2 w-full relative">
+                        <img src="images/stress.jpg" alt="Crash" class="w-full h-full object-cover opacity-80 mix-blend-screen">
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-950/90 to-transparent"></div>
+                    </div>
+                    <div class="p-8 flex flex-col justify-center flex-grow">
+                        <div class="text-5xl mb-4">💥</div>
+                        <h3 class="text-5xl font-black text-red-400 mb-4">徹底斷電</h3>
+                        <p class="text-2xl text-red-100 font-bold">雙重打擊疊加，<br>大腦強制進入關機模式。</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- WHO 區塊 -->
+    <section id="who" class="py-32 bg-black px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-6xl md:text-7xl font-black mb-20 reveal text-white text-center md:text-left">誰最容易被擊倒？</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="relative h-[450px] rounded-3xl overflow-hidden reveal group">
+                    <img src="images/stress.jpg" alt="Stressed" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent p-10 flex flex-col justify-end">
+                        <h3 class="text-4xl font-black mb-4 text-white">長期熬夜與高壓族</h3>
+                        <p class="text-gray-300 text-2xl font-medium leading-relaxed">睡眠不足會讓壓力荷爾蒙飆升，降低胰島素敏感度。此時吃下碳水，睡意直接翻倍。</p>
+                    </div>
+                </div>
+                <div class="relative h-[450px] rounded-3xl overflow-hidden reveal group">
+                    <img src="images/sedentary.jpg" alt="Sedentary" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent p-10 flex flex-col justify-end">
+                        <h3 class="text-4xl font-black mb-4 text-white">久坐少動上班族</h3>
+                        <p class="text-gray-300 text-2xl font-medium leading-relaxed">肌肉是人體最大的吃糖機器。長期久坐讓肌肉無法有效消耗飯後血液中多餘的葡萄糖。</p>
+                    </div>
+                </div>
+                <div class="relative h-[450px] rounded-3xl overflow-hidden reveal group">
+                    <img src="images/refined_carbs.jpg" alt="Refined Carbs" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent p-10 flex flex-col justify-end">
+                        <h3 class="text-4xl font-black mb-4 text-white">精緻澱粉狂熱者</h3>
+                        <p class="text-gray-300 text-2xl font-medium leading-relaxed">白飯配炸排骨，加全糖珍奶。缺乏蔬菜纖維與足夠蛋白質緩衝，是誘發暈碳的最危險菜單。</p>
+                    </div>
+                </div>
+                <div class="relative h-[450px] rounded-3xl overflow-hidden reveal group">
+                    <img src="images/medical.jpg" alt="Medical" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent p-10 flex flex-col justify-end">
+                        <h3 class="text-4xl font-black mb-4 text-white">代謝異常與糖前族群</h3>
+                        <p class="text-gray-300 text-2xl font-medium leading-relaxed">有肥胖或胰島素阻抗問題的人，身體調節血糖更吃力，餐後異常昏睡是重要的健康警訊。</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="company-info">
-                <span class="info-icon">📍</span>彰化縣員林市員集路2段493巷4弄10號<br>
-                <div style="margin-top: 5px;">
-                    <span class="info-icon">📞</span>04-8356923 &nbsp;&nbsp; 
-                    <span class="info-icon">📱</span>0935-435757 &nbsp;&nbsp; 
-                    <span class="info-icon">📠</span>04-8341151 &nbsp;&nbsp; 
-                    <span class="info-icon">🆔</span>45229579
+    <!-- WHY 區塊 -->
+    <section id="why" class="py-32 bg-[#111111]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-28 reveal">
+                <h2 class="text-6xl md:text-7xl font-black text-white mb-8">為什麼大腦會強迫你登出？</h2>
+                <p class="text-3xl text-gray-400 font-bold">解構人體睡眠機制的 3 個生化真相。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 items-center mb-32 reveal">
+                <div>
+                    <h3 class="text-5xl font-black text-white mb-8">1. 血糖雲霄飛車</h3>
+                    <div class="inline-block bg-yellow-500/20 border border-yellow-500/50 rounded-2xl px-6 py-3 mb-8">
+                        <h4 class="text-2xl md:text-3xl text-yellow-400 font-black">⚡ 警覺系統被強制關閉</h4>
+                    </div>
+                    <p class="text-gray-300 text-2xl font-medium leading-relaxed mb-6">
+                        吃下高碳水後，血糖飆升，胰臟分泌大量胰島素壓制。這種「忽高忽低」的效應，會讓大腦能量供給極度不穩。
+                    </p>
+                    <p class="text-gray-300 text-2xl font-medium leading-relaxed">
+                        高血糖更會直接抑制大腦中負責保持清醒的<strong class="text-white">「食慾素」神經元</strong>。身體判定「已經吃飽不需打獵」，隨即切換至節能模式。
+                    </p>
+                </div>
+                <div class="rounded-3xl overflow-hidden shadow-2xl h-[450px]">
+                    <img src="images/rollercoaster.jpg" alt="Sugar Rush" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 items-center mb-32 reveal">
+                <div class="order-2 md:order-1 rounded-3xl overflow-hidden shadow-2xl h-[450px]">
+                    <img src="images/brain.jpg" alt="Brain Neurons" class="w-full h-full object-cover">
+                </div>
+                <div class="order-1 md:order-2">
+                    <h3 class="text-5xl font-black text-white mb-8">2. 大腦的天然安眠藥</h3>
+                    <div class="inline-block bg-blue-500/20 border border-blue-500/50 rounded-2xl px-6 py-3 mb-8">
+                        <h4 class="text-2xl md:text-3xl text-blue-400 font-black">🧠 色胺酸 ➔ 血清素 ➔ 褪黑激素</h4>
+                    </div>
+                    <p class="text-gray-300 text-2xl font-medium leading-relaxed mb-6">
+                        胰島素在運送血糖時，會順便把血液中的胺基酸送進肌肉，唯獨留下<strong class="text-white">「色胺酸」</strong>。
+                    </p>
+                    <p class="text-gray-300 text-2xl font-medium leading-relaxed">
+                        缺乏競爭者的色胺酸輕鬆進入大腦，轉化為讓人放鬆的「血清素」，最後合成誘發睡眠的「褪黑激素」。等於是你吃下的碳水，幫大腦製造了一顆安眠藥。
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16 items-center reveal">
+                <div>
+                    <h3 class="text-5xl font-black text-white mb-8">3. 啟動消化模式</h3>
+                    <div class="inline-block bg-green-500/20 border border-green-500/50 rounded-2xl px-6 py-3 mb-8">
+                        <h4 class="text-2xl md:text-3xl text-green-400 font-black">🔋 副交感神經接管身體</h4>
+                    </div>
+                    <p class="text-gray-300 text-2xl font-medium leading-relaxed mb-6">
+                        進食後，人體的自律神經系統會切換由<strong class="text-white">「副交感神經」</strong>主導。
+                    </p>
+                    <p class="text-gray-300 text-2xl font-medium leading-relaxed">
+                        心跳放慢、血壓微降，全身進入「休息與消化」狀態。加上腸胃釋放的飽足荷爾蒙傳回大腦，進一步加深了你的疲倦感。
+                    </p>
+                </div>
+                <div class="rounded-3xl overflow-hidden shadow-2xl h-[450px]">
+                    <img src="images/digestion.jpg" alt="Digestion" class="w-full h-full object-cover">
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 區塊 1: 客戶資料 (藍色調) -->
-        <div class="section-card">
-            <div class="card-title">客戶資料 Client Info</div>
-            <div class="client-grid">
-                <div class="input-group">
-                    <label>客戶名稱 / Customer Name</label>
-                    <input type="text" placeholder="請輸入客戶名稱" style="font-weight: bold; font-size: 16px;">
-                </div>
-                <div class="input-group">
-                    <label>機器編號 / Machine No.</label>
-                    <input type="text" placeholder="編號...">
-                </div>
-                <div class="input-group">
-                    <label>維修開始 / Start Time</label>
-                    <input type="time">
-                </div>
-                <div class="input-group">
-                    <label>維修結束 / End Time</label>
-                    <input type="time">
-                </div>
+    <!-- HOW 區塊 -->
+    <section id="how" class="py-32 bg-white text-black px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-6xl md:text-8xl font-black mb-8">防暈碳三招。</h2>
+                <p class="text-3xl text-gray-600 font-bold">你不需要痛苦地戒掉碳水，只需要聰明地吃。</p>
             </div>
-        </div>
-
-        <!-- 區塊 2: 故障描述 (紅色調) -->
-        <div class="section-card issue-card">
-            <div class="card-title" style="color: #d63031;">故障與檢測 Issues & Diagnosis</div>
-            <table class="desc-table">
-                <tr>
-                    <td class="label">故障情形</td>
-                    <td><textarea placeholder="描述..."></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label">故障原因</td>
-                    <td><textarea placeholder="原因..."></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label">處理對策</td>
-                    <td><textarea placeholder="建議事項..."></textarea></td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- 區塊 3: 零件明細 (白色卡片) -->
-        <div class="parts-container">
-            <table class="parts-table" id="partsTable">
-                <thead>
-                    <tr>
-                        <th width="35%" style="text-align: left; padding-left: 15px;">項目 / 零件名稱</th>
-                        <th width="20%">規 格</th>
-                        <th width="10%">數量</th>
-                        <th width="15%">單 價</th>
-                        <th width="15%">小 計</th>
-                        <th width="5%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="padding-left: 15px;"><input type="text" placeholder="輸入項目" style="text-align: left;"></td>
-                        <td><input type="text"></td>
-                        <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
-                        <td><input type="number" class="price" oninput="calcTotal(this)"></td>
-                        <td><input type="text" class="subtotal" readonly></td>
-                        <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
-                    </tr>
-                </tbody>
-            </table>
             
-            <div class="total-area">
-                <span style="margin-right: 20px; color: #666;">總計 Total Amount:</span>
-                <input type="text" id="grandTotal" readonly value="0">
-            </div>
-        </div>
-
-        <!-- 簽名區 -->
-        <div class="footer">
-            <div class="sign-box">
-                <div class="sign-title">客戶簽名 / Client Signature</div>
-                <div class="sign-line"></div>
-            </div>
-            <div class="sign-box">
-                <div class="sign-title">維修人員 / Engineer</div>
-                <div class="sign-line" style="position: relative;">
-                    <span style="position: absolute; bottom: 5px; right: 20px; font-weight: bold; font-size: 18px;">朱文言</span>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="reveal">
+                    <div class="rounded-3xl overflow-hidden h-[350px] mb-8 shadow-xl bg-gray-100">
+                        <img src="images/veggies.jpg" alt="Veggies" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-5xl font-black text-gray-900 mb-4">01. 換順序</h3>
+                    <h4 class="text-2xl font-black text-blue-600 mb-6 bg-blue-50 inline-block px-4 py-2 rounded-lg">蔬菜 ➔ 蛋白質 ➔ 澱粉</h4>
+                    <p class="text-gray-700 text-2xl font-medium leading-relaxed">
+                        先吃青菜，利用纖維延緩胃排空。接著吃蛋白質，最後再吃飯，讓澱粉轉化為血糖平穩緩慢。
+                    </p>
+                </div>
+                <div class="reveal" style="transition-delay: 150ms;">
+                    <div class="rounded-3xl overflow-hidden h-[350px] mb-8 shadow-xl bg-gray-100">
+                        <img src="images/grains.jpg" alt="Whole Grains" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-5xl font-black text-gray-900 mb-4">02. 換食物</h3>
+                    <h4 class="text-2xl font-black text-blue-600 mb-6 bg-blue-50 inline-block px-4 py-2 rounded-lg">低 GI 取代精緻澱粉</h4>
+                    <p class="text-gray-700 text-2xl font-medium leading-relaxed">
+                        把白飯換成糙米、地瓜。最重要的是，絕對要避免空腹喝含糖飲料，液態糖分是最強殺手。
+                    </p>
+                </div>
+                <div class="reveal" style="transition-delay: 300ms;">
+                    <div class="rounded-3xl overflow-hidden h-[350px] mb-8 shadow-xl bg-gray-100">
+                        <img src="images/walking.jpg" alt="Walking" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-5xl font-black text-gray-900 mb-4">03. 動一下</h3>
+                    <h4 class="text-2xl font-black text-blue-600 mb-6 bg-blue-50 inline-block px-4 py-2 rounded-lg">餐後微運動 15 分鐘</h4>
+                    <p class="text-gray-700 text-2xl font-medium leading-relaxed">
+                        飯後散步 10-15 分鐘，利用肌肉收縮直接將血液中的葡萄糖吸進細胞燃燒，是最天然降糖藥。
+                    </p>
                 </div>
             </div>
         </div>
+    </section>
 
-    </div>
+    <!-- 頁尾結論 -->
+    <section id="conclusion" class="min-h-screen bg-black flex flex-col justify-center items-center px-6 text-center border-t border-white/10 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+            <h1 class="text-[15rem] md:text-[20rem] font-black text-white">AWAKE</h1>
+        </div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 reveal mt-10">
+            <h2 class="text-5xl md:text-8xl font-black text-white mb-12 leading-tight">
+                暈碳不是懶，<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                    而是血糖正在綁架你的大腦。
+                </span>
+            </h2>
+            <p class="text-3xl text-gray-400 mb-20 font-bold">
+                奪回清醒控制權，從下一餐的飲食順序開始。
+            </p>
+            <p class="text-gray-600 text-xl font-bold tracking-widest mt-10">
+                © 2026 CARB COMA PROJECT. DESIGNED BY THE VILLAIN HERSELF.
+            </p>
+        </div>
+    </section>
 
     <script>
-        // 1. 初始化
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        document.getElementById('dateField').valueAsDate = today;
-        document.getElementById('orderNo').value = `${year}${month}${day}`;
-
-        // 2. 列印 (保留色彩)
-        function printWithFilename() {
-            const customerName = document.querySelector('input[placeholder="請輸入客戶名稱"]').value || '客戶';
-            document.title = `${year}${month}${day}_${customerName}_維修單`;
-            window.print();
-        }
-
-        // 3. 計算
-        function calcTotal(input) {
-            const row = input.closest('tr');
-            const qty = parseFloat(row.querySelector('.qty').value) || 0;
-            const price = parseFloat(row.querySelector('.price').value) || 0;
-            const total = Math.round(qty * price);
-            row.querySelector('.subtotal').value = total > 0 ? total : '';
-            updateGrandTotal();
-        }
-
-        function updateGrandTotal() {
-            let sum = 0;
-            document.querySelectorAll('.subtotal').forEach(el => sum += parseFloat(el.value) || 0);
-            document.getElementById('grandTotal').value = sum.toLocaleString();
-        }
-
-        // 4. 新增刪除
-        function addPartRow() {
-            const tbody = document.querySelector('#partsTable tbody');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td style="padding-left: 15px;"><input type="text" style="text-align: left;"></td>
-                <td><input type="text"></td>
-                <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
-                <td><input type="number" class="price" oninput="calcTotal(this)"></td>
-                <td><input type="text" class="subtotal" readonly></td>
-                <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        function deleteRow(btn) {
-            const tbody = document.querySelector('#partsTable tbody');
-            if (tbody.rows.length > 1) {
-                btn.closest('tr').remove();
-                updateGrandTotal();
-            }
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOnScroll = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            });
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
     </script>
 </body>
 </html>
