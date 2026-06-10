@@ -1,317 +1,76 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>雪橇三傻：極地生存與遺傳演化的科學報告</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Montserrat:wght@800;900&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>雪橇三傻｜全螢幕沉浸式網頁簡報</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--ink:#0f172a;--sky:#0ea5e9;--line:rgba(148,163,184,.26);--card:rgba(255,255,255,.82)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:'Noto Sans TC',sans-serif;background:#020617;color:var(--ink);overflow-x:hidden}.en{font-family:'Montserrat',sans-serif}
+/* Opening animation */
+.opening{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:#020617;color:white;overflow:hidden;animation:openingOut 1.1s ease 2.7s forwards}.opening::before{content:"";position:absolute;inset:-18%;background:radial-gradient(circle at 20% 20%,rgba(56,189,248,.28),transparent 32%),radial-gradient(circle at 75% 15%,rgba(99,102,241,.24),transparent 34%),radial-gradient(circle at 50% 90%,rgba(34,211,238,.2),transparent 35%);filter:blur(18px);animation:auroraMove 2.8s ease-in-out infinite alternate}.opening::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.75) 0 1px,transparent 2px),radial-gradient(circle,rgba(186,230,253,.55) 0 1.5px,transparent 2.5px);background-size:130px 130px,210px 210px;animation:snowFall 8s linear infinite;opacity:.65}.opening-content{position:relative;z-index:2;text-align:center;animation:openingText 1.2s cubic-bezier(.2,.8,.2,1) both}.opening-title{font-size:clamp(3.4rem,9vw,9rem);font-weight:900;letter-spacing:-.08em;line-height:.95}.opening-sub{margin-top:1rem;color:#bae6fd;font-size:clamp(1.1rem,2vw,1.7rem);font-weight:900;letter-spacing:.12em}.opening-line{width:0;height:4px;border-radius:99px;margin:1.6rem auto 0;background:linear-gradient(90deg,#7dd3fc,#2563eb,#a78bfa);animation:lineGrow 1.6s ease .45s forwards}@keyframes openingText{from{opacity:0;transform:translateY(28px) scale(.97);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}@keyframes lineGrow{to{width:min(520px,70vw)}}@keyframes openingOut{to{opacity:0;visibility:hidden;transform:scale(1.04);filter:blur(10px)}}
+.progress{position:fixed;top:0;left:0;width:0%;height:4px;z-index:100;background:linear-gradient(90deg,#7dd3fc,#38bdf8,#2563eb,#a78bfa);box-shadow:0 0 22px rgba(14,165,233,.55)}
+/* Liquid glass navigation */
+.glass-nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:min(1460px,calc(100vw - 28px));z-index:90;border-radius:999px;background:linear-gradient(135deg,rgba(255,255,255,.65),rgba(255,255,255,.28));backdrop-filter:blur(34px) saturate(190%);-webkit-backdrop-filter:blur(34px) saturate(190%);border:1px solid rgba(255,255,255,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.82),inset 0 -1px 0 rgba(255,255,255,.28),0 18px 60px -42px rgba(15,23,42,.9);overflow:hidden}.glass-nav::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 16% 0%,rgba(255,255,255,.96),transparent 30%),radial-gradient(circle at 82% 120%,rgba(125,211,252,.34),transparent 34%),linear-gradient(90deg,rgba(125,211,252,.14),rgba(255,255,255,.08),rgba(147,197,253,.16));pointer-events:none}.liquid-orb{position:absolute;left:8%;bottom:-42px;width:165px;height:88px;border-radius:999px;background:rgba(125,211,252,.34);filter:blur(18px);animation:liquidMove 8s ease-in-out infinite alternate;pointer-events:none}@keyframes liquidMove{from{transform:translateX(0) scale(1)}to{transform:translateX(70vw) scale(1.16)}}.navlink{position:relative;transition:.25s}.navlink::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:2px;border-radius:99px;background:#0ea5e9;transform:scaleX(0);transition:.25s}.navlink.active{color:#0284c7}.navlink.active::after{transform:scaleX(1)}
+/* Fullscreen presentation layout */
+.slide{width:100vw;min-height:100svh;position:relative;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line);padding:6rem 1.4rem 4rem}.wrap{width:min(1500px,100%);margin:0 auto;position:relative;z-index:5}.kicker{display:inline-flex;align-items:center;gap:.55rem;color:#0284c7;font-weight:900;letter-spacing:.16em;font-size:.9rem;text-transform:uppercase;margin-bottom:.75rem}.kicker::before{content:"";width:34px;height:2px;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#2563eb)}.display{font-size:clamp(3.2rem,7.4vw,8.2rem);line-height:.94;letter-spacing:-.08em;font-weight:900}.headline{font-size:clamp(2.15rem,4.4vw,5rem);line-height:1.08;letter-spacing:-.055em;font-weight:900}.lead{font-size:clamp(1.12rem,1.85vw,1.72rem);line-height:1.72;color:#475569;font-weight:500}.small{font-size:1.02rem;line-height:1.75;color:#64748b}.card{background:var(--card);border:1px solid var(--line);border-radius:1.65rem;box-shadow:0 24px 58px -42px rgba(15,23,42,.55);backdrop-filter:blur(18px)}.dark-card{background:rgba(15,23,42,.56);border:1px solid rgba(255,255,255,.14);border-radius:1.65rem;backdrop-filter:blur(20px);box-shadow:0 30px 70px -50px rgba(2,6,23,.85)}.image-frame{position:relative;overflow:hidden;border-radius:2rem;background:linear-gradient(135deg,#e0f2fe,#f8fafc);box-shadow:0 26px 76px -48px rgba(15,23,42,.75)}.image-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.1s cubic-bezier(.2,.8,.2,1),filter 1.1s}.image-frame:hover img{transform:scale(1.05);filter:saturate(1.08) contrast(1.02)}.image-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 54%,rgba(2,6,23,.35));pointer-events:none}.image-tag{position:absolute;left:1rem;bottom:1rem;z-index:3;padding:.5rem .8rem;border-radius:999px;background:rgba(255,255,255,.84);backdrop-filter:blur(12px);font-weight:900;color:#0f172a;font-size:.85rem}.pill{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;padding:.62rem .95rem;font-weight:900;background:#f1f5f9;color:#334155;border:1px solid rgba(148,163,184,.24)}.number{position:absolute;right:clamp(1rem,4vw,3rem);bottom:clamp(1rem,3vw,2rem);font-family:'Montserrat',sans-serif;font-size:clamp(3rem,9vw,8rem);font-weight:900;color:rgba(148,163,184,.15);z-index:1;pointer-events:none}.aurora{position:absolute;inset:-20%;pointer-events:none;background:radial-gradient(circle at 20% 18%,rgba(34,211,238,.28),transparent 30%),radial-gradient(circle at 70% 8%,rgba(59,130,246,.25),transparent 34%),radial-gradient(circle at 55% 85%,rgba(124,58,237,.16),transparent 30%);filter:blur(18px);animation:auroraMove 12s ease-in-out infinite alternate}@keyframes auroraMove{from{transform:translate3d(-2%,0,0) scale(1)}to{transform:translate3d(3%,2%,0) scale(1.05)}}.snow{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.65) 0 1.5px,transparent 2.5px),radial-gradient(circle at 70% 15%,rgba(255,255,255,.45) 0 1px,transparent 2px),radial-gradient(circle at 40% 80%,rgba(186,230,253,.5) 0 2px,transparent 3px);background-size:180px 180px,240px 240px,310px 310px;animation:snowFall 22s linear infinite;opacity:.75}@keyframes snowFall{from{background-position:0 0,0 0,0 0}to{background-position:0 600px,0 480px,0 700px}}.mesh{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 10% 20%,rgba(14,165,233,.12),transparent 28%),radial-gradient(circle at 80% 40%,rgba(37,99,235,.1),transparent 26%),radial-gradient(circle at 50% 100%,rgba(34,211,238,.12),transparent 36%)}
+.reveal{opacity:0;transform:translateY(34px);filter:blur(8px);transition:opacity .85s,transform .85s cubic-bezier(.2,.8,.2,1),filter .85s}.reveal.active{opacity:1;transform:translateY(0);filter:blur(0)}.delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}.hero-title{animation:heroIn 1.1s cubic-bezier(.2,.8,.2,1) 2.85s both}@keyframes heroIn{from{opacity:0;transform:translateY(35px) scale(.98);filter:blur(14px)}to{opacity:1;transform:none;filter:blur(0)}}
+.dog-card{cursor:pointer;transition:transform .35s ease,box-shadow .35s ease,border-color .35s}.dog-card:hover{transform:translateY(-8px);border-color:rgba(125,211,252,.45);box-shadow:0 34px 80px -50px rgba(14,165,233,.7)}.dog-card .open-arrow{transition:.35s}.dog-card:hover .open-arrow{transform:translateX(6px)}.story-card{position:relative;min-height:180px}.story-card::after{content:"";position:absolute;right:-22px;top:50%;width:34px;height:2px;background:linear-gradient(90deg,#38bdf8,transparent)}.story-card:last-child::after{display:none}.story-num{font-family:'Montserrat',sans-serif;font-size:3.8rem;line-height:1;color:#bae6fd;font-weight:900}.speaker{display:none;position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);z-index:80;width:min(900px,calc(100vw - 2rem));background:rgba(2,6,23,.9);color:#e2e8f0;border:1px solid rgba(255,255,255,.12);border-radius:1.35rem;padding:.9rem 1.15rem;box-shadow:0 24px 60px -35px rgba(2,6,23,.8);backdrop-filter:blur(20px)}.speaker.show{display:block}.speaker b{color:#7dd3fc}.hint{position:fixed;right:1rem;bottom:1rem;z-index:60;background:rgba(255,255,255,.76);backdrop-filter:blur(14px);border:1px solid rgba(148,163,184,.28);border-radius:999px;padding:.62rem .95rem;color:#334155;font-weight:900;box-shadow:0 20px 55px -38px rgba(15,23,42,.8)}
+.modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(2,6,23,.72);backdrop-filter:blur(20px)}.modal.show{display:flex}.modal-panel{width:min(1180px,100%);max-height:min(760px,calc(100vh - 2rem));overflow:hidden;border-radius:2rem;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.55);box-shadow:0 35px 100px -45px rgba(2,6,23,.95);display:grid;grid-template-columns:1.15fr .95fr;animation:modalIn .35s cubic-bezier(.2,.8,.2,1) both}@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(18px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}.modal-photo{position:relative;min-height:640px;overflow:hidden}.modal-photo img{width:100%;height:100%;object-fit:cover}.modal-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 45%,rgba(15,23,42,.24)),linear-gradient(180deg,transparent 55%,rgba(2,6,23,.58))}.modal-body{padding:2rem;overflow:auto}.modal-close{position:absolute;right:1rem;top:1rem;z-index:5;width:44px;height:44px;border-radius:999px;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);font-weight:900}.modal-title{font-size:clamp(2.1rem,4vw,4.2rem);font-weight:900;line-height:1.05;letter-spacing:-.05em}.modal-list li{padding:.7rem 0;border-bottom:1px solid rgba(148,163,184,.28);line-height:1.65;color:#475569}.modal-list b{color:#0f172a}.modal-photo-title{position:absolute;left:1.3rem;bottom:1.3rem;z-index:4;color:white}.modal-photo-title h3{font-size:2rem;font-weight:900}.modal-photo-title p{color:#e2e8f0;font-weight:700}
+@media (min-width:1024px){body.presentation-mode{scroll-snap-type:y mandatory}body.presentation-mode .slide{scroll-snap-align:start}}@media(max-width:900px){.glass-nav{top:8px;width:calc(100% - 16px);border-radius:1.4rem}.slide{padding:5.6rem 1rem 3.5rem}.image-frame{border-radius:1.4rem}.card,.dark-card{border-radius:1.25rem}.hint{display:none}.display{letter-spacing:-.06em}.modal-panel{grid-template-columns:1fr;overflow:auto}.modal-photo{min-height:320px}.story-card::after{display:none}.opening-title{font-size:4.2rem}}
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #ffffff;
-            color: #0f172a;
-            overflow-x: hidden;
-        }
+/* === final polish round 4 === */
+.silly-word{display:inline-block;font-size:1.8em;line-height:.75;color:#ef4444;text-shadow:0 10px 34px rgba(239,68,68,.34);transform:rotate(-3deg);vertical-align:-.08em}
+.qr-image{background:#fff}.qr-image img{object-fit:contain!important;object-position:center center!important;padding:1.2rem;background:#fff}.qr-card{background:rgba(255,255,255,.88);border:1px solid rgba(148,163,184,.28);border-radius:2rem;box-shadow:0 30px 80px -50px rgba(15,23,42,.65);backdrop-filter:blur(18px)}
+.env-highlight{display:inline-block;padding:.1em .45em;border-radius:.45em;box-shadow:inset 0 -2px 0 rgba(14,165,233,.2)}.env-highlight.cold{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1d4ed8}.env-highlight.route{background:linear-gradient(135deg,#dcfce7,#bbf7d0);color:#15803d}.env-highlight.brain{background:linear-gradient(135deg,#f3e8ff,#ddd6fe);color:#7e22ce}
+.fur-highlight{display:inline-block;padding:.08em .42em;border-radius:.45em;box-shadow:inset 0 -2px 0 rgba(14,165,233,.18)}.fur-highlight.upper{background:linear-gradient(135deg,#ffedd5,#fed7aa);color:#c2410c}.fur-highlight.lower{background:linear-gradient(135deg,#e0f2fe,#bae6fd);color:#0369a1}
+.coat-diagram,.myth-image{background:#fff}.coat-diagram img,.myth-image img{object-fit:contain!important;object-position:center center!important;padding:1rem;background:#fff}
+.myth-topic,.care-topic{display:inline-block;padding:.18em .5em;border-radius:.55em;box-shadow:inset 0 -2px 0 rgba(15,23,42,.12)}.myth-topic.m1{background:#fee2e2;color:#b91c1c}.myth-topic.m2{background:#dcfce7;color:#15803d}.myth-topic.m3{background:#e0f2fe;color:#0369a1}.myth-topic.m4{background:#fef3c7;color:#92400e}.care-topic.c1{background:#dbeafe;color:#1d4ed8}.care-topic.c2{background:#dcfce7;color:#15803d}.care-topic.c3{background:#ffedd5;color:#c2410c}.care-topic.c4{background:#f3e8ff;color:#7e22ce}
+.modal-photo-title{display:none!important}
+.eye-blue{display:inline-block;padding:.08em .35em;border-radius:.4em;background:#dbeafe;color:#1d4ed8;font-weight:900}.eye-brown{display:inline-block;padding:.08em .35em;border-radius:.4em;background:#fef3c7;color:#92400e;font-weight:900}.eye-hetero{display:inline-block;padding:.08em .35em;border-radius:.4em;background:linear-gradient(135deg,#dbeafe 0 50%,#fef3c7 50% 100%);color:#334155;font-weight:900}
+.topic-highlight{display:inline-block;padding:.18em .48em;border-radius:.5em;box-shadow:inset 0 -2px 0 rgba(15,23,42,.12)}.topic-highlight.t1{background:#ffedd5;color:#c2410c}.topic-highlight.t2{background:#dcfce7;color:#15803d}.topic-highlight.t3{background:#e0f2fe;color:#0369a1}
+.smile-image,.care-image{background:#f8fafc}.smile-image img,.care-image img{object-fit:contain!important;object-position:center center!important;background:#f8fafc}.smile-image::before,.care-image::before{content:"";position:absolute;inset:0;background:#f8fafc;z-index:0}.smile-image img,.care-image img{position:relative;z-index:1}.smile-image .image-tag,.care-image .image-tag{z-index:3}
+.story-card:nth-child(1) .story-num{color:#f97316}.story-card:nth-child(2) .story-num{color:#0ea5e9}.story-card:nth-child(3) .story-num{color:#22c55e}.story-card:nth-child(4) .story-num{color:#8b5cf6}.story-card:nth-child(5) .story-num{color:#ef4444}
+.end-title{font-size:clamp(2.35rem,5.1vw,5.7rem)!important;line-height:1.08!important;letter-spacing:-.055em!important}
+@media(max-width:900px){.silly-word{font-size:1.55em}.end-title{font-size:2.7rem!important}.qr-image img{padding:.75rem}}
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.2, 0, 0, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .arctic-gradient {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-
-        .img-overlay-light {
-            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 100%);
-        }
-
-        .hero-title {
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: -0.05em;
-        }
-        
-        /* 螢光筆 Highlight 效果 */
-        .hl {
-            background: linear-gradient(120deg, #bae6fd 0%, #e0f2fe 100%);
-            color: #0369a1;
-            padding: 0.1em 0.3em;
-            border-radius: 0.3em;
-            font-weight: 800;
-        }
-    </style>
+</style>
 </head>
-<body class="antialiased selection:bg-sky-200 selection:text-sky-900">
+<body class="antialiased selection:bg-sky-100 selection:text-sky-950 presentation-mode">
+<div class="opening"><div class="opening-content"><div class="opening-title">雪橇三傻</div><div class="opening-sub">ARCTIC SURVIVAL EXPERTS</div><div class="opening-line"></div></div></div>
+<div id="progress" class="progress"></div>
+<nav class="glass-nav no-print"><div class="liquid-orb"></div><div class="relative z-10 px-4 md:px-7 h-[72px] flex items-center justify-between font-bold text-slate-600"><a href="#hero" class="text-lg md:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2"><span>❄️</span><span>雪橇三傻</span></a><div class="hidden 2xl:flex space-x-5 text-sm"><a class="navlink" href="#qr">QR Code</a><a class="navlink" href="#intro">破題</a><a class="navlink" href="#arctic">極地</a><a class="navlink" href="#coat">雙層毛</a><a class="navlink" href="#compare">三犬比較</a><a class="navlink" href="#behavior">行為</a><a class="navlink" href="#summary">總結</a></div><div class="hidden md:flex items-center gap-2 text-xs"><button id="fullBtn" class="pill py-2 px-3">全螢幕</button><button id="modeBtn" class="pill py-2 px-3">簡報模式</button><button id="noteBtn" class="pill py-2 px-3">講稿提示</button></div></div></nav>
+<section id="hero" class="slide bg-slate-950 text-white"><div class="absolute inset-0"><img data-img="hero" class="w-full h-full object-cover opacity-55"><div class="absolute inset-0 bg-gradient-to-b from-slate-950/55 via-slate-950/35 to-slate-950"></div></div><div class="aurora"></div><div class="snow"></div><div class="wrap text-center"><div class="hero-title"><span class="kicker text-sky-200 justify-center">ARCTIC EVOLUTION × BEHAVIOR SCIENCE</span><h1 class="display mb-6">雪橇三傻</h1><p class="lead text-slate-200 max-w-4xl mx-auto"><span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-cyan-200 to-blue-300 font-black">從三傻到生存專家</span>｜牠們看似「傻」的外表與行為，其實是極地環境留下的演化密碼。</p><div class="mt-7 flex flex-wrap justify-center gap-3"><span class="pill bg-white/15 border-white/10 text-white">阿拉斯加</span><span class="pill bg-white/15 border-white/10 text-white">哈士奇</span><span class="pill bg-white/15 border-white/10 text-white">薩摩耶</span></div></div></div><div class="number">00</div></section>
 
-    <nav class="fixed w-full z-50 top-0 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-lg font-bold text-slate-500">
-            <a href="#hero" class="hover:text-sky-600 transition text-xl tracking-tighter flex items-center gap-2">
-                <span class="text-sky-500">❄️</span> Arctic Genetics Research
-            </a>
-            <div class="hidden md:flex space-x-10">
-                <a href="#intro" class="hover:text-sky-600 transition">WHY 緣由</a>
-                <a href="#biology" class="hover:text-sky-600 transition">BIO 生物學</a>
-                <a href="#smile" class="hover:text-sky-600 transition">SMILE 解剖</a>
-                <a href="#genetics" class="hover:text-sky-600 transition">GENE 遺傳</a>
-                <a href="#profiles" class="hover:text-sky-600 transition">TYPE 種類</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="hero" class="relative h-screen flex flex-col justify-center items-center text-center px-4">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1478265409131-1f65c88f965c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Arctic Landscape" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-white/30"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white"></div>
-        </div>
-        
-        <div class="relative z-10 max-w-7xl reveal mt-20">
-            <h2 class="text-sky-700 text-2xl md:text-3xl font-black mb-6 tracking-[0.5em] uppercase">Sled Dog Trio</h2>
-            
-            <h1 class="hero-title text-7xl md:text-9xl font-black mb-10 text-slate-900 drop-shadow-sm leading-tight">
-                極地演化：<br><span class="text-sky-500">雪橇三傻</span>
-            </h1>
-            
-            <p class="text-3xl md:text-4xl text-slate-700 font-medium leading-relaxed max-w-5xl mx-auto">
-                從雙層毛結構到微笑表情，<br>
-                每一處細節都是為了<span class="hl text-sky-800">對抗嚴寒</span>而生。
-            </p>
-            <div class="mt-12 text-slate-500 font-bold text-xl">
-                資二乙 張芳慈 1111302051 | 2025 生物圖學報告
-            </div>
-        </div>
-    </section>
-
-    <!-- Intro Section -->
-    <section id="intro" class="py-40 bg-white">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
-            <div class="reveal">
-                <h3 class="text-7xl font-black leading-tight mb-10 text-slate-900">
-                    為什麼叫<br>
-                    <span class="text-sky-500 underline decoration-8 underline-offset-8">「三傻」？</span>
-                </h3>
-                <p class="text-3xl text-slate-600 font-medium leading-relaxed mb-8">
-                    這個戲稱源於極地環境演化出的 <span class="hl">行為特質</span>。因表情豐富，且常做出令人費解的「破壞行為」而得名。
-                </p>
-                <div class="bg-slate-50 p-10 rounded-3xl border-l-8 border-sky-400 mt-10">
-                    <p class="text-2xl text-slate-700 italic font-bold">
-                        「這並非愚鈍，而是牠們具備<span class="text-sky-600">獨立判斷冰面路況</span>的基因，在溫暖城市中無處釋放能量的副作用。」
-                    </p>
-                </div>
-            </div>
-            <div class="reveal grid grid-cols-2 gap-6">
-                <img src="https://images.unsplash.com/photo-1605568420105-440bf10fc652?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Husky" class="w-full h-80 object-cover rounded-[3rem] shadow-xl">
-                <img src="https://images.unsplash.com/photo-1529927066849-79b791a69825?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Samoyed" class="w-full h-80 object-cover rounded-[3rem] shadow-xl mt-12">
-            </div>
-        </div>
-    </section>
-
-    <!-- Biology Section -->
-    <section id="biology" class="py-40 arctic-gradient">
-        <div class="max-w-7xl mx-auto px-6 text-center reveal mb-24">
-            <h2 class="text-6xl md:text-8xl font-black text-slate-900 mb-8">極地生存神裝 🛡️</h2>
-            <p class="text-3xl text-slate-600 font-bold">每一根毛髮都是精密的生物工程。</p>
-        </div>
-        
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div class="reveal space-y-10">
-                <div class="bg-white p-12 rounded-[3rem] shadow-lg border border-sky-100">
-                    <div class="flex items-center gap-6 mb-8">
-                        <span class="bg-sky-500 text-white w-16 h-16 rounded-full flex items-center justify-center font-black text-2xl">01</span>
-                        <h4 class="text-4xl font-black text-slate-900">上層毛 (Guard Hair)</h4>
-                    </div>
-                    <p class="text-2xl font-medium text-slate-700 leading-relaxed">
-                        質地強韌具天然油脂。負責 <span class="hl">阻隔陽光曬傷</span>、<span class="hl">防止蚊蟲</span> 與雨水淋濕。
-                    </p>
-                </div>
-                <div class="bg-white p-12 rounded-[3rem] shadow-lg border border-sky-100">
-                    <div class="flex items-center gap-6 mb-8">
-                        <span class="bg-sky-400 text-white w-16 h-16 rounded-full flex items-center justify-center font-black text-2xl">02</span>
-                        <h4 class="text-4xl font-black text-slate-900">下層毛 (Undercoat)</h4>
-                    </div>
-                    <p class="text-2xl font-medium text-slate-700 leading-relaxed">
-                        質地極柔軟。負責 <span class="hl">高效保暖</span> 與 <span class="hl">鎖住體溫</span>，隨季節大幅汰換以調節散熱。
-                    </p>
-                </div>
-            </div>
-            <div class="reveal grid grid-rows-2 gap-8 h-full">
-                <img src="https://images.unsplash.com/photo-1554692908-085e3477eeb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Fur Structure 1" class="w-full h-72 object-cover rounded-[3rem] shadow-2xl border-8 border-white">
-                <img src="https://images.unsplash.com/photo-1563212891-b3b070498dbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Fur Structure 2" class="w-full h-72 object-cover rounded-[3rem] shadow-2xl border-8 border-white">
-            </div>
-        </div>
-    </section>
-
-    <!-- Smile Section -->
-    <section id="smile" class="py-40 bg-white px-6">
-        <div class="max-w-6xl mx-auto reveal text-center">
-            <h2 class="text-2xl font-black tracking-[0.5em] text-sky-500 mb-8 uppercase">The Sammy Smile</h2>
-            <h3 class="text-7xl md:text-8xl font-black mb-20 text-slate-900 leading-tight">
-                治癒微笑的<br>
-                <span class="text-sky-500">生理機能</span>
-            </h3>
-            
-            <div class="grid md:grid-cols-3 gap-10 text-left mb-20">
-                <div class="bg-slate-50 p-12 rounded-[3rem] shadow-sm">
-                    <h5 class="text-3xl font-black text-slate-900 mb-6">防止結冰 🧊</h5>
-                    <p class="text-xl text-slate-600 font-medium leading-relaxed">
-                        上翹的嘴角能 <span class="hl">防止唾液溢出</span>，避免在零下環境中於臉部結成冰柱導致凍傷。
-                    </p>
-                </div>
-                <div class="bg-slate-50 p-12 rounded-[3rem] shadow-sm">
-                    <h5 class="text-3xl font-black text-slate-900 mb-6">散熱機制 🌡️</h5>
-                    <p class="text-xl text-slate-600 font-medium leading-relaxed">
-                        毛髮極厚，<span class="hl">張嘴喘氣</span> 是唯一散熱途徑，配合上揚唇線形成微笑錯覺。
-                    </p>
-                </div>
-                <div class="bg-slate-50 p-12 rounded-[3rem] shadow-sm">
-                    <h5 class="text-3xl font-black text-slate-900 mb-6">黃金比例 ✨</h5>
-                    <p class="text-xl text-slate-600 font-medium leading-relaxed">
-                        杏仁眼搭配微翹嘴角，在解剖學上強化了其 <span class="hl">友善、親人</span> 的社交特性。
-                    </p>
-                </div>
-            </div>
-            
-            <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" alt="Smiling Samoyed Detail" class="w-full h-[600px] object-cover rounded-[4rem] shadow-2xl">
-        </div>
-    </section>
-
-    <!-- Genetics Section -->
-    <section id="genetics" class="py-40 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
-            <div class="reveal relative h-[800px] rounded-[4rem] overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1596767677894-3cb60216b2a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Historical Sled Dogs" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-sky-900/10 mix-blend-overlay"></div>
-            </div>
-            <div class="reveal">
-                <h2 class="text-7xl font-black text-slate-900 mb-12 leading-tight">消失的毛色：<br><span class="text-sky-500">人為選擇的力量</span></h2>
-                <div class="space-y-16">
-                    <div>
-                        <h4 class="text-4xl font-black text-slate-900 mb-6">19 世紀的審美偏好</h4>
-                        <p class="text-2xl text-slate-600 leading-relaxed font-medium">
-                            最初的薩摩耶具備多種毛色。19世紀育犬標準認為 <span class="hl">「純白」象徵高貴</span>，導致其他顏色基因被邊緣化。
-                        </p>
-                    </div>
-                    <div>
-                        <h4 class="text-4xl font-black text-slate-900 mb-6">返祖現象 (Atavism)</h4>
-                        <p class="text-2xl text-slate-600 leading-relaxed font-medium">
-                            隱性基因仍可能重新組合。偶爾出現 <span class="hl">帶有黃色斑塊</span> 或深色毛髮的個體，即是生物學上的返祖現象。
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profiles Section -->
-    <section id="profiles" class="py-40 bg-white px-6">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-7xl md:text-8xl font-black mb-32 reveal text-slate-900 text-center">特徵對比圖譜</h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <!-- 阿拉斯加 -->
-                <div class="bg-white border-2 border-slate-100 rounded-[3rem] shadow-2xl overflow-hidden reveal group">
-                    <div class="h-96 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1548624149-19be38a536f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Alaskan" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-12">
-                        <span class="bg-slate-900 text-white px-6 py-2 rounded-full text-sm font-black tracking-widest mb-6 inline-block">THE GIANT</span>
-                        <h3 class="text-5xl font-black mb-8 text-slate-900">阿拉斯加</h3>
-                        <ul class="space-y-6 text-slate-600 font-bold text-2xl">
-                            <li class="flex justify-between border-b-2 pb-3"><span>體型</span><span class="text-slate-900">大型犬</span></li>
-                            <li class="flex justify-between border-b-2 pb-3"><span>耳朵</span><span class="text-slate-900">耳尖圓潤</span></li>
-                            <li class="flex justify-between border-b-2 pb-3"><span>特點</span><span class="hl">力量與負重</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 哈士奇 -->
-                <div class="bg-white border-2 border-slate-100 rounded-[3rem] shadow-2xl overflow-hidden reveal group" style="transition-delay: 150ms;">
-                    <div class="h-96 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1605568420105-440bf10fc652?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Husky" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-12">
-                        <span class="bg-sky-500 text-white px-6 py-2 rounded-full text-sm font-black tracking-widest mb-6 inline-block">THE ATHLETE</span>
-                        <h3 class="text-5xl font-black mb-8 text-slate-900">哈士奇</h3>
-                        <ul class="space-y-6 text-slate-600 font-bold text-2xl">
-                            <li class="flex justify-between border-b-2 pb-3"><span>體型</span><span class="text-slate-900">中型犬</span></li>
-                            <li class="flex justify-between border-b-2 pb-3"><span>眼睛</span><span class="text-slate-900">異色瞳常見</span></li>
-                            <li class="flex justify-between border-b-2 pb-3"><span>特點</span><span class="hl">速度與耐力</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 薩摩耶 -->
-                <div class="bg-white border-2 border-slate-100 rounded-[3rem] shadow-2xl overflow-hidden reveal group" style="transition-delay: 300ms;">
-                    <div class="h-96 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1529927066849-79b791a69825?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Samoyed" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-12">
-                        <span class="bg-sky-200 text-sky-800 px-6 py-2 rounded-full text-sm font-black tracking-widest mb-6 inline-block">THE ANGEL</span>
-                        <h3 class="text-5xl font-black mb-8 text-slate-900">薩摩耶</h3>
-                        <ul class="space-y-6 text-slate-600 font-bold text-2xl">
-                            <li class="flex justify-between border-b-2 pb-3"><span>體型</span><span class="text-slate-900">中大型犬</span></li>
-                            <li class="flex justify-between border-b-2 pb-3"><span>毛色</span><span class="text-slate-900">純白/淡黃</span></li>
-                            <li class="flex justify-between border-b-2 pb-3"><span>特點</span><span class="hl">耐寒與社交</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Conclusion Section -->
-    <section id="conclusion" class="min-h-screen bg-slate-900 flex flex-col justify-center items-center px-6 text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
-            <h1 class="text-[15rem] md:text-[25rem] font-black text-white">ARCTIC</h1>
-        </div>
-        
-        <div class="max-w-7xl mx-auto relative z-10 reveal">
-            <h2 class="text-6xl md:text-9xl font-black text-white mb-16 leading-tight">
-                「傻」是生存的智慧，<br>
-                <span class="text-sky-400">是極地留在基因裡的印記。</span>
-            </h2>
-            <p class="text-3xl text-slate-400 mb-24 font-medium max-w-4xl mx-auto leading-relaxed">
-                了解牠們的演化機制，不僅是學習生物知識，更是學會尊重每一種生命對抗環境的方式。
-            </p>
-            <div class="h-1 w-32 bg-sky-500 mx-auto mb-16 rounded-full"></div>
-            <p class="text-slate-500 text-lg font-bold tracking-widest uppercase">
-                © 2025 Arctic Genetics Project. Designed for Presentation.
-            </p>
-        </div>
-    </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const reveals = document.querySelectorAll('.reveal');
-            const revealOnScroll = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            });
-            reveals.forEach(reveal => {
-                revealOnScroll.observe(reveal);
-            });
-        });
-    </script>
+<section id="qr" class="slide bg-gradient-to-b from-slate-50 to-white"><div class="mesh"></div><div class="wrap grid lg:grid-cols-12 gap-8 items-center"><div class="lg:col-span-6 reveal"><span class="kicker">Before We Start</span><h2 class="headline mb-6">掃描 QR Code<br>一起進入報告</h2><p class="lead">這一頁可以放在封面後，讓同學或老師先掃描連結，之後也能回去看完整的網頁簡報。</p><div class="card p-6 mt-6"><p class="text-2xl font-black leading-relaxed text-slate-800">建議上台說法：<span class="text-sky-600">如果想跟著看，可以先掃描這個 QR Code。</span></p></div></div><div class="lg:col-span-6 reveal delay-1"><div class="qr-card p-8"><div class="image-frame qr-image h-[560px]"><img data-img="qr"><span class="image-tag">QR Code</span></div></div></div></div><div class="number">01</div></section>
+<section id="intro" class="slide bg-white"><div class="mesh"></div><div class="wrap grid lg:grid-cols-12 gap-8 items-center"><div class="lg:col-span-5 reveal"><span class="kicker">Opening Question</span><h2 class="headline mb-5">牠們真的<br>「<span class="silly-word">傻</span>」嗎？</h2><p class="lead">「雪橇三傻」是網路對三種極地犬的戲稱。牠們表情誇張、愛嚎叫、常拆家，看起來像不受控；但換個角度看，這些其實都是工作犬本能在都市中的表現。</p><div class="card p-6 mt-6"><p class="text-2xl font-black leading-relaxed"><span class="text-sky-600">不是智商低，而是人類誤讀了牠們的極地本能。</span></p></div></div><div class="lg:col-span-7 grid grid-cols-12 gap-4 reveal delay-1"><div class="image-frame col-span-7 h-[360px]"><img data-img="intro1"><span class="image-tag">表情誇張</span></div><div class="image-frame col-span-5 h-[360px] mt-8"><img data-img="intro2"><span class="image-tag">傻萌印象</span></div><div class="dark-card col-span-12 p-6 text-white"><div class="grid md:grid-cols-3 gap-3 text-center"><div><p class="text-sky-200 font-black">大眾印象</p><p class="text-2xl font-black">很傻</p></div><div><p class="text-sky-200 font-black">科學解釋</p><p class="text-2xl font-black">高能量</p></div><div><p class="text-sky-200 font-black">真正本質</p><p class="text-2xl font-black">工作犬本能</p></div></div></div></div></div><div class="number">01</div></section>
+<section id="arctic" class="slide bg-slate-950 text-white"><div class="absolute inset-0"><img data-img="arctic" class="w-full h-full object-cover opacity-35"><div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-slate-950/30"></div></div><div class="aurora"></div><div class="wrap grid lg:grid-cols-2 gap-8 items-center"><div class="reveal"><span class="kicker text-sky-200">Environment</span><h2 class="headline mb-6">極端環境，<br>塑造極端能力</h2><p class="lead text-slate-200">在阿拉斯加與西伯利亞，低溫、強風、冰原、苔原與無道路地形，讓雪橇犬不只是寵物，而是人類移動、運輸與生存協作的重要夥伴。</p></div><div class="grid gap-4 reveal delay-1"><div class="dark-card p-6"><h3 class="text-3xl font-black mb-2"><i class="fa-solid fa-temperature-arrow-down text-sky-300 mr-3"></i><span class="env-highlight cold">低溫壓力</span></h3><p class="text-slate-200 text-xl leading-relaxed">保暖、耐力與能量效率，是活下去的基本條件。</p></div><div class="dark-card p-6"><h3 class="text-3xl font-black mb-2"><i class="fa-solid fa-route text-sky-300 mr-3"></i><span class="env-highlight route">沒有道路</span></h3><p class="text-slate-200 text-xl leading-relaxed">雪橇犬能跨越雪地，承擔運輸、狩獵與長距離移動任務。</p></div><div class="dark-card p-6"><h3 class="text-3xl font-black mb-2"><i class="fa-solid fa-brain text-sky-300 mr-3"></i><span class="env-highlight brain">需要判斷</span></h3><p class="text-slate-200 text-xl leading-relaxed">冰層、裂縫與暴風雪，讓牠們必須具備自主判斷能力。</p></div></div></div><div class="number">02</div></section>
+<section id="coat" class="slide bg-gradient-to-b from-sky-50 to-white"><div class="wrap grid lg:grid-cols-12 gap-8 items-center"><div class="lg:col-span-6 reveal"><span class="kicker">Biological Armor</span><h2 class="headline mb-6">雙層毛：<br>天然防護衣</h2><p class="lead">雪橇犬的毛髮不是普通裝飾，而是像極地機能外套。外層負責阻隔環境，內層負責鎖住空氣與保暖。</p><div class="mt-6 space-y-4"><div class="card p-6"><h3 class="text-2xl font-black"><span class="fur-highlight upper">上層毛</span>：防水、防曬、防蟲、保護皮膚</h3></div><div class="card p-6"><h3 class="text-2xl font-black"><span class="fur-highlight lower">下層毛</span>：柔軟濃密，鎖住空氣形成隔熱層</h3></div></div></div><div class="lg:col-span-6 reveal delay-1"><div class="image-frame h-[530px] coat-diagram"><img data-img="coat"><span class="image-tag">雙層毛結構圖可放這裡</span></div></div></div><div class="number">03</div></section>
+<section id="myth" class="slide bg-white"><div class="mesh"></div><div class="wrap"><div class="text-center reveal mb-8"><span class="kicker justify-center">Myth Buster</span><h2 class="headline mb-5">夏天剃光更涼？</h2><p class="lead max-w-4xl mx-auto">對雙層毛犬來說，剃光不一定更涼，反而可能讓皮膚直接暴露在紫外線、蚊蟲與高溫環境中。</p></div><div class="grid lg:grid-cols-12 gap-6 items-stretch"><div class="lg:col-span-5 image-frame min-h-[450px] reveal myth-image"><img data-img="myth"><span class="image-tag">迷思破解圖片</span></div><div class="lg:col-span-7 grid md:grid-cols-2 gap-4"><div class="card p-6 reveal delay-1"><h3 class="text-3xl font-black mb-2"><span class="myth-topic m1">❌ 直接剃光</span></h3><p class="text-xl leading-relaxed text-slate-600">可能曬傷、被叮咬，也可能破壞原本毛層調節。</p></div><div class="card p-6 reveal delay-2"><h3 class="text-3xl font-black mb-2"><span class="myth-topic m2">✅ 勤加梳理</span></h3><p class="text-xl leading-relaxed text-slate-600">移除廢掉的下層絨毛，讓空氣能流通。</p></div><div class="card p-6 reveal delay-3"><h3 class="text-3xl font-black mb-2"><span class="myth-topic m3">✅ 避開高溫</span></h3><p class="text-xl leading-relaxed text-slate-600">台灣夏季避免中午外出，注意地面燙傷。</p></div><div class="card p-6 reveal delay-4"><h3 class="text-3xl font-black mb-2"><span class="myth-topic m4">✅ 補水降溫</span></h3><p class="text-xl leading-relaxed text-slate-600">陰涼、飲水、休息，比剃光更重要。</p></div></div></div></div><div class="number">04</div></section>
+<section id="compare" class="slide bg-slate-950 text-white"><div class="aurora"></div><div class="wrap"><div class="reveal mb-8"><span class="kicker text-sky-200">Three Roles · Click To Explore</span><h2 class="headline mb-5">三犬比較：<br>點進去，看牠們各自的任務</h2><p class="lead text-slate-200 max-w-5xl">點擊任一犬種，就會展開大照片與詳細說明，讓這一頁更像互動式展示。</p></div><div class="grid lg:grid-cols-3 gap-6"><article class="dog-card dark-card overflow-hidden reveal" onclick="openDog('malamute')"><div class="image-frame rounded-b-none h-64"><img data-img="malamute"><span class="image-tag">力量型</span></div><div class="p-6"><div class="flex justify-between items-start gap-4"><h3 class="text-3xl font-black mb-2">阿拉斯加雪橇犬</h3><i class="open-arrow fa-solid fa-arrow-right text-sky-300 text-2xl mt-2"></i></div><p class="text-xl text-slate-200 leading-relaxed">大型、厚實、負重能力強，像極地運輸隊的大貨車。</p><span class="pill mt-4 bg-white/10 border-white/10 text-white">點擊深入介紹</span></div></article><article class="dog-card dark-card overflow-hidden reveal delay-1" onclick="openDog('husky')"><div class="image-frame rounded-b-none h-64"><img data-img="husky"><span class="image-tag">速度型</span></div><div class="p-6"><div class="flex justify-between items-start gap-4"><h3 class="text-3xl font-black mb-2">西伯利亞哈士奇</h3><i class="open-arrow fa-solid fa-arrow-right text-sky-300 text-2xl mt-2"></i></div><p class="text-xl text-slate-200 leading-relaxed">較輕盈、耐力強，適合長距離移動與隊伍協作。</p><span class="pill mt-4 bg-white/10 border-white/10 text-white">點擊深入介紹</span></div></article><article class="dog-card dark-card overflow-hidden reveal delay-2" onclick="openDog('samoyed')"><div class="image-frame rounded-b-none h-64"><img data-img="samoyed"><span class="image-tag">協作型</span></div><div class="p-6"><div class="flex justify-between items-start gap-4"><h3 class="text-3xl font-black mb-2">薩摩耶犬</h3><i class="open-arrow fa-solid fa-arrow-right text-sky-300 text-2xl mt-2"></i></div><p class="text-xl text-slate-200 leading-relaxed">親人、耐寒、社交性強，是極地生活中的多功能夥伴。</p><span class="pill mt-4 bg-white/10 border-white/10 text-white">點擊深入介紹</span></div></article></div></div><div class="number">05</div></section>
+<section id="eyes" class="slide bg-white"><div class="wrap grid lg:grid-cols-2 gap-8 items-center"><div class="reveal"><span class="kicker">Genetic Trait</span><h2 class="headline mb-6">哈士奇藍眼：<br>不是雪地保護色</h2><p class="lead">哈士奇常見<span class="eye-blue">藍眼</span>、<span class="eye-brown">棕眼</span>或<span class="eye-hetero">異色瞳</span>，但<span class="eye-blue">藍眼</span>主要是基因表現與育種選擇的結果，不是牠為了在雪地中生存而演化出的保護色。</p></div><div class="image-frame h-[560px] reveal delay-1"><img data-img="eyes"><span class="image-tag">藍眼 / 異瞳特寫</span></div></div><div class="number">06</div></section>
+<section id="smile" class="slide bg-gradient-to-b from-slate-50 to-sky-50"><div class="wrap grid lg:grid-cols-12 gap-8 items-center"><div class="lg:col-span-5 reveal"><span class="kicker">Anatomy</span><h2 class="headline mb-6">薩摩耶微笑：<br>可愛背後有功能</h2><p class="lead">薩摩耶的「微笑天使」不是只為了賣萌，而可能與嘴角構造、臉部比例，以及喘氣散熱的視覺效果有關。</p></div><div class="lg:col-span-7 grid md:grid-cols-3 gap-4"><div class="card p-6 reveal delay-1"><h3 class="text-2xl font-black mb-2"><span class="topic-highlight t1">01 防止口水結冰</span></h3><p class="small">嘴角上揚有助減少口水外流，降低結冰與凍傷風險。</p></div><div class="card p-6 reveal delay-2"><h3 class="text-2xl font-black mb-2"><span class="topic-highlight t2">02 臉部比例</span></h3><p class="small">杏仁眼、黑色嘴角與舌頭，讓牠看起來像在笑。</p></div><div class="card p-6 reveal delay-3"><h3 class="text-2xl font-black mb-2"><span class="topic-highlight t3">03 喘氣散熱</span></h3><p class="small">在台灣較熱環境中，張嘴喘氣讓笑容更明顯。</p></div><div class="image-frame md:col-span-3 h-[330px] reveal delay-4 smile-image"><img data-img="smile"><span class="image-tag">微笑天使</span></div></div></div><div class="number">07</div></section>
+<section id="behavior" class="slide bg-slate-950 text-white"><div class="absolute inset-0"><img data-img="behavior" class="w-full h-full object-cover opacity-25"><div class="absolute inset-0 bg-slate-950/78"></div></div><div class="aurora"></div><div class="wrap"><div class="text-center reveal mb-8"><span class="kicker text-sky-200 justify-center">Behavior Science</span><h2 class="headline mb-5">行為翻案：<br>牠不是故意搗蛋</h2><p class="lead text-slate-200 max-w-5xl mx-auto">都市裡的問題行為，常常是工作犬本能、運動不足與環境刺激不足共同造成。</p></div><div class="grid lg:grid-cols-3 gap-6"><div class="dark-card p-6 reveal"><i class="fa-solid fa-couch text-5xl text-sky-300 mb-5"></i><h3 class="text-3xl font-black mb-3">拆家</h3><p class="text-xl text-slate-200 leading-relaxed">能量無處釋放，可能轉為啃咬、破壞與尋找刺激。</p></div><div class="dark-card p-6 reveal delay-1"><i class="fa-solid fa-volume-high text-5xl text-sky-300 mb-5"></i><h3 class="text-3xl font-black mb-3">嚎叫</h3><p class="text-xl text-slate-200 leading-relaxed">是犬科社交發聲本能，也可能受聲音、無聊或焦慮引發。</p></div><div class="dark-card p-6 reveal delay-2"><i class="fa-solid fa-brain text-5xl text-sky-300 mb-5"></i><h3 class="text-3xl font-black mb-3">不服從</h3><p class="text-xl text-slate-200 leading-relaxed">在極地，獨立判斷可能是救命能力；在都市卻被誤解成固執。</p></div></div></div><div class="number">08</div></section>
+<section id="care" class="slide bg-gradient-to-b from-white to-slate-50"><div class="wrap grid lg:grid-cols-12 gap-8 items-center"><div class="lg:col-span-5 reveal"><span class="kicker">Modern Coexistence</span><h2 class="headline mb-6">理解牠們，<br>才是真正照顧牠們</h2><p class="lead">如果在台灣都市飼養雪橇犬，核心不是只要求牠乖，而是讓牠的身體與大腦都有正確出口。</p></div><div class="lg:col-span-7 grid md:grid-cols-2 gap-4"><div class="image-frame md:col-span-2 h-64 reveal care-image"><img data-img="care"><span class="image-tag">人犬共處</span></div><div class="card p-6 reveal delay-1"><h3 class="text-2xl font-black mb-2"><span class="care-topic c1">足夠運動</span></h3><p class="small">跑步、長距離散步、飛盤等中高強度活動。</p></div><div class="card p-6 reveal delay-2"><h3 class="text-2xl font-black mb-2"><span class="care-topic c2">嗅聞與腦力</span></h3><p class="small">Nosework、找食、任務訓練，消耗腦力降低無聊。</p></div><div class="card p-6 reveal delay-3"><h3 class="text-2xl font-black mb-2"><span class="care-topic c3">夏季避暑</span></h3><p class="small">避開高溫、準備飲水、陰影與休息。</p></div><div class="card p-6 reveal delay-4"><h3 class="text-2xl font-black mb-2"><span class="care-topic c4">理解取代責罵</span></h3><p class="small">先找出行為原因，再設計環境與訓練。</p></div></div></div><div class="number">09</div></section>
+<section id="summary" class="slide bg-white"><div class="mesh"></div><div class="wrap"><div class="reveal text-center mb-8"><span class="kicker justify-center">Storyline</span><h2 class="headline mb-5">整份報告，可以這樣講</h2><p class="lead max-w-4xl mx-auto">用「誤解 → 來源 → 適應 → 錯置 → 翻案」串起全篇，讓觀眾跟著你的邏輯一步步改變看法。</p></div><div class="grid lg:grid-cols-5 gap-5"><div class="story-card card p-6 reveal"><div class="story-num">01</div><h3 class="text-2xl font-black mb-2">大眾印象</h3><p class="small">牠們看起來傻萌、愛叫、愛拆家，所以被稱為「雪橇三傻」。</p></div><div class="story-card card p-6 reveal delay-1"><div class="story-num">02</div><h3 class="text-2xl font-black mb-2">追溯來源</h3><p class="small">其實牠們來自阿拉斯加與西伯利亞等極地環境。</p></div><div class="story-card card p-6 reveal delay-2"><div class="story-num">03</div><h3 class="text-2xl font-black mb-2">演化適應</h3><p class="small">雙層毛、耐力、嚎叫與自主判斷，都是極地生存能力。</p></div><div class="story-card card p-6 reveal delay-3"><div class="story-num">04</div><h3 class="text-2xl font-black mb-2">環境錯置</h3><p class="small">當牠們進入都市，原本的工作犬本能變成問題行為。</p></div><div class="story-card card p-6 reveal delay-4"><div class="story-num">05</div><h3 class="text-2xl font-black mb-2">科學翻案</h3><p class="small">所謂「傻」，其實是人類用錯角度理解牠們。</p></div></div></div><div class="number">10</div></section>
+<section id="end" class="slide bg-slate-950 text-white text-center"><div class="absolute inset-0"><img data-img="end" class="w-full h-full object-cover opacity-38"><div class="absolute inset-0 bg-gradient-to-b from-slate-950/55 via-slate-950/75 to-slate-950"></div></div><div class="aurora"></div><div class="snow"></div><div class="wrap reveal"><span class="kicker text-sky-200 justify-center">Conclusion</span><h2 class="display end-title mb-8">牠們不是傻，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-cyan-200">是被放錯環境的極地專家。</span></h2><div class="grid md:grid-cols-3 gap-5 max-w-6xl mx-auto text-left"><div class="dark-card p-6"><h3 class="text-2xl font-black mb-3">雙層毛</h3><p class="text-slate-200 leading-relaxed">是對抗嚴寒與調節體溫的防護衣。</p></div><div class="dark-card p-6"><h3 class="text-2xl font-black mb-3">微笑與嚎叫</h3><p class="text-slate-200 leading-relaxed">背後有解剖、散熱與社交溝通原因。</p></div><div class="dark-card p-6"><h3 class="text-2xl font-black mb-3">拆家與不服從</h3><p class="text-slate-200 leading-relaxed">是高能量與獨立判斷本能的延伸。</p></div></div><p class="mt-8 text-2xl md:text-3xl text-slate-200 font-black">理解牠們的過去，才能更尊重牠們現在的行為。</p></div><div class="number">11</div></section>
+<div id="dogModal" class="modal" onclick="modalBackdrop(event)"><div class="modal-panel"><button class="modal-close" onclick="closeDog()">×</button><div class="modal-photo"><img id="modalImg" alt="犬種大照片"><div class="modal-photo-title"><h3 id="modalPhotoTitle"></h3><p id="modalPhotoSub"></p></div></div><div class="modal-body"><span class="kicker">Deep Dive</span><h2 id="modalTitle" class="modal-title mb-4"></h2><p id="modalLead" class="lead mb-5"></p><div id="modalTags" class="flex flex-wrap gap-2 mb-5"></div><ul id="modalList" class="modal-list"></ul><div class="card p-5 mt-5"><p id="modalSpeak" class="text-xl font-black leading-relaxed text-slate-800"></p></div></div></div></div>
+<div id="speaker" class="speaker no-print"><b>講稿提示：</b><span id="speakerText">按「講稿提示」或鍵盤 N 可顯示每頁提示。</span></div><div class="hint no-print">快捷鍵：↑ ↓ 換頁｜F 全螢幕｜N 講稿｜P 模式</div>
+<script>
+const IMAGE_URLS={hero:"https://drive.google.com/thumbnail?id=1dFBk7xGgH2LD93TR-F1LwCKgBa4FZKb0&sz=w2400",qr:"https://drive.google.com/thumbnail?id=1jDmJLYYqrPfpn0-5stIpj1mzqYekOZYF&sz=w1600",intro1:"https://drive.google.com/thumbnail?id=1bT128R2ARNlAkY7DLkxT7eYg5Qchsvcw&sz=w2400",intro2:"https://drive.google.com/thumbnail?id=1cq6O2GiPbwitsGcrDWyor3LlPmOeYrmS&sz=w2400",arctic:"https://drive.google.com/thumbnail?id=1kt18qJ7iwn_w2CQCa33n1NongKqH9-Xg&sz=w2400",coat:"https://drive.google.com/thumbnail?id=1l3qEldqYD3HeGOoNWHtmn21gDQdH-yDU&sz=w2400",myth:"https://drive.google.com/thumbnail?id=1MIFx2N_HP8JQXE3eBWGAzTfrCyRV_ZbK&sz=w2400",malamute:"https://drive.google.com/thumbnail?id=1D6uN5pPg1TRWqhAF9ix2C7dTwZRr0V8k&sz=w2400",husky:"https://drive.google.com/thumbnail?id=1kBuAzkTZRYlltM_qsJNBv19-DfKP_zHq&sz=w2400",samoyed:"https://drive.google.com/thumbnail?id=19TFlNYyDc-q_y5tUaw659y_dv5WQgIKb&sz=w2400",eyes:"https://drive.google.com/thumbnail?id=1te_LLDXC0Z0MmfoYQ-sDeAn-XREXNwrf&sz=w2400",smile:"https://drive.google.com/thumbnail?id=1WfTWSotoSTFnpNt3Vaw8k6oOx4iJw-Cq&sz=w2400",behavior:"https://drive.google.com/thumbnail?id=1paiyJOzeURqqGpaSgTEwwLWEAXaeJ2pq&sz=w2400",care:"https://drive.google.com/thumbnail?id=15JoH5x638KxPNjJ967LKQhiShWZAnWcm&sz=w2400",end:"https://drive.google.com/thumbnail?id=1yczJNjmEdnl-Gh8_G4lKbS4b6GwDSBWd&sz=w2400"};
+const DOGS={malamute:{img:'malamute',title:'阿拉斯加雪橇犬',sub:'力量型｜重型運輸專家',lead:'牠的定位不是快，而是穩、強、能負重。可以把牠想像成極地世界裡的大貨車。',tags:['大型犬','重型貨運','力量','耐寒'],list:['<b>任務定位：</b>長距離慢速負重，適合拖運較重物資。','<b>外型重點：</b>骨架大、胸腔厚、毛量豐，整體看起來穩重有力量。','<b>報告講法：</b>牠不是靠爆發速度取勝，而是靠穩定輸出與耐力。','<b>容易誤解：</b>體型大不代表笨重，而是為了在惡劣環境中承擔運輸任務。'],speak:'一句話記：阿拉斯加不是跑車，是極地大貨車。'},husky:{img:'husky',title:'西伯利亞哈士奇',sub:'速度型｜長距離耐力選手',lead:'哈士奇的優勢是輕盈、耐力與團隊移動，所以牠常呈現高能量、愛發聲、表情豐富。',tags:['中型犬','速度','耐力','社交發聲'],list:['<b>任務定位：</b>長距離移動與雪橇隊協作，強調速度與耐力。','<b>外型重點：</b>身形較輕盈，常見藍眼、棕眼或異色瞳。','<b>行為特色：</b>嚎叫不是單純頂嘴，而是犬科社交溝通本能。','<b>容易誤解：</b>牠不是故意吵，而是保留較強的群體發聲傾向。'],speak:'一句話記：哈士奇不是在罵人，是極地通訊員。'},samoyed:{img:'samoyed',title:'薩摩耶犬',sub:'協作型｜微笑的極地夥伴',lead:'薩摩耶的特色是親人、耐寒與社交協作。牠的微笑不是只有可愛，也能連到防凍與散熱的科學解釋。',tags:['中大型犬','社交','牧鹿協作','微笑'],list:['<b>任務定位：</b>與人類生活協作，包含牧鹿、護衛與陪伴。','<b>外型重點：</b>白色或奶油色毛髮、上揚嘴角、親和表情。','<b>微笑真相：</b>嘴角構造可能有助減少口水外流，降低極寒環境結冰風險。','<b>容易誤解：</b>牠不是只會賣萌，而是高度親人、適合協作的工作犬。'],speak:'一句話記：薩摩耶不是只會笑，是極地生活助理。'}};
+const SPEAKER_NOTES={hero:'開場：大家聽過雪橇三傻嗎？今天要把牠們從傻翻案成極地生存專家。',intro:'用反差吸引聽眾：我們其實是用都市寵物標準去誤解極地工作犬。',arctic:'環境決定能力：低溫、沒有道路、危險地形，讓牠們必須耐寒、耐力強、能判斷。',coat:'雙層毛是核心科普點：上層防護，下層保暖。',myth:'攻防重點：不建議剃光；正確做法是梳理與避暑。',compare:'這頁可以請同學點選犬種，進入第二層介紹。',eyes:'哈士奇藍眼不是雪地保護色，而是基因表現與育種選擇。',smile:'薩摩耶微笑：防止口水結冰、臉部比例、喘氣散熱。',behavior:'拆家、嚎叫、不服從，都可以用工作犬本能解釋。',care:'理解本能後，就知道運動、腦力、避暑與環境設計很重要。',summary:'這頁照五張卡片講：誤解、來源、適應、錯置、翻案。',end:'最後一句慢一點講：牠們不是傻，是被放錯環境的極地專家。'};
+document.querySelectorAll('[data-img]').forEach(el=>{const k=el.getAttribute('data-img');if(IMAGE_URLS[k])el.src=IMAGE_URLS[k]});
+const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+const sections=[...document.querySelectorAll('section[id]')],links=[...document.querySelectorAll('.navlink')],speaker=document.getElementById('speaker'),speakerText=document.getElementById('speakerText');function currentSection(){let c=sections[0];sections.forEach(s=>{if(scrollY>=s.offsetTop-130)c=s});return c}function update(){const h=document.documentElement;document.getElementById('progress').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';const cur=currentSection().id;links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));speakerText.textContent=SPEAKER_NOTES[cur]||'這頁可以自由發揮。'}addEventListener('scroll',update,{passive:true});update();
+function toggleFull(){if(!document.fullscreenElement){document.documentElement.requestFullscreen?.()}else{document.exitFullscreen?.()}}document.getElementById('fullBtn').addEventListener('click',toggleFull);document.getElementById('noteBtn').addEventListener('click',()=>speaker.classList.toggle('show'));document.getElementById('modeBtn').addEventListener('click',()=>document.body.classList.toggle('presentation-mode'));function go(d){const cur=currentSection(),i=sections.indexOf(cur),n=sections[Math.max(0,Math.min(sections.length-1,i+d))];n.scrollIntoView({behavior:'smooth'})}
+function openDog(key){const d=DOGS[key];if(!d)return;document.getElementById('modalImg').src=IMAGE_URLS[d.img];document.getElementById('modalPhotoTitle').textContent=d.title;document.getElementById('modalPhotoSub').textContent=d.sub;document.getElementById('modalTitle').textContent=d.title;document.getElementById('modalLead').textContent=d.lead;document.getElementById('modalTags').innerHTML=d.tags.map(t=>`<span class="pill">${t}</span>`).join('');document.getElementById('modalList').innerHTML=d.list.map(x=>`<li>${x}</li>`).join('');document.getElementById('modalSpeak').textContent=d.speak;document.getElementById('dogModal').classList.add('show');document.body.style.overflow='hidden'}function closeDog(){document.getElementById('dogModal').classList.remove('show');document.body.style.overflow=''}function modalBackdrop(e){if(e.target.id==='dogModal')closeDog()}
+document.addEventListener('keydown',e=>{if(document.getElementById('dogModal').classList.contains('show')&&e.key==='Escape'){closeDog();return}if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();go(1)}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();go(-1)}if(e.key.toLowerCase()==='n')speaker.classList.toggle('show');if(e.key.toLowerCase()==='p')document.body.classList.toggle('presentation-mode');if(e.key.toLowerCase()==='f')toggleFull()});
+</script>
 </body>
 </html>
