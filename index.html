@@ -1,70 +1,697 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python 題庫測驗系統｜90題</title>
-<style>
-:root{--bg1:#f6f9ff;--bg2:#eaf2ff;--card:rgba(255,255,255,.78);--text:#172033;--muted:#687386;--blue:#2563eb;--cyan:#06b6d4;--green:#16a34a;--red:#dc2626;--border:rgba(37,99,235,.14);--shadow:0 24px 80px rgba(15,23,42,.12)}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",Arial,sans-serif;color:var(--text);min-height:100vh;background:radial-gradient(circle at 10% 10%,rgba(37,99,235,.18),transparent 28%),radial-gradient(circle at 90% 0%,rgba(6,182,212,.18),transparent 30%),linear-gradient(135deg,var(--bg1),var(--bg2))}body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.32) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.32) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}
-.app{max-width:1180px;margin:0 auto;padding:28px 18px 48px;position:relative}.hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:22px}.brand{display:flex;gap:14px;align-items:center}.logo{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:white;font-size:28px;box-shadow:0 14px 34px rgba(37,99,235,.28)}h1{font-size:clamp(28px,5vw,48px);line-height:1.04;margin:0;letter-spacing:-.04em}.subtitle{color:var(--muted);margin:9px 0 0;font-size:15px}.pillbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}.pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--border);font-weight:800;backdrop-filter:blur(16px)}
-.card{background:var(--card);border:1px solid rgba(255,255,255,.75);box-shadow:var(--shadow);border-radius:30px;backdrop-filter:blur(24px);padding:24px}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.panelTitle{font-size:20px;margin:0 0 14px;letter-spacing:-.02em}.modeGrid,.topicGrid,.countGrid{display:grid;gap:12px}.modeGrid,.topicGrid{grid-template-columns:repeat(2,1fr)}.countGrid{grid-template-columns:repeat(4,1fr)}
-.choiceCard{border:1px solid var(--border);border-radius:22px;padding:16px;background:rgba(255,255,255,.62);cursor:pointer;transition:.22s ease;min-height:92px}.choiceCard:hover{transform:translateY(-3px);box-shadow:0 16px 38px rgba(37,99,235,.12)}.choiceCard.active{border-color:rgba(37,99,235,.72);background:linear-gradient(135deg,rgba(37,99,235,.13),rgba(6,182,212,.08));box-shadow:0 16px 38px rgba(37,99,235,.15)}.choiceCard b{display:block;font-size:17px;margin-bottom:6px}.choiceCard span{color:var(--muted);font-size:13px;line-height:1.45}.input,.select{width:100%;border:1px solid var(--border);border-radius:16px;padding:13px 14px;font-size:15px;background:rgba(255,255,255,.76);outline:none}
-.btn{border:none;border-radius:18px;padding:13px 18px;font-weight:900;cursor:pointer;transition:.2s ease;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn.primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:white;box-shadow:0 16px 34px rgba(37,99,235,.24)}.btn.primary:hover{transform:translateY(-2px);box-shadow:0 18px 42px rgba(37,99,235,.32)}.btn.ghost{background:rgba(255,255,255,.72);color:#1f2937;border:1px solid var(--border)}.btn.green{background:rgba(22,163,74,.1);color:var(--green);border:1px solid rgba(22,163,74,.22)}.btn:disabled{opacity:.48;cursor:not-allowed}.startRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.hidden{display:none!important}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{border-radius:22px;padding:16px;background:rgba(255,255,255,.6);border:1px solid var(--border)}.stat .num{font-size:28px;font-weight:950;color:var(--blue)}.stat .label{color:var(--muted);font-size:13px}.notice{border-left:4px solid var(--blue);background:rgba(37,99,235,.08);padding:12px 14px;border-radius:16px;line-height:1.65;color:#334155;margin-top:16px}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.progressWrap{height:12px;border-radius:999px;background:rgba(37,99,235,.10);overflow:hidden;margin:12px 0 18px}.progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px;transition:.25s ease}.meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:#475569;font-weight:800}.timer{font-variant-numeric:tabular-nums;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--border);font-weight:950;color:var(--red)}.questionCard{padding:28px;border-radius:28px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.86)}.questionText{font-size:22px;line-height:1.58;font-weight:900;letter-spacing:-.015em;margin:0 0 18px;white-space:pre-wrap}.small{font-size:13px;color:var(--muted)}
-.options{display:grid;gap:12px}.option{text-align:left;width:100%;border:1px solid rgba(37,99,235,.14);background:rgba(255,255,255,.82);border-radius:20px;padding:15px 16px;cursor:pointer;transition:.18s ease;font-size:16px;line-height:1.5;display:flex;gap:12px;align-items:flex-start}.option:hover{transform:translateY(-2px);border-color:rgba(37,99,235,.38);box-shadow:0 12px 30px rgba(37,99,235,.08)}.option.selected{border-color:rgba(37,99,235,.82);background:rgba(37,99,235,.09)}.option.correct{border-color:rgba(22,163,74,.6);background:rgba(22,163,74,.12)}.option.wrong{border-color:rgba(220,38,38,.55);background:rgba(220,38,38,.11)}.badge{flex:0 0 auto;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:#eef2ff;color:var(--blue);font-weight:950}.feedback{margin-top:16px;border-radius:22px;padding:16px;border:1px solid var(--border);background:rgba(255,255,255,.68)}.feedback.ok{border-color:rgba(22,163,74,.28);background:rgba(22,163,74,.08)}.feedback.no{border-color:rgba(220,38,38,.24);background:rgba(220,38,38,.07)}.feedback h3{margin:0 0 8px}.explain{color:#334155;line-height:1.7;margin:6px 0 0}.navRow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}
-.scoreHero{text-align:center;padding:30px}.scoreNum{font-size:clamp(48px,9vw,96px);font-weight:1000;letter-spacing:-.06em;color:var(--blue);line-height:.95}.reviewGrid,.browseGrid{display:grid;gap:14px;margin-top:16px}.reviewItem,.browseItem{border:1px solid var(--border);background:rgba(255,255,255,.66);border-radius:22px;padding:16px}.reviewItem h4,.browseItem h3{margin:0 0 10px;line-height:1.45}.answerLine{padding:10px 12px;border-radius:14px;background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.18);font-weight:900;color:var(--green)}.browseTools{display:grid;grid-template-columns:1fr 170px 140px;gap:10px;margin:14px 0}.optionList{display:grid;gap:6px;margin:10px 0}.optionMini{padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.62);border:1px solid rgba(37,99,235,.10)}.optionMini.good{background:rgba(22,163,74,.09);border-color:rgba(22,163,74,.22);font-weight:900}
-@media(max-width:860px){.hero,.topbar{flex-direction:column;align-items:stretch}.grid{grid-template-columns:1fr}.modeGrid,.topicGrid{grid-template-columns:1fr}.countGrid{grid-template-columns:repeat(2,1fr)}.card{padding:18px;border-radius:24px}.questionText{font-size:19px}.browseTools{grid-template-columns:1fr}.pillbar{justify-content:flex-start}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英泰自動控制行 - 數位維修單</title>
+    <style>
+        /* =========================================
+           1. 視覺系統與配色 (Color & Variables)
+           ========================================= */
+        :root {
+            --primary-blue: #007AFF;
+            --primary-grad: linear-gradient(135deg, #007AFF 0%, #0055b3 100%);
+            --accent-green: #34C759;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --header-bg: rgba(235, 245, 255, 0.6); /* 淺藍色區塊背景 */
+            --text-main: #1d1d1f;
+            --shadow-soft: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px 150px;
+            color: var(--text-main);
+            /* 背景：柔和多彩極光，不刺眼 */
+            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            -webkit-print-color-adjust: exact; /* 強制列印背景色 */
+            print-color-adjust: exact;
+        }
+
+        /* =========================================
+           2. 主體玻璃容器 (The Glass Paper)
+           ========================================= */
+        .paper {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 8mm 8mm;
+            box-sizing: border-box;
+            
+            /* Liquid Glass 質感 */
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255, 255, 255, 1);
+            position: relative;
+        }
+
+        /* =========================================
+           3. 抬頭設計 (Header) - 公司大，維修單小
+           ========================================= */
+        .header {
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .company-block h1 {
+            margin: 0;
+            font-size: 30px; /* 公司名加大 */
+            font-weight: 800;
+            background: linear-gradient(45deg, #007AFF, #00C6FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .en-title {
+            font-size: 14px;
+            color: #888;
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .doc-badge {
+            background: var(--primary-blue);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,122,255,0.3);
+            display: inline-block;
+        }
+
+        .company-info {
+            margin-top: 15px;
+            font-size: 15px; /* 字體加大 */
+            color: #444;
+            line-height: 1.8;
+            font-weight: 500;
+            background: rgba(255,255,255,0.5);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .info-icon { margin-right: 5px; font-size: 16px; }
+
+        .meta-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .meta-box {
+            background: #f2f2f7;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .meta-box input { background: transparent; width: 110px; text-align: right; font-weight: bold; padding: 0;}
+
+        /* =========================================
+           4. 彩色區塊卡片 (Colorful Sections)
+           ========================================= */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.8);
+            /* 讓每個區塊有點顏色 */
+            background: linear-gradient(to bottom right, rgba(235, 245, 255, 0.7), rgba(255, 255, 255, 0.4));
+        }
+
+        /* 特別為故障區塊換個色調 */
+        .section-card.issue-card {
+            background: linear-gradient(to bottom right, rgba(255, 240, 240, 0.7), rgba(255, 255, 255, 0.4));
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #555;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        .card-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px; height: 16px;
+            background: var(--primary-blue);
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        /* 輸入框樣式 */
+        input, textarea {
+            width: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.6);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #333;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0,122,255,0.2);
+            border-color: var(--primary-blue);
+        }
+
+        /* 客戶資料 Grid */
+        .client-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        /* 故障表格 */
+        .desc-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        .desc-table td.label { 
+            width: 80px; font-weight: bold; color: #444; vertical-align: top; padding-top: 10px; 
+            text-align: right; padding-right: 15px;
+        }
+        .desc-table textarea { min-height: 50px; }
+
+        /* 零件表 */
+        .parts-container {
+            background: white;
+            border-radius: 16px;
+            padding: 5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .parts-table { width: 100%; border-collapse: collapse; }
+        .parts-table th {
+            background: #f2f2f7;
+            color: #555;
+            padding: 10px;
+            font-size: 13px;
+            text-align: center;
+        }
+        .parts-table th:first-child { border-radius: 10px 0 0 10px; }
+        .parts-table th:last-child { border-radius: 0 10px 10px 0; }
+        
+        .parts-table td { padding: 5px; }
+        .parts-table input { text-align: center; background: transparent; border: none; border-bottom: 1px dashed #ddd; border-radius: 0; }
+        .parts-table input:focus { background: #f9f9f9; border-bottom: 1px solid var(--primary-blue); box-shadow: none; }
+        
+        .total-area {
+            text-align: right;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            border-top: 2px dashed #eee;
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        #grandTotal { 
+            width: 150px; font-size: 24px; color: var(--primary-blue); 
+            background: transparent; border: none; text-align: right;
+            font-weight: 800;
+        }
+
+        /* 簽名區 */
+        .footer { display: flex; justify-content: space-between; margin-top: 30px; gap: 20px; }
+        .sign-box {
+            flex: 1;
+            background: rgba(255,255,255,0.5);
+            border: 2px solid #e5e5ea;
+            border-radius: 12px;
+            padding: 15px;
+            position: relative;
+        }
+        .sign-title { font-size: 14px; font-weight: bold; color: #555; margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px;}
+        .sign-line { border-bottom: 1px dashed #aaa; height: 40px; margin-top: 10px;}
+
+        /* 按鈕 */
+        .btn-del { 
+            color: red; cursor: pointer; font-weight: bold; font-size: 18px; 
+            display: flex; justify-content: center; width: 30px;
+        }
+        /* 操作工具列：獨立浮動，不遮住表單內容 */
+        .toolbar {
+            position: fixed;
+            z-index: 9999;
+            right: 20px;
+            bottom: max(18px, env(safe-area-inset-bottom));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 10px;
+            max-width: min(760px, calc(100vw - 40px));
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,.9);
+            border-radius: 18px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 10px 30px rgba(31,35,40,.18);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .btn-float {
+            min-height: 44px;
+            background: var(--primary-grad);
+            color: white;
+            border: none;
+            padding: 10px 17px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.2;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(0,122,255,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+        .btn-float:hover { transform: translateY(-2px); filter: brightness(1.03); }
+        .btn-float:focus-visible { outline: 3px solid rgba(0,122,255,.28); outline-offset: 2px; }
+
+        @media (max-width: 760px) {
+            body { padding-bottom: 210px; }
+            .toolbar {
+                left: 10px;
+                right: 10px;
+                bottom: max(10px, env(safe-area-inset-bottom));
+                max-width: none;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                padding: 9px;
+                border-radius: 16px;
+            }
+            .btn-float {
+                width: 100%;
+                min-width: 0;
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+            .toolbar .btn-float:first-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 390px) {
+            body { padding-bottom: 250px; }
+            .toolbar { grid-template-columns: 1fr; }
+            .toolbar .btn-float:first-child { grid-column: auto; }
+        }
+
+        /* =========================================
+           5. 彩色 PDF 列印設定 (Print)
+           ========================================= */
+        @media print {
+            body { 
+                background: white; 
+                -webkit-print-color-adjust: exact !important; /* 關鍵：強制列印色彩 */
+                print-color-adjust: exact !important;
+            }
+            .toolbar, .btn-del { display: none !important; }
+            
+            .paper {
+                box-shadow: none; margin: 0; width: 100%; border: none;
+                /* 列印時保持淡色背景，增加質感 */
+                background: white;
+            }
+
+            /* 確保區塊的顏色被印出來 */
+            .section-card {
+                background-color: rgba(235, 245, 255, 0.4) !important;
+                border: 1px solid #ddd !important;
+            }
+            .section-card.issue-card {
+                background-color: rgba(255, 240, 240, 0.4) !important;
+            }
+            .parts-table th { background-color: #f2f2f7 !important; }
+
+            /* 輸入框去框線 */
+            input, textarea { 
+                border: none !important; 
+                background: transparent !important; 
+                box-shadow: none !important;
+            }
+            
+            /* 公司名漸層轉純藍 (防止老印表機印不出漸層) */
+            .company-block h1 { 
+                background: none; 
+                -webkit-text-fill-color: #007AFF; 
+                color: #007AFF; 
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="app">
-  <section class="hero">
-    <div class="brand"><div class="logo">🐍</div><div><h1>Python 題庫測驗系統</h1><p class="subtitle">90 題整合｜練習模式立即檢討｜考試模式 50 分鐘倒數｜考前總覽一次看題目與答案</p></div></div>
-    <div class="pillbar"><div class="pill">📘 期中50題</div><div class="pill">🧩 Function + List</div><div class="pill">📁 檔案 + 排序</div></div>
-  </section>
 
-  <main id="home" class="grid">
-    <section class="card">
-      <h2 class="panelTitle">① 選擇模式</h2>
-      <div class="modeGrid" id="modeGrid"><div class="choiceCard active" data-mode="practice"><b>✏️ 練習模式</b><span>一題一題作答，確認後立刻顯示正解與詳解。</span></div><div class="choiceCard" data-mode="exam"><b>🧪 考試模式</b><span>50 分鐘倒數，作答中不顯示答案，最後統一看成績。</span></div></div>
-      <h2 class="panelTitle" style="margin-top:22px">② 選擇主題</h2>
-      <div class="topicGrid" id="topicGrid"><div class="choiceCard active" data-topic="all"><b>🎯 綜合全部</b><span>從 90 題中抽題，最適合模擬考。</span></div><div class="choiceCard" data-topic="midterm50"><b>📘 期中50題</b><span>range、if、迴圈、亂數、input、函數、Turtle。</span></div><div class="choiceCard" data-topic="functionList"><b>🧩 Function + List</b><span>函數、return、參數、二維 List、append。</span></div><div class="choiceCard" data-topic="fileSort"><b>📁 檔案 + 排序</b><span>open、close、readlines、encoding、三大排序。</span></div><div class="choiceCard" data-topic="wrong"><b>🔥 錯題複習</b><span>只抽你之前做錯的題目。</span></div></div>
-      <h2 class="panelTitle" style="margin-top:22px">③ 題數與設定</h2>
-      <div class="countGrid"><button class="btn ghost countBtn" data-count="10">10 題</button><button class="btn ghost countBtn" data-count="20">20 題</button><button class="btn ghost countBtn" data-count="30">30 題</button><button class="btn ghost countBtn activeCount" data-count="50">50 題</button></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px"><input id="customCount" class="input" type="number" min="1" value="50" placeholder="自訂題數"><select id="shuffleOptions" class="select"><option value="yes" selected>選項也隨機排序</option><option value="no">選項維持原順序</option></select></div>
-      <div class="startRow"><button class="btn primary" id="startBtn">開始測驗 🚀</button><button class="btn ghost" id="browseBtn">考前總覽：看全部題目答案</button><button class="btn ghost" id="clearWrongBtn">清空錯題紀錄</button></div>
-    </section>
-    <aside class="card"><h2 class="panelTitle">系統狀態</h2><div class="stats"><div class="stat"><div class="num">90</div><div class="label">總題數</div></div><div class="stat"><div class="num" id="wrongCount">0</div><div class="label">已記錄錯題</div></div><div class="stat"><div class="num">50</div><div class="label">考試分鐘</div></div><div class="stat"><div class="num">1</div><div class="label">一次一題</div></div></div><div class="notice"><b>建議：</b><br>先按「考前總覽」快速掃過全部題目與答案，再用練習模式刷題，最後用考試模式抽 50 題模擬。</div></aside>
-  </main>
+    <div class="toolbar">
+        <button class="btn-float" onclick="addPartRow()"><span>+</span> 新增項目</button>
+        <button class="btn-float" style="background: var(--accent-green);" onclick="exportFormalPDF()"><span>📄</span> 正式 PDF</button>
+        <button class="btn-float" onclick="exportFormalWord()"><span>W</span> Word 備用</button>
+    </div>
 
-  <section id="quiz" class="card hidden"><div class="topbar"><div><div class="meta"><span id="modeLabel"></span><span id="topicLabel"></span><span id="answeredLabel"></span></div><div class="progressWrap"><div class="progressFill" id="progressFill"></div></div></div><div class="timer hidden" id="timer">50:00</div></div><div class="questionCard"><div class="small" id="sourceLabel"></div><h2 class="questionText" id="questionText"></h2><div class="options" id="options"></div><div id="feedback" class="feedback hidden"></div></div><div class="navRow"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" id="prevBtn">← 上一題</button><button class="btn ghost" id="nextBtn">下一題 →</button></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn green" id="checkBtn">確認答案</button><button class="btn primary" id="submitBtn">交卷 / 結束</button></div></div></section>
-  <section id="browse" class="card hidden"><div class="topbar"><div><h2 class="panelTitle">📖 考前總覽：全部題目與答案</h2><p class="subtitle">可以一次瀏覽題目、選項、正確答案與詳解；也能用搜尋和主題篩選。</p></div><button class="btn ghost" id="backHomeBtn">返回首頁</button></div><div class="browseTools"><input id="searchInput" class="input" placeholder="搜尋題目、答案或詳解，例如：range、open、return"><select id="browseTopic" class="select"><option value="all">全部90題</option><option value="midterm50">期中50題</option><option value="functionList">Function + List</option><option value="fileSort">檔案 + 排序</option></select><button class="btn primary" id="renderBrowseBtn">更新總覽</button></div><div id="browseCount" class="small"></div><div class="browseGrid" id="browseList"></div></section>
-  <section id="result" class="card hidden"></section>
-</div>
-<script>
-const QUESTION_BANK = [{"id": "midterm50-1", "topic": "期中50題", "topicId": "midterm50", "number": 1, "question": "以下哪一個程式碼片段會印出 1, 3, 5, 7, 9？", "options": [{"key": "A", "text": "for i in range(1, 10): if i % 2 == 1: print(i)"}, {"key": "B", "text": "for i in range(1, 10): if i % 2 == 0: print(i)"}, {"key": "C", "text": "for i in range(1, 11, 2): if i % 2 == 0: print(i)"}, {"key": "D", "text": "for i in range(10): if i % 2 == 0: print(i)"}], "answer": "A", "explanation": "range(1, 10) 會產生 1~9；i % 2 == 1 代表奇數，所以印出 1、3、5、7、9。"}, {"id": "midterm50-2", "topic": "期中50題", "topicId": "midterm50", "number": 2, "question": "在 Python 中，下列哪個符號用於註解單行？", "options": [{"key": "A", "text": "//"}, {"key": "B", "text": "#"}, {"key": "C", "text": "/*"}, {"key": "D", "text": "--"}], "answer": "B", "explanation": "Python 單行註解使用 #；// 在 Python 中是整數除法，不是註解。"}, {"id": "midterm50-3", "topic": "期中50題", "topicId": "midterm50", "number": 3, "question": "for i in range(1, 10): if i == 5: break print(i) 執行後的輸出會是？", "options": [{"key": "A", "text": "5"}, {"key": "B", "text": "1 2 3 4"}, {"key": "C", "text": "1 2 3 4 5 6 7 8 9"}, {"key": "D", "text": "1 2 3 4 5"}], "answer": "B", "explanation": "當 i 等於 5 時 break 會跳出迴圈，因此 5 不會被印出，只會印 1 到 4。"}, {"id": "midterm50-4", "topic": "期中50題", "topicId": "midterm50", "number": 4, "question": "import random；迴圈 5 次產生 random.randint(1,10)，若 n > 5 才 print(n)，哪個敘述正確？", "options": [{"key": "A", "text": "印出大於 5 的數（可能少於 5 個）"}, {"key": "B", "text": "一定印出 5 個數字"}, {"key": "C", "text": "不會印任何東西"}, {"key": "D", "text": "印出小於 5 的數"}], "answer": "A", "explanation": "迴圈固定跑 5 次，但只有亂數大於 5 才印，因此印出的個數不一定是 5 個。"}, {"id": "midterm50-5", "topic": "期中50題", "topicId": "midterm50", "number": 5, "question": "x = input('請輸入內容：')；print('你剛輸入的是', x)。若輸入 banana，輸出會是？", "options": [{"key": "A", "text": "banana"}, {"key": "B", "text": "你剛輸入的是 banana"}, {"key": "C", "text": "\"banana\""}, {"key": "D", "text": "x"}], "answer": "B", "explanation": "input() 將 banana 存入 x；print 用逗號會在中間自動加空白。"}, {"id": "midterm50-6", "topic": "期中50題", "topicId": "midterm50", "number": 6, "question": "num = -5；if num > 0 印正數，elif num > 10 印大於10，else 印其他。輸出為？", "options": [{"key": "A", "text": "沒有輸出"}, {"key": "B", "text": "其他"}, {"key": "C", "text": "大於10"}, {"key": "D", "text": "正數"}], "answer": "B", "explanation": "-5 不大於 0，也不大於 10，因此進入 else 印出「其他」。"}, {"id": "midterm50-7", "topic": "期中50題", "topicId": "midterm50", "number": 7, "question": "for i in range(1, 6): if i % 2 == 0: print(i) 會印出哪些數字？", "options": [{"key": "A", "text": "2 4"}, {"key": "B", "text": "1 3 5"}, {"key": "C", "text": "只有 2"}, {"key": "D", "text": "1 2 3 4 5"}], "answer": "A", "explanation": "range(1,6) 是 1~5，其中偶數為 2、4。"}, {"id": "midterm50-8", "topic": "期中50題", "topicId": "midterm50", "number": 8, "question": "下列哪一行可以讀取使用者輸入？", "options": [{"key": "A", "text": "input('請輸入：')"}, {"key": "B", "text": "user = get()"}, {"key": "C", "text": "read(input)"}, {"key": "D", "text": "print(input)"}], "answer": "A", "explanation": "Python 內建 input() 用於讀取鍵盤輸入。"}, {"id": "midterm50-9", "topic": "期中50題", "topicId": "midterm50", "number": 9, "question": "for i in range(10): if i % 2 == 0 and i % 3 == 0: print(i) 會印出哪些數字？", "options": [{"key": "A", "text": "6 9"}, {"key": "B", "text": "0 6"}, {"key": "C", "text": "0 2 4 6 8"}, {"key": "D", "text": "3 6 9"}], "answer": "B", "explanation": "同時被 2 和 3 整除即 6 的倍數；0~9 中符合者為 0、6。"}, {"id": "midterm50-10", "topic": "期中50題", "topicId": "midterm50", "number": 10, "question": "def add(x, y): return x + y；result = add(3,4)；print(result) 輸出為何？", "options": [{"key": "A", "text": "34"}, {"key": "B", "text": "x＋y"}, {"key": "C", "text": "7"}, {"key": "D", "text": "add"}], "answer": "C", "explanation": "add(3,4) 回傳 3+4=7，result 取得 7 後印出。"}, {"id": "midterm50-11", "topic": "期中50題", "topicId": "midterm50", "number": 11, "question": "Turtle 迴圈 3 次：forward(100)、left(120)，這段程式畫出的是？", "options": [{"key": "A", "text": "六邊形"}, {"key": "B", "text": "left(120)"}, {"key": "C", "text": "三角形"}, {"key": "D", "text": "正方形"}, {"key": "E", "text": "initializeTurtle()"}, {"key": "F", "text": "星星"}, {"key": "G", "text": "forward(100)"}], "answer": "C", "explanation": "正三角形有 3 邊，每次轉外角 360/3=120 度。"}, {"id": "midterm50-12", "topic": "期中50題", "topicId": "midterm50", "number": 12, "question": "要印出 12345：for i in range(1,6): print( ? , end='')，? 應該是？", "options": [{"key": "A", "text": "*"}, {"key": "B", "text": "'12345'"}, {"key": "C", "text": "'i'"}, {"key": "D", "text": "i"}], "answer": "D", "explanation": "i 依序為 1~5，end='' 使輸出不換行，形成 12345。"}, {"id": "midterm50-13", "topic": "期中50題", "topicId": "midterm50", "number": 13, "question": "x = 7；if x % 2 == 0 印偶數 else 印奇數。會印出什麼？", "options": [{"key": "A", "text": "偶數"}, {"key": "B", "text": "無法執行"}, {"key": "C", "text": "7"}, {"key": "D", "text": "奇數"}], "answer": "D", "explanation": "7 除以 2 餘數為 1，不符合偶數條件，所以印奇數。"}, {"id": "midterm50-14", "topic": "期中50題", "topicId": "midterm50", "number": 14, "question": "random.randint(1,10) 後判斷奇偶，輸出可能是？", "options": [{"key": "A", "text": "只有偶數"}, {"key": "B", "text": "永遠是奇數"}, {"key": "C", "text": "可能是奇數或偶數"}, {"key": "D", "text": "錯誤，因為沒加 for"}], "answer": "C", "explanation": "亂數可能產生奇數或偶數，因此兩種輸出皆可能。"}, {"id": "midterm50-15", "topic": "期中50題", "topicId": "midterm50", "number": 15, "question": "name = input('請輸入你的名字：')；print('你好', name)。若輸入小明，會印出？", "options": [{"key": "A", "text": "你好 小明"}, {"key": "B", "text": "name"}, {"key": "C", "text": "請輸入你的名字：小明"}, {"key": "D", "text": "小明"}], "answer": "A", "explanation": "input 取得小明，print 以逗號分隔會輸出「你好 小明」。"}, {"id": "midterm50-16", "topic": "期中50題", "topicId": "midterm50", "number": 16, "question": "巢狀迴圈要印出 1、12、123、1234、12345，print(？, end='') 應填？", "options": [{"key": "A", "text": "1"}, {"key": "B", "text": "i"}, {"key": "C", "text": "i+1"}, {"key": "D", "text": "j"}], "answer": "D", "explanation": "內層 j 從 1 跑到 i，正好是每列要印出的遞增數字。"}, {"id": "midterm50-17", "topic": "期中50題", "topicId": "midterm50", "number": 17, "question": "x = 8；if x < 5 印小於5，elif x < 10 印介於5到9，else 印10以上。輸出？", "options": [{"key": "A", "text": "10以上"}, {"key": "B", "text": "小於5"}, {"key": "C", "text": "介於5到9"}, {"key": "D", "text": "沒有輸出"}], "answer": "C", "explanation": "8 不小於 5，但小於 10，因此輸出「介於5到9」。"}, {"id": "midterm50-18", "topic": "期中50題", "topicId": "midterm50", "number": 18, "question": "result = 10 + 3 * 2 // 2；print(result) 輸出為？", "options": [{"key": "A", "text": "16"}, {"key": "B", "text": "12"}, {"key": "C", "text": "13"}, {"key": "D", "text": "11"}], "answer": "C", "explanation": "先算 3*2=6，再 6//2=3，最後 10+3=13。"}, {"id": "midterm50-19", "topic": "期中50題", "topicId": "midterm50", "number": 19, "question": "要印出 5 10 15 20 25 30，range(5, ?) 中 ? 應該是？", "options": [{"key": "A", "text": "32"}, {"key": "B", "text": "30"}, {"key": "C", "text": "33"}, {"key": "D", "text": "31"}], "answer": "D", "explanation": "range 結束值不包含本身；要包含 30，結束值至少為 31。題庫答案選 D。"}, {"id": "midterm50-20", "topic": "期中50題", "topicId": "midterm50", "number": 20, "question": "def multiply(a,b): print(a*b)；multiply(2,5) 輸出為？", "options": [{"key": "A", "text": "multiply(a, b)"}, {"key": "B", "text": "7"}, {"key": "C", "text": "25"}, {"key": "D", "text": "10"}], "answer": "D", "explanation": "函式內直接印出 2*5=10。"}, {"id": "midterm50-21", "topic": "期中50題", "topicId": "midterm50", "number": 21, "question": "for i in range(5): if i % 2 == 0: print(i) 會印出哪些數字？", "options": [{"key": "A", "text": "0 2 4"}, {"key": "B", "text": "1 2 3 4"}, {"key": "C", "text": "1 3 5"}, {"key": "D", "text": "0 1 2 3 4"}], "answer": "A", "explanation": "range(5) 是 0~4，其中偶數為 0、2、4。"}, {"id": "midterm50-22", "topic": "期中50題", "topicId": "midterm50", "number": 22, "question": "Turtle 畫正九邊形：for i in range(9): forward(100); left(____)，____ 填？", "options": [{"key": "A", "text": "45"}, {"key": "B", "text": "60"}, {"key": "C", "text": "initializeTurtle()"}, {"key": "D", "text": "forward(100)"}, {"key": "E", "text": "40"}, {"key": "F", "text": "left(____)"}, {"key": "G", "text": "140"}], "answer": "E", "explanation": "正 n 邊形每次轉外角 360/n，正九邊形為 360/9=40 度。"}, {"id": "midterm50-23", "topic": "期中50題", "topicId": "midterm50", "number": 23, "question": "for i in range(3): print(i) 執行後的輸出是？", "options": [{"key": "A", "text": "0 1 2 3"}, {"key": "B", "text": "1 2"}, {"key": "C", "text": "1 2 3"}, {"key": "D", "text": "0 1 2"}], "answer": "D", "explanation": "range(3) 產生 0、1、2，不包含 3。"}, {"id": "midterm50-24", "topic": "期中50題", "topicId": "midterm50", "number": 24, "question": "x=4, y=10；if x > 3 and y < 15 印符合條件，否則不符合。輸出？", "options": [{"key": "A", "text": "不符合"}, {"key": "B", "text": "錯誤"}, {"key": "C", "text": "符合條件"}, {"key": "D", "text": "無輸出"}], "answer": "C", "explanation": "and 兩邊皆為 True：4>3 且 10<15，所以條件成立。"}, {"id": "midterm50-25", "topic": "期中50題", "topicId": "midterm50", "number": 25, "question": "def greet(): print('Hi there!') 這段程式會印出什麼？", "options": [{"key": "A", "text": "Hi there!"}, {"key": "B", "text": "greet"}, {"key": "C", "text": "錯誤"}, {"key": "D", "text": "沒有輸出"}], "answer": "D", "explanation": "只有定義函數，沒有呼叫 greet()，所以不會輸出。"}, {"id": "midterm50-26", "topic": "期中50題", "topicId": "midterm50", "number": 26, "question": "count=0；while count < 3: print('Hi'); count += 1。Hi 會印幾次？", "options": [{"key": "A", "text": "無限次"}, {"key": "B", "text": "2"}, {"key": "C", "text": "4"}, {"key": "D", "text": "3"}], "answer": "D", "explanation": "count 為 0、1、2 時執行，共 3 次；變成 3 後停止。"}, {"id": "midterm50-27", "topic": "期中50題", "topicId": "midterm50", "number": 27, "question": "a=15, b=4；print(a // b, a % b) 輸出為？", "options": [{"key": "A", "text": "3 4"}, {"key": "B", "text": "4 3"}, {"key": "C", "text": "3 2"}, {"key": "D", "text": "3 3"}], "answer": "D", "explanation": "15//4=3，15%4=3。"}, {"id": "midterm50-28", "topic": "期中50題", "topicId": "midterm50", "number": 28, "question": "answer=random.randint(1,10)，guess=5；若相等印猜對，否則猜錯。可能輸出？", "options": [{"key": "A", "text": "兩者皆有可能"}, {"key": "B", "text": "永遠猜對"}, {"key": "C", "text": "猜錯了"}, {"key": "D", "text": "猜對了"}], "answer": "A", "explanation": "answer 可能剛好是 5，也可能不是 5，因此猜對或猜錯都有可能。"}, {"id": "midterm50-29", "topic": "期中50題", "topicId": "midterm50", "number": 29, "question": "x=10, y=3；print(x // y) 輸出結果是？", "options": [{"key": "A", "text": "3.33"}, {"key": "B", "text": "3.0"}, {"key": "C", "text": "4"}, {"key": "D", "text": "3"}], "answer": "D", "explanation": "// 為整除，10//3 的整數商是 3。"}, {"id": "midterm50-30", "topic": "期中50題", "topicId": "midterm50", "number": 30, "question": "number=35, low=1, high=100, guess=60；若 guess > number 更新 high=guess 並印提示。輸出？", "options": [{"key": "A", "text": "太大了，請猜 1 ~ 60"}, {"key": "B", "text": "輸出錯誤"}, {"key": "C", "text": "太小了，請猜 60 ~ 100"}, {"key": "D", "text": "猜對了！"}], "answer": "A", "explanation": "60 > 35 成立，high 更新為 60，印出「太大了，請猜 1 ~ 60」。"}, {"id": "midterm50-31", "topic": "期中50題", "topicId": "midterm50", "number": 31, "question": "total=0；for i in range(2): for j in range(2): total += i+j；print(total)。輸出？", "options": [{"key": "A", "text": "10"}, {"key": "B", "text": "8"}, {"key": "C", "text": "6"}, {"key": "D", "text": "4"}], "answer": "D", "explanation": "四次累加分別為 0、1、1、2，總和為 4。"}, {"id": "midterm50-32", "topic": "期中50題", "topicId": "midterm50", "number": 32, "question": "while True: print('Hello') 會發生什麼？", "options": [{"key": "A", "text": "印一次 Hello"}, {"key": "B", "text": "不會停止，一直印 Hello"}, {"key": "C", "text": "印三次 Hello"}, {"key": "D", "text": "沒有輸出"}], "answer": "B", "explanation": "while True 永遠成立，且沒有 break，因此形成無限迴圈。"}, {"id": "midterm50-33", "topic": "期中50題", "topicId": "midterm50", "number": 33, "question": "count=0；while True: count+=1；if count==3: break；print(count)。會印出？", "options": [{"key": "A", "text": "無限迴圈"}, {"key": "B", "text": "1 2"}, {"key": "C", "text": "0 1 2"}, {"key": "D", "text": "1 2 3"}], "answer": "B", "explanation": "count 到 3 時先 break，所以 3 不會被印出，只印 1、2。"}, {"id": "midterm50-34", "topic": "期中50題", "topicId": "midterm50", "number": 34, "question": "for i in range(1,4): for j in range(i): print('*', end=''); print() 輸出樣式是？", "options": [{"key": "A", "text": "（3）"}, {"key": "B", "text": "錯誤"}, {"key": "C", "text": "（2）"}, {"key": "D", "text": "（1）"}], "answer": "C", "explanation": "i 依序為 1、2、3，因此三行分別印 1、2、3 顆星號。"}, {"id": "midterm50-35", "topic": "期中50題", "topicId": "midterm50", "number": 35, "question": "for i in range(2): for j in range(3): print(i, j) 總共會印幾行？", "options": [{"key": "A", "text": "2"}, {"key": "B", "text": "3"}, {"key": "C", "text": "5"}, {"key": "D", "text": "6"}], "answer": "D", "explanation": "外層 2 次，內層每次 3 次，共 2*3=6 行。"}, {"id": "midterm50-36", "topic": "期中50題", "topicId": "midterm50", "number": 36, "question": "x=10, y='5'；print(x + y) 執行時會發生什麼？", "options": [{"key": "A", "text": "印出 '105'"}, {"key": "B", "text": "印出 15"}, {"key": "C", "text": "發生錯誤"}, {"key": "D", "text": "印出 x + y"}], "answer": "C", "explanation": "整數不能直接與字串相加，會產生 TypeError。"}, {"id": "midterm50-37", "topic": "期中50題", "topicId": "midterm50", "number": 37, "question": "a='50', b='70'；print(a + b) 輸出是？", "options": [{"key": "A", "text": "5070"}, {"key": "B", "text": "120"}, {"key": "C", "text": "7050"}, {"key": "D", "text": "3500"}], "answer": "A", "explanation": "兩者都是字串，+ 代表串接，結果為 5070。"}, {"id": "midterm50-38", "topic": "期中50題", "topicId": "midterm50", "number": 38, "question": "import random；print(random.randint(1,5)) 可能輸出是？", "options": [{"key": "A", "text": "1 到 4 的整數，不包含 5"}, {"key": "B", "text": "0"}, {"key": "C", "text": "1 到 5 之間的任一整數"}, {"key": "D", "text": "永遠是 3"}], "answer": "C", "explanation": "randint(1,5) 會包含 1 和 5，可能為 1~5 任一整數。"}, {"id": "midterm50-39", "topic": "期中50題", "topicId": "midterm50", "number": 39, "question": "s=0；for i in range(1,6,2): s = s * i；print(s)。輸出？", "options": [{"key": "A", "text": "60"}, {"key": "B", "text": "30"}, {"key": "C", "text": "15"}, {"key": "D", "text": "0"}], "answer": "D", "explanation": "s 初始為 0，0 乘任何數仍是 0。"}, {"id": "midterm50-40", "topic": "期中50題", "topicId": "midterm50", "number": 40, "question": "下列哪個選項是正確的 My_BMI 函數呼叫語法？", "options": [{"key": "A", "text": "My_BMI（170, 60）："}, {"key": "B", "text": "def My_BMI(170, 60):"}, {"key": "C", "text": "My_BMI()"}, {"key": "D", "text": "My_BMI(170, 60)"}], "answer": "D", "explanation": "呼叫函數使用函數名稱加半形小括號，並放入需要的參數。"}, {"id": "midterm50-41", "topic": "期中50題", "topicId": "midterm50", "number": 41, "question": "Turtle：forward(100)、left(90)、forward(100) 畫出來是什麼？", "options": [{"key": "A", "text": "正方形"}, {"key": "B", "text": "L 型路徑"}, {"key": "C", "text": "一條直線"}, {"key": "D", "text": "圓形"}], "answer": "B", "explanation": "先畫一段線，再轉 90 度畫第二段線，形成 L 型路徑。"}, {"id": "midterm50-42", "topic": "期中50題", "topicId": "midterm50", "number": 42, "question": "x=10, y='5'；print(str(x) + y) 會印出什麼？", "options": [{"key": "A", "text": "15"}, {"key": "B", "text": "105"}, {"key": "C", "text": "10 + 5"}, {"key": "D", "text": "錯誤"}], "answer": "B", "explanation": "str(x) 把 10 轉成 '10'，與 '5' 串接成 '105'。"}, {"id": "midterm50-43", "topic": "期中50題", "topicId": "midterm50", "number": 43, "question": "s=10, i=2；while s > i: s=s-i; i=i+2；print(s)。輸出？", "options": [{"key": "A", "text": "False"}, {"key": "B", "text": "8"}, {"key": "C", "text": "6"}, {"key": "D", "text": "4"}], "answer": "D", "explanation": "第一次 s=8,i=4；第二次 s=4,i=6；此時 4>6 不成立，印 4。"}, {"id": "midterm50-44", "topic": "期中50題", "topicId": "midterm50", "number": 44, "question": "以下哪個語句用於結束函數並返回一個值？", "options": [{"key": "A", "text": "finish"}, {"key": "B", "text": "return"}, {"key": "C", "text": "end"}, {"key": "D", "text": "break"}], "answer": "B", "explanation": "return 用於結束函數並回傳值；break 是跳出迴圈。"}, {"id": "midterm50-45", "topic": "期中50題", "topicId": "midterm50", "number": 45, "question": "哪個表示式的結果是 True？", "options": [{"key": "A", "text": "7 <= 7"}, {"key": "B", "text": "5 > 10"}, {"key": "C", "text": "3 == 4"}, {"key": "D", "text": "2 != 2"}], "answer": "A", "explanation": "7 <= 7 表示 7 小於或等於 7，結果為 True。"}, {"id": "midterm50-46", "topic": "期中50題", "topicId": "midterm50", "number": 46, "question": "a=input('請輸入一個數：')；print(a + 1)。若輸入 5，會發生什麼？", "options": [{"key": "A", "text": "錯誤：字串不能加整數"}, {"key": "B", "text": "印出 6"}, {"key": "C", "text": "無法判斷"}, {"key": "D", "text": "印出 51"}], "answer": "A", "explanation": "input() 讀入的是字串 '5'，不能直接與整數 1 相加。"}, {"id": "midterm50-47", "topic": "期中50題", "topicId": "midterm50", "number": 47, "question": "def say_hello(): print('Hello!')；哪一個可以正確呼叫這個函數？", "options": [{"key": "A", "text": "print say_hello()"}, {"key": "B", "text": "say_hello"}, {"key": "C", "text": "say_hello()"}, {"key": "D", "text": "call say_hello()"}], "answer": "C", "explanation": "呼叫函數必須在函數名稱後加上小括號。"}, {"id": "midterm50-48", "topic": "期中50題", "topicId": "midterm50", "number": 48, "question": "x=10；while x > 5: x -= 1；print(x)。輸出是？", "options": [{"key": "A", "text": "10"}, {"key": "B", "text": "無限迴圈"}, {"key": "C", "text": "5"}, {"key": "D", "text": "6"}], "answer": "C", "explanation": "x 從 10 每次減 1，減到 5 時條件不成立，最後印 5。"}, {"id": "midterm50-49", "topic": "期中50題", "topicId": "midterm50", "number": 49, "question": "A=12, B=20；print('A') 輸出是？", "options": [{"key": "A", "text": "12"}, {"key": "B", "text": "20"}, {"key": "C", "text": "A"}, {"key": "D", "text": "無答案（錯誤）"}], "answer": "C", "explanation": "'A' 有引號，代表字串，不是變數，因此直接印出 A。"}, {"id": "midterm50-50", "topic": "期中50題", "topicId": "midterm50", "number": 50, "question": "x=5；if x > 0 印大於0；elif x > 3 印大於3；else 印其他。會印出什麼？", "options": [{"key": "A", "text": "其他"}, {"key": "B", "text": "大於3"}, {"key": "C", "text": "都不印"}, {"key": "D", "text": "大於0"}], "answer": "D", "explanation": "if...elif 由上往下判斷；第一個條件 x>0 已成立，所以印大於0，後面不再判斷。"}, {"id": "functionList-1", "topic": "Function + List", "topicId": "functionList", "number": 1, "question": "計算三角形面積的函數 triangle_area(base, height)，其內部邏輯應為？", "options": [{"key": "A", "text": "base * height"}, {"key": "B", "text": "base + height / 2"}, {"key": "C", "text": "base * height / 2"}, {"key": "D", "text": "(base + height) * 2"}], "answer": "C", "explanation": "三角形面積公式為（底 × 高）÷ 2，因此在 Python 中可寫成 base * height / 2。"}, {"id": "functionList-2", "topic": "Function + List", "topicId": "functionList", "number": 2, "question": "下列何者是會計人學習函數的主要好處「模組化 (Modularization)」？", "options": [{"key": "A", "text": "增加程式碼的顏色美觀"}, {"key": "B", "text": "將常用的會計公式（如：EPS）寫成函數，不必每次重複寫一樣的代碼"}, {"key": "C", "text": "讓程式跑得更快"}, {"key": "D", "text": "自動備份財務報表"}], "answer": "B", "explanation": "模組化是把常用或重複使用的邏輯封裝起來，未來需要時直接呼叫函數，可減少重複撰寫與錯誤。"}, {"id": "functionList-3", "topic": "Function + List", "topicId": "functionList", "number": 3, "question": "若要取得「王五」的「成績 2」（數值為 86），應如何表示其座標（假設行列皆從 0 開始，資料欄姓名、成績等標題不包含在內）？", "options": [{"key": "A", "text": "(1, 1)"}, {"key": "B", "text": "(2, 2)"}, {"key": "C", "text": "(1, 2)"}, {"key": "D", "text": "(2, 1)"}], "answer": "C", "explanation": "二維陣列座標常用（行索引 row, 列索引 col）。張三為第 0 行，王五為第 1 行；成績 2 為第 2 列，因此座標為 (1, 2)。"}, {"id": "functionList-4", "topic": "Function + List", "topicId": "functionList", "number": 4, "question": "「無參數、有回傳 (No Input, Output)」的函數（如 get_pi_value()）特色為何？", "options": [{"key": "A", "text": "每次執行都要輸入不同的數據"}, {"key": "B", "text": "不需要輸入資訊，但會主動回報一個固定或特定的結果"}, {"key": "C", "text": "不會執行任何動作"}, {"key": "D", "text": "只能在會計軟體中使用"}], "answer": "B", "explanation": "無參數代表呼叫時不需要提供資料；有回傳代表函數執行後會把某個結果交回主程式。"}, {"id": "functionList-5", "topic": "Function + List", "topicId": "functionList", "number": 5, "question": "下列程式的輸出結果為何？ def test(x): if x > 10: return 'Big' else: return 'Small' print(test(8))", "options": [{"key": "A", "text": "Big"}, {"key": "B", "text": "Small"}, {"key": "C", "text": "8"}, {"key": "D", "text": "Error"}], "answer": "B", "explanation": "呼叫 test(8) 時，x 為 8；8 > 10 不成立，因此走 else 並回傳 Small，最後印出 Small。"}, {"id": "functionList-6", "topic": "Function + List", "topicId": "functionList", "number": 6, "question": "在 Python 函數中，return 的主要作用是什麼？", "options": [{"key": "A", "text": "將計算結果交還給呼叫它的主程式"}, {"key": "B", "text": "只是為了結束程式"}, {"key": "C", "text": "重新啟動電腦"}, {"key": "D", "text": "修正程式中的錯誤"}], "answer": "A", "explanation": "return 會把函數內部處理完成的結果回傳給呼叫函數的位置，讓主程式可以繼續使用該結果。"}, {"id": "functionList-7", "topic": "Function + List", "topicId": "functionList", "number": 7, "question": "要呼叫名為 say_hello 的函數，程式碼應寫為？", "options": [{"key": "A", "text": "say_hello"}, {"key": "B", "text": "say_hello()"}, {"key": "C", "text": "call say_hello"}, {"key": "D", "text": "run say_hello"}], "answer": "B", "explanation": "呼叫函數時，要寫出函數名稱並加上一對小括號，即 say_hello()。"}, {"id": "functionList-8", "topic": "Function + List", "topicId": "functionList", "number": 8, "question": "對於會計專業而言，函數最適合被比喻成下列哪一個概念？", "options": [{"key": "A", "text": "公司的資產負債表"}, {"key": "B", "text": "公司內部的「標準作業程序 (SOP)」"}, {"key": "C", "text": "公司的年度預算書"}, {"key": "D", "text": "公司的客戶名單"}], "answer": "B", "explanation": "函數就像 SOP：把流程與公式先定義好，之後只要輸入資料，就能得到一致、標準化的結果。"}, {"id": "functionList-9", "topic": "Function + List", "topicId": "functionList", "number": 9, "question": "若稅率從 5% 改為 7%，使用函數開發報表的最大優點是什麼？", "options": [{"key": "A", "text": "程式會自動通報國稅局"}, {"key": "B", "text": "只需要修改函數內部一行代碼，全公司報表即自動更新"}, {"key": "C", "text": "函數會自動計算出差額並補稅"}, {"key": "D", "text": "可以完全不用修改任何代碼"}], "answer": "B", "explanation": "若公式集中寫在函數中，只要修改函數內部的稅率邏輯，所有呼叫該函數的地方都會套用更新後的結果。"}, {"id": "functionList-10", "topic": "Function + List", "topicId": "functionList", "number": 10, "question": "觀察表格資料，「張三」的成績資料位於二維陣列中的哪一個索引位置（假設行列皆從 0 開始，資料欄標題不包含在內）？", "options": [{"key": "A", "text": "matrix[0]"}, {"key": "B", "text": "matrix[1]"}, {"key": "C", "text": "matrix[2]"}, {"key": "D", "text": "matrix[3]"}], "answer": "A", "explanation": "索引從 0 開始，第一筆資料張三位於第 0 行，因此是 matrix[0]。"}, {"id": "functionList-11", "topic": "Function + List", "topicId": "functionList", "number": 11, "question": "下列哪種情境屬於「無參數、無回傳 (No Input, No Output)」？", "options": [{"key": "A", "text": "詢問現在幾點"}, {"key": "B", "text": "把錢投進販賣機買飲料"}, {"key": "C", "text": "單純執行印出「哈囉！今天天氣不錯」的動作"}, {"key": "D", "text": "計算 10 + 20 的結果"}], "answer": "C", "explanation": "單純 print 固定文字不需要外部參數，也沒有把計算結果 return 回主程式，因此屬於無參數、無回傳。"}, {"id": "functionList-12", "topic": "Function + List", "topicId": "functionList", "number": 12, "question": "下列哪一個函數呼叫會發生錯誤？ def add(a, b): return a + b", "options": [{"key": "A", "text": "add(2, 3)"}, {"key": "B", "text": "add(5, 1)"}, {"key": "C", "text": "add(7)"}, {"key": "D", "text": "add(4, 9)"}], "answer": "C", "explanation": "add(a, b) 定義時需要兩個參數，但 add(7) 只給一個參數，會因參數數量不足而發生錯誤。"}, {"id": "functionList-13", "topic": "Function + List", "topicId": "functionList", "number": 13, "question": "執行下列程式後，輸出為何？ def a(): return 5 def b(): return a() * 2 print(b())", "options": [{"key": "A", "text": "5"}, {"key": "B", "text": "7"}, {"key": "C", "text": "10"}, {"key": "D", "text": "Error"}], "answer": "C", "explanation": "b() 內部先呼叫 a() 得到 5，再做 5 * 2，結果為 10。"}, {"id": "functionList-14", "topic": "Function + List", "topicId": "functionList", "number": 14, "question": "下列哪一個是正確的 Python 函數定義方式？", "options": [{"key": "A", "text": "function add(a, b)"}, {"key": "B", "text": "def add(a, b):"}, {"key": "C", "text": "define add(a, b):"}, {"key": "D", "text": "add(a, b):"}], "answer": "B", "explanation": "Python 使用 def 定義函數，標準格式為 def 函數名稱(參數):，冒號不可省略。"}, {"id": "functionList-15", "topic": "Function + List", "topicId": "functionList", "number": 15, "question": "會計人學習函數的主要好處「模組化 (Modularization)」是指什麼？", "options": [{"key": "A", "text": "將常用的公式（如 EPS）寫成函數，避免重複撰寫代碼"}, {"key": "B", "text": "增加程式執行的速度"}, {"key": "C", "text": "讓報表看起來顏色更豐富"}, {"key": "D", "text": "隱藏公司的財務秘密"}], "answer": "A", "explanation": "模組化就是把常用公式或流程獨立封裝成函數，之後直接呼叫，避免程式碼重複與維護困難。"}, {"id": "functionList-16", "topic": "Function + List", "topicId": "functionList", "number": 16, "question": "在 Python 中定義函數時，必須使用哪一個關鍵字？", "options": [{"key": "A", "text": "function"}, {"key": "B", "text": "define"}, {"key": "C", "text": "def"}, {"key": "D", "text": "sub"}], "answer": "C", "explanation": "Python 定義函數使用 def 關鍵字。"}, {"id": "functionList-17", "topic": "Function + List", "topicId": "functionList", "number": 17, "question": "若要「增加趙八的成績在最後」，應使用哪種語法？", "options": [{"key": "A", "text": "matrix.insert(0, ['趙八', ...])"}, {"key": "B", "text": "matrix.append(['趙八', ...])"}, {"key": "C", "text": "matrix.pop(['趙八', ...])"}, {"key": "D", "text": "matrix.remove(['趙八', ...])"}], "answer": "B", "explanation": "append() 會把新元素加到 list 的最後面，因此可用 matrix.append([...]) 新增趙八的資料。"}, {"id": "functionList-18", "topic": "Function + List", "topicId": "functionList", "number": 18, "question": "「有參數、無回傳 (Input, No Output)」最像下列哪種生活情境？", "options": [{"key": "A", "text": "問朋友現在幾點，他沒說話直接指鐘"}, {"key": "B", "text": "傳簡訊給朋友，他收到了但沒回覆你"}, {"key": "C", "text": "投幣買飲料，販賣機吐出可樂"}, {"key": "D", "text": "站在原地什麼都不做"}], "answer": "B", "explanation": "傳簡訊代表有輸入；朋友收到但沒有回覆，代表沒有回傳值。"}, {"id": "functionList-19", "topic": "Function + List", "topicId": "functionList", "number": 19, "question": "下列哪一行是「呼叫函數」？", "options": [{"key": "A", "text": "def test():"}, {"key": "B", "text": "return x"}, {"key": "C", "text": "test()"}, {"key": "D", "text": "print = 5"}], "answer": "C", "explanation": "def test(): 是定義函數；test() 才是實際呼叫函數。"}, {"id": "functionList-20", "topic": "Function + List", "topicId": "functionList", "number": 20, "question": "將常用的會計公式（如：EPS、流動比率）寫成函數，這種做法稱為？", "options": [{"key": "A", "text": "自動化 (Automation)"}, {"key": "B", "text": "模組化 (Modularization)"}, {"key": "C", "text": "格式化 (Formatting)"}, {"key": "D", "text": "數位化 (Digitization)"}], "answer": "B", "explanation": "將常用公式抽出並封裝成函數，是程式設計中的模組化概念。"}, {"id": "fileSort-1", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 1, "question": "小華用 Python 寫了一個自動點名程式，開啟了 students.txt 來紀錄出席狀況。當程式操作完檔案後，為了釋放電腦記憶體資源並確保資料有成功寫入硬碟，應該呼叫哪一個方法來把檔案關閉？", "options": [{"key": "A", "text": "exit()"}, {"key": "B", "text": "close()"}, {"key": "C", "text": "finish()"}, {"key": "D", "text": "stop()"}], "answer": "B", "explanation": "開啟檔案進行讀寫後，良好的程式習慣是呼叫 close() 關閉檔案。這能釋放系統資源，也能確保緩衝區中的資料完整寫入硬碟。"}, {"id": "fileSort-2", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 2, "question": "資料 [4, 2, 3, 1]，從小到大排序，插入排序經過兩輪後會變成？", "options": [{"key": "A", "text": "[1, 2, 3, 4]"}, {"key": "B", "text": "[2, 4, 3, 1]"}, {"key": "C", "text": "[2, 3, 1, 4]"}, {"key": "D", "text": "[2, 3, 4, 1]"}], "answer": "D", "explanation": "插入排序第 1 輪將 2 插到 4 前面，變成 [2, 4, 3, 1]；第 2 輪將 3 插到 2 與 4 之間，變成 [2, 3, 4, 1]。"}, {"id": "fileSort-3", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 3, "question": "氣泡、選擇、插入排序三種方法的共同目的是什麼？", "options": [{"key": "A", "text": "建立亂數"}, {"key": "B", "text": "比大小決定要不要交換"}, {"key": "C", "text": "把資料分類"}, {"key": "D", "text": "記錄誰排第幾名"}], "answer": "B", "explanation": "這三種都是比較類排序演算法，核心都是透過元素之間比大小，再依據比較結果進行交換或移動，使資料按照指定順序排列。"}, {"id": "fileSort-4", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 4, "question": "體育老師想幫排成一列的 5 位同學按身高從矮到高排序。他從第一位開始，兩兩比較相鄰同學，如果右邊比較矮就交換位置，一輪比完後最高的同學會到最右邊。這是哪種排序法？", "options": [{"key": "A", "text": "選擇排序法"}, {"key": "B", "text": "快速排序法"}, {"key": "C", "text": "插入排序法"}, {"key": "D", "text": "氣泡排序法"}], "answer": "D", "explanation": "氣泡排序的特徵是相鄰元素兩兩比較與交換。由小到大排序時，較大的值會一路往右移動，一輪後最大值會被排到最右端。"}, {"id": "fileSort-5", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 5, "question": "便利商店店員整理 4 罐飲料，有效期限天數為 [5, 2, 9, 1]。若使用氣泡排序法由小到大排序，第一輪相鄰兩兩比較與交換的過程順序為何？", "options": [{"key": "A", "text": "只有5和2比，後面不比"}, {"key": "B", "text": "5和2比 ➔ 5和9比 ➔ 9和1比"}, {"key": "C", "text": "5和2比 ➔ 2和9比 ➔ 9和1比"}, {"key": "D", "text": "5和2比 ➔ 5和9比 ➔ 5和1比"}], "answer": "B", "explanation": "初始 [5,2,9,1]。先比 5 和 2，交換成 [2,5,9,1]；再比 5 和 9，不交換；最後比 9 和 1，交換成 [2,5,1,9]。所以比較順序為 5和2、5和9、9和1。"}, {"id": "fileSort-6", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 6, "question": "資料為 [5, 4, 1, 3]，從小到大排序，使用選擇排序法，第一輪排序後會變成？", "options": [{"key": "A", "text": "[1, 3, 4, 5]"}, {"key": "B", "text": "[1, 3, 5, 4]"}, {"key": "C", "text": "[1, 5, 4, 3]"}, {"key": "D", "text": "[1, 4, 5, 3]"}], "answer": "D", "explanation": "選擇排序第一輪會掃描整個未排序區，找出最小值 1，並和最左邊的 5 交換，因此變成 [1, 4, 5, 3]。"}, {"id": "fileSort-7", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 7, "question": "已排序資料為 [3, 5, 8]，接下來要插入數字 4。4 會由右向左比較，請問總共會跟哪些數字進行到比較？", "options": [{"key": "A", "text": "直接插在最前面，不跟任何數字比"}, {"key": "B", "text": "只跟 3 比較"}, {"key": "C", "text": "先跟 3 比，再跟 5 比，最後跟 8 比"}, {"key": "D", "text": "先跟 8 比，再跟 5 比"}], "answer": "D", "explanation": "插入排序由右向左比較。4 先與 8 比，8 往後移；再與 5 比，5 往後移；接著遇到 3 時已可確認 4 應插在 3 後面。題庫重點答案為先跟 8 比，再跟 5 比。"}, {"id": "fileSort-8", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 8, "question": "小美經營網拍，想用 Python 紀錄顧客編號。每次有新客戶時，程式必須把新編號接在原本檔案最後面，不刪除舊資料。應使用哪一種檔案開啟模式？", "options": [{"key": "A", "text": "'w' (Write)"}, {"key": "B", "text": "'a' (Append)"}, {"key": "C", "text": "'r' (Read)"}, {"key": "D", "text": "'b' (Binary)"}], "answer": "B", "explanation": "'a' 是附加模式，寫入的新資料會加到檔案末尾，不會覆蓋舊資料。若使用 'w' 則會清空原檔內容。"}, {"id": "fileSort-9", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 9, "question": "下列哪一個選項可以用來打開檔案供讀取使用？", "options": [{"key": "A", "text": "open(\"data.txt\", \"x\")"}, {"key": "B", "text": "open(\"data.txt\", \"w\")"}, {"key": "C", "text": "open(\"data.txt\", \"a\")"}, {"key": "D", "text": "open(\"data.txt\", \"r\")"}], "answer": "D", "explanation": "open() 的第二個參數是模式，'r' 代表 Read 讀取模式，用來開啟現有檔案並讀取內容。"}, {"id": "fileSort-10", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 10, "question": "廚師小張把秘密食譜寫在 recipe.txt，這份食譜有好幾行。如果想一次把整份食譜的所有行讀取出來，並存成一個 List，應該使用哪一個方法？", "options": [{"key": "A", "text": "readlines()"}, {"key": "B", "text": "readline()"}, {"key": "C", "text": "write()"}, {"key": "D", "text": "read()"}], "answer": "A", "explanation": "readlines() 會一次讀取檔案所有行，並把每一行作為一個元素回傳成 List。readline() 一次讀一行；read() 則讀成一整個字串。"}, {"id": "fileSort-11", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 11, "question": "寫完檔案後忘記關檔，有時會怎樣？", "options": [{"key": "A", "text": "檔案會自動消失"}, {"key": "B", "text": "沒關係，Python 會幫我做"}, {"key": "C", "text": "程式變快"}, {"key": "D", "text": "資料可能不完整或儲存失敗"}], "answer": "D", "explanation": "寫入檔案時資料可能先暫存在緩衝區。如果沒有正確關閉檔案，資料可能尚未完整寫入硬碟，造成儲存失敗或資料不完整。"}, {"id": "fileSort-12", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 12, "question": "玩大老二或橋牌時，拿到新牌後，會與手中已排好的牌從右到左比較，找到縫隙後插進去。這最符合哪一種演算法？", "options": [{"key": "A", "text": "選擇排序法"}, {"key": "B", "text": "快速排序法"}, {"key": "C", "text": "氣泡排序法"}, {"key": "D", "text": "插入排序法"}], "answer": "D", "explanation": "插入排序的邏輯就是把資料分成已排序與未排序，每次取出新元素，從已排序區由後往前找位置並插入，與整理手牌非常相似。"}, {"id": "fileSort-13", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 13, "question": "小明想用 Python 寫日記程式，將文字儲存在 diary.txt 中。在 Python 中，開啟檔案最常用且標準的內建指令是什麼？", "options": [{"key": "A", "text": "start()"}, {"key": "B", "text": "open()"}, {"key": "C", "text": "load()"}, {"key": "D", "text": "file()"}], "answer": "B", "explanation": "Python 使用內建函數 open() 開啟檔案。它會依照指定路徑與模式回傳檔案物件，供後續讀寫使用。"}, {"id": "fileSort-14", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 14, "question": "大華下載 homework.txt，只想讀取內容，不需要修改。open() 的模式參數應設定為哪一個字母？", "options": [{"key": "A", "text": "'w'"}, {"key": "B", "text": "'r'"}, {"key": "C", "text": "'a'"}, {"key": "D", "text": "'x'"}], "answer": "B", "explanation": "'r' 代表 Read 讀取模式，只能讀取檔案內容，不能寫入或覆蓋，是讀取檔案最常用的模式。"}, {"id": "fileSort-15", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 15, "question": "小美挑蘋果時，每次都掃描整排蘋果，找出最大／最重的一顆，然後放到指定位置；接著在剩下的蘋果中再找次大的。這種每次找出極值並定位的做法最接近哪種排序法？", "options": [{"key": "A", "text": "選擇排序法"}, {"key": "B", "text": "氣泡排序法"}, {"key": "C", "text": "合併排序法"}, {"key": "D", "text": "插入排序法"}], "answer": "A", "explanation": "選擇排序的核心是每一輪掃描未排序區，選出最大值或最小值，並將其交換到正確位置。"}, {"id": "fileSort-16", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 16, "question": "冷氣維修工程師小李執行 open('log.txt', 'r')，但該路徑下沒有這個檔案，程式會跳出哪一種常見錯誤？", "options": [{"key": "A", "text": "FileNotFoundError"}, {"key": "B", "text": "TypeError"}, {"key": "C", "text": "ValueError"}, {"key": "D", "text": "SyntaxError"}], "answer": "A", "explanation": "使用 'r' 模式讀取檔案時，檔案必須已存在。如果指定路徑找不到檔案，Python 會拋出 FileNotFoundError。"}, {"id": "fileSort-17", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 17, "question": "若希望從檔案讀取後處理每行，哪一個流程順序最合理？", "options": [{"key": "A", "text": "寫入 ➔ 關閉 ➔ 處理 ➔ 讀取"}, {"key": "B", "text": "開啟 ➔ 讀取 ➔ 處理 ➔ 關閉"}, {"key": "C", "text": "處理 ➔ 讀取 ➔ 開啟"}, {"key": "D", "text": "寫入 ➔ 關閉 ➔ 處理"}], "answer": "B", "explanation": "檔案處理的合理流程是先開啟檔案，再讀取內容，接著處理資料，最後關閉檔案以釋放資源。"}, {"id": "fileSort-18", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 18, "question": "小明用 Python 讀取中文 letter.txt，結果出現亂碼。為了解決繁體中文編碼問題，應在 open() 函數中加入哪一個參數指定文字編碼？", "options": [{"key": "A", "text": "format='word'"}, {"key": "B", "text": "type='text'"}, {"key": "C", "text": "encoding='utf-8'"}, {"key": "D", "text": "mode='chinese'"}], "answer": "C", "explanation": "中文亂碼通常是編碼不一致造成。讀取文字檔時可在 open() 中指定 encoding='utf-8'，讓 Python 用 UTF-8 方式解讀文字。"}, {"id": "fileSort-19", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 19, "question": "桌上有 5 張撲克牌 [7, 5, 2, 8, 4]。若使用選擇排序法由小到大排序，第一輪找出最小數字 2 後，會把 2 跟哪個位置的數字交換？", "options": [{"key": "A", "text": "跟最前面的 7 交換"}, {"key": "B", "text": "跟它右邊的 8 交換"}, {"key": "C", "text": "跟最後面的 4 交換"}, {"key": "D", "text": "原地不動，不交換"}], "answer": "A", "explanation": "選擇排序第一輪找出最小值後，會與目前未排序區間的第一個位置交換。本題第一個位置是 7，所以 2 會和 7 交換。"}, {"id": "fileSort-20", "topic": "檔案 + 排序", "topicId": "fileSort", "number": 20, "question": "如果小美不小心把模式誤設為 'w' (Write) 模式，當她寫入新客戶編號時，原本儲存好幾百筆的舊客戶資料會發生什麼事？", "options": [{"key": "A", "text": "舊資料會被完全清空（覆蓋），只剩下剛寫入的新資料"}, {"key": "B", "text": "舊資料完全不受影響，自動排在前面"}, {"key": "C", "text": "系統會自動複製一份備份檔案"}, {"key": "D", "text": "程式會直接當機並跳出錯誤"}], "answer": "A", "explanation": "'w' 是覆寫模式。若檔案已存在，以 'w' 開啟會先清空原本內容，再寫入新資料，因此舊資料會消失。"}];
-const state={mode:'practice',topic:'all',count:50,shuffleOptions:true,questions:[],current:0,answers:{},checked:{},startTime:null,timerId:null,timeLeft:50*60};
-const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s)); const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-function escapeHTML(str){return String(str??'').replace(/[&<>"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]))}
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function getWrongIds(){return JSON.parse(localStorage.getItem('pythonQuizWrongIds')||'[]')}function setWrongIds(ids){localStorage.setItem('pythonQuizWrongIds',JSON.stringify([...new Set(ids)]));updateWrongCount()}function updateWrongCount(){$('#wrongCount').textContent=getWrongIds().length}updateWrongCount();
-function setupChoiceGroup(container,key){$$(container+' .choiceCard').forEach(card=>card.addEventListener('click',()=>{$$(container+' .choiceCard').forEach(c=>c.classList.remove('active'));card.classList.add('active');state[key]=card.dataset[key]}))}setupChoiceGroup('#modeGrid','mode');setupChoiceGroup('#topicGrid','topic');
-$$('.countBtn').forEach(btn=>btn.addEventListener('click',()=>{$$('.countBtn').forEach(b=>b.classList.remove('activeCount'));btn.classList.add('activeCount');$('#customCount').value=btn.dataset.count}));
-$('#clearWrongBtn').addEventListener('click',()=>{if(confirm('確定要清空錯題紀錄嗎？'))setWrongIds([])});$('#startBtn').addEventListener('click',startQuiz);$('#browseBtn').addEventListener('click',showBrowse);$('#backHomeBtn').addEventListener('click',()=>{$('#browse').classList.add('hidden');$('#home').classList.remove('hidden')});$('#renderBrowseBtn').addEventListener('click',renderBrowse);$('#searchInput').addEventListener('input',renderBrowse);$('#browseTopic').addEventListener('change',renderBrowse);
-$('#prevBtn').addEventListener('click',()=>go(-1));$('#nextBtn').addEventListener('click',()=>go(1));$('#checkBtn').addEventListener('click',checkPractice);$('#submitBtn').addEventListener('click',()=>{if(state.mode==='exam'&&!confirm('確定要交卷嗎？'))return;finishQuiz()});
-function topicName(id){return {all:'綜合全部',midterm50:'期中50題',functionList:'Function + List',fileSort:'檔案 + 排序',wrong:'錯題複習'}[id]||id}
-function getPool(){if(state.topic==='all')return QUESTION_BANK;if(state.topic==='wrong'){const ids=getWrongIds();return QUESTION_BANK.filter(q=>ids.includes(q.id))}return QUESTION_BANK.filter(q=>q.topicId===state.topic)}
-function startQuiz(){state.count=Math.max(1,parseInt($('#customCount').value||'50',10));state.shuffleOptions=$('#shuffleOptions').value==='yes';let pool=getPool();if(!pool.length){alert('目前沒有可抽的題目，可能是錯題紀錄為空。');return}const realCount=Math.min(state.count,pool.length);if(realCount<state.count)alert(`這個主題最多只有 ${pool.length} 題，系統會自動改成 ${realCount} 題。`);state.questions=shuffle(pool).slice(0,realCount).map(q=>({...q,renderOptions:state.shuffleOptions?shuffle(q.options):[...q.options]}));state.current=0;state.answers={};state.checked={};state.startTime=Date.now();state.timeLeft=50*60;$('#home').classList.add('hidden');$('#browse').classList.add('hidden');$('#result').classList.add('hidden');$('#quiz').classList.remove('hidden');$('#timer').classList.toggle('hidden',state.mode!=='exam');$('#checkBtn').classList.toggle('hidden',state.mode!=='practice');$('#modeLabel').textContent=state.mode==='practice'?'✏️ 練習模式':'🧪 考試模式';$('#topicLabel').textContent='｜'+topicName(state.topic);if(state.mode==='exam')startTimer();else stopTimer();renderQuestion()}
-function renderQuestion(){const q=state.questions[state.current];const answered=Object.keys(state.answers).length;$('#answeredLabel').textContent=`｜第 ${state.current+1} / ${state.questions.length} 題｜已作答 ${answered} 題`;$('#progressFill').style.width=`${((state.current+1)/state.questions.length)*100}%`;$('#sourceLabel').textContent=`${q.topic}｜原題號 ${q.number}`;$('#questionText').textContent=q.question;$('#options').innerHTML=q.renderOptions.map((opt,idx)=>{const selected=state.answers[q.id]===opt.key;const checked=state.checked[q.id];let cls=selected?'selected':'';if(state.mode==='practice'&&checked){if(opt.key===q.answer)cls+=' correct';if(selected&&opt.key!==q.answer)cls+=' wrong'}return `<button class="option ${cls}" data-key="${opt.key}"><span class="badge">${letters[idx]}</span><span>${escapeHTML(opt.text)}</span></button>`}).join('');$$('.option').forEach(btn=>btn.addEventListener('click',()=>{if(state.mode==='practice'&&state.checked[q.id])return;state.answers[q.id]=btn.dataset.key;renderQuestion()}));renderFeedback();$('#prevBtn').disabled=state.current===0;$('#nextBtn').textContent=state.current===state.questions.length-1?'最後一題':'下一題 →'}
-function renderFeedback(){const q=state.questions[state.current],fb=$('#feedback');if(state.mode==='practice'&&state.checked[q.id]){const user=state.answers[q.id],ok=user===q.answer;fb.className='feedback '+(ok?'ok':'no');fb.innerHTML=`<h3>${ok?'✅ 答對了！':'❌ 答錯了'} <span class="small">正確答案：${q.answer}</span></h3><p class="explain">${escapeHTML(q.explanation)}</p>`;fb.classList.remove('hidden')}else{fb.classList.add('hidden');fb.innerHTML=''}}
-function checkPractice(){const q=state.questions[state.current];if(!state.answers[q.id]){alert('請先選一個答案～');return}state.checked[q.id]=true;updateWrongRecord(q,state.answers[q.id]);renderQuestion()}function go(delta){if(state.mode==='practice'){const q=state.questions[state.current];if(delta>0&&!state.checked[q.id]){alert('練習模式要先確認答案，才能看下一題喔！');return}}const next=state.current+delta;if(next<0||next>=state.questions.length)return;state.current=next;renderQuestion()}
-function updateWrongRecord(q,userAns){let ids=getWrongIds();if(userAns!==q.answer)ids.push(q.id);else ids=ids.filter(id=>id!==q.id);setWrongIds(ids)}
-function startTimer(){stopTimer();updateTimerText();state.timerId=setInterval(()=>{state.timeLeft--;updateTimerText();if(state.timeLeft<=0){alert('時間到！系統自動交卷。');finishQuiz()}},1000)}function stopTimer(){if(state.timerId)clearInterval(state.timerId);state.timerId=null}function updateTimerText(){const m=Math.floor(state.timeLeft/60).toString().padStart(2,'0'),s=(state.timeLeft%60).toString().padStart(2,'0');$('#timer').textContent=`${m}:${s}`}
-function finishQuiz(){stopTimer();let score=0;state.questions.forEach(q=>{const user=state.answers[q.id]||null;const ok=user===q.answer;if(ok)score++;updateWrongRecord(q,user)});const percent=Math.round(score/state.questions.length*100);const used=Math.floor((Date.now()-state.startTime)/1000),usedText=`${Math.floor(used/60)}分${used%60}秒`;$('#quiz').classList.add('hidden');$('#result').classList.remove('hidden');$('#result').innerHTML=`<div class="scoreHero"><div class="small">${state.mode==='exam'?'考試模式':'練習模式'}｜${topicName(state.topic)}｜用時 ${usedText}</div><div class="scoreNum">${score}/${state.questions.length}</div><h2>${percent>=80?'🎉 很穩！':percent>=60?'👍 還不錯，錯題再刷一輪':'🔥 建議先刷錯題模式'} 正確率 ${percent}%</h2><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px"><button class="btn primary" onclick="location.reload()">回首頁重新設定</button><button class="btn ghost" onclick="reviewWrongOnly()">只看錯題詳解</button><button class="btn green" onclick="restartSame()">同一份再考一次</button></div></div><h2 class="panelTitle">作答檢討</h2><div class="reviewGrid">${state.questions.map((q,i)=>reviewHTML(q,i)).join('')}</div>`}
-function reviewHTML(q,i){const user=state.answers[q.id]||'未作答',ok=user===q.answer,userText=q.options.find(o=>o.key===user)?.text||'未作答',ansText=q.options.find(o=>o.key===q.answer)?.text||'';return `<div class="reviewItem" data-ok="${ok}"><h4>${ok?'✅':'❌'} ${i+1}. ${escapeHTML(q.question)}</h4><div class="small">主題：${q.topic}｜原題號：${q.number}</div><p><b>你的答案：</b>${escapeHTML(user)}. ${escapeHTML(userText)}</p><p><b>正確答案：</b><span style="color:var(--green);font-weight:900">${q.answer}. ${escapeHTML(ansText)}</span></p><p class="explain"><b>解析：</b>${escapeHTML(q.explanation)}</p></div>`}
-function reviewWrongOnly(){$$('.reviewItem').forEach(el=>{if(el.dataset.ok==='true')el.classList.add('hidden')});window.scrollTo({top:0,behavior:'smooth'})}function restartSame(){state.questions=shuffle(state.questions).map(q=>({...q,renderOptions:state.shuffleOptions?shuffle(q.options):[...q.options]}));state.current=0;state.answers={};state.checked={};state.startTime=Date.now();state.timeLeft=50*60;$('#result').classList.add('hidden');$('#quiz').classList.remove('hidden');if(state.mode==='exam')startTimer();renderQuestion()}
-function showBrowse(){$('#home').classList.add('hidden');$('#quiz').classList.add('hidden');$('#result').classList.add('hidden');$('#browse').classList.remove('hidden');$('#browseTopic').value=state.topic==='wrong'?'all':state.topic;renderBrowse();window.scrollTo({top:0,behavior:'smooth'})}
-function renderBrowse(){const topic=$('#browseTopic').value,kw=$('#searchInput').value.trim().toLowerCase();let list=QUESTION_BANK.filter(q=>topic==='all'||q.topicId===topic);if(kw)list=list.filter(q=>(q.question+' '+q.explanation+' '+q.options.map(o=>o.text).join(' ')).toLowerCase().includes(kw));$('#browseCount').textContent=`目前顯示 ${list.length} 題`;$('#browseList').innerHTML=list.map(q=>{const ansText=q.options.find(o=>o.key===q.answer)?.text||'';return `<article class="browseItem"><div class="small">${q.topic}｜原題號 ${q.number}</div><h3>${escapeHTML(q.question)}</h3><div class="optionList">${q.options.map(o=>`<div class="optionMini ${o.key===q.answer?'good':''}">${o.key}. ${escapeHTML(o.text)}</div>`).join('')}</div><div class="answerLine">正確答案：${q.answer}. ${escapeHTML(ansText)}</div><p class="explain"><b>解析：</b>${escapeHTML(q.explanation)}</p></article>`}).join('')}
-</script>
-</body></html>
+    <div class="paper">
+        
+        <!-- 表頭 -->
+        <div class="header">
+            <div class="header-top">
+                <div class="company-block">
+                    <h1>英泰自動控制行</h1>
+                    <div class="en-title">INTAI AUTO CONTROL</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="doc-badge">維修單</div>
+                    <div class="meta-row">
+                        <div class="meta-box">
+                            No. <input type="text" id="orderNo">
+                        </div>
+                        <div class="meta-box">
+                            Date. <input type="date" id="dateField">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-info">
+                <span class="info-icon">📍</span>彰化縣員林市員集路2段493巷4弄10號<br>
+                <div style="margin-top: 5px;">
+                    <span class="info-icon">📞</span>04-8356923 &nbsp;&nbsp; 
+                    <span class="info-icon">📱</span>0935-435757 &nbsp;&nbsp; 
+                    <span class="info-icon">📠</span>04-8341151 &nbsp;&nbsp; 
+                    <span class="info-icon">🆔</span>45229579
+                </div>
+            </div>
+        </div>
+
+        <!-- 區塊 1: 客戶資料 (藍色調) -->
+        <div class="section-card">
+            <div class="card-title">客戶資料 Client Info</div>
+            <div class="client-grid">
+                <div class="input-group">
+                    <label>客戶名稱 / Customer Name</label>
+                    <input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight: bold; font-size: 16px;">
+                </div>
+                <div class="input-group">
+                    <label>機器編號 / Machine No.</label>
+                    <input type="text" id="machineNo" placeholder="編號...">
+                </div>
+                <div class="input-group">
+                    <label>維修開始 / Start Time</label>
+                    <input type="time" id="startTime">
+                </div>
+                <div class="input-group">
+                    <label>維修結束 / End Time</label>
+                    <input type="time" id="endTime">
+                </div>
+            </div>
+        </div>
+
+        <!-- 區塊 2: 故障描述 (紅色調) -->
+        <div class="section-card issue-card">
+            <div class="card-title" style="color: #d63031;">故障與檢測 Issues & Diagnosis</div>
+            <table class="desc-table">
+                <tr>
+                    <td class="label">故障情形</td>
+                    <td><textarea id="issue" placeholder="描述..."></textarea></td>
+                </tr>
+                <tr>
+                    <td class="label">故障原因</td>
+                    <td><textarea id="cause" placeholder="原因..."></textarea></td>
+                </tr>
+                <tr>
+                    <td class="label">處理對策</td>
+                    <td><textarea id="solution" placeholder="建議事項..."></textarea></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 區塊 3: 零件明細 (白色卡片) -->
+        <div class="parts-container">
+            <table class="parts-table" id="partsTable">
+                <thead>
+                    <tr>
+                        <th width="35%" style="text-align: left; padding-left: 15px;">項目 / 零件名稱</th>
+                        <th width="20%">規 格</th>
+                        <th width="10%">數量</th>
+                        <th width="15%">單 價</th>
+                        <th width="15%">小 計</th>
+                        <th width="5%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding-left: 15px;"><input type="text" placeholder="輸入項目" style="text-align: left;"></td>
+                        <td><input type="text"></td>
+                        <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
+                        <td><input type="number" class="price" oninput="calcTotal(this)"></td>
+                        <td><input type="text" class="subtotal" readonly></td>
+                        <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="total-area">
+                <span style="margin-right: 20px; color: #666;">總計 Total Amount:</span>
+                <input type="text" id="grandTotal" readonly value="0">
+            </div>
+        </div>
+
+        <!-- 簽名區 -->
+        <div class="footer">
+            <div class="sign-box">
+                <div class="sign-title">客戶簽名 / Client Signature</div>
+                <div class="sign-line"></div>
+            </div>
+            <div class="sign-box">
+                <div class="sign-title">維修人員 / Engineer</div>
+                <div class="sign-line" style="position: relative;">
+                    <span style="position: absolute; bottom: 5px; right: 20px; font-weight: bold; font-size: 18px;">朱文言</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. 初始化
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('dateField').valueAsDate = today;
+        document.getElementById('orderNo').value = `${year}${month}${day}`;
+
+        // 2. 正式文件輸出（PDF 與 Word 共用同一份模板）
+        const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+            '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+        }[ch]));
+        const nl2br = value => esc(value).replace(/\n/g, '<br>');
+        const toNumber = value => Math.max(0, Number(value) || 0);
+        const moneyText = value => Math.round(value).toLocaleString('zh-TW');
+
+        function getFormalData() {
+            const rows = [...document.querySelectorAll('#partsTable tbody tr')].map(tr => ({
+                item: tr.cells[0]?.querySelector('input')?.value || '',
+                spec: tr.cells[1]?.querySelector('input')?.value || '',
+                qty: tr.querySelector('.qty')?.value || '',
+                price: tr.querySelector('.price')?.value || ''
+            })).filter(r => r.item || r.spec || r.qty !== '1' || toNumber(r.price));
+            const total = rows.reduce((sum, r) => sum + toNumber(r.qty) * toNumber(r.price), 0);
+            const iso = document.getElementById('dateField').value || '';
+            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso)
+                ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` : esc(iso);
+            return {
+                orderNo: document.getElementById('orderNo').value,
+                date: displayDate,
+                customer: document.getElementById('customerName').value.trim(),
+                machineNo: document.getElementById('machineNo').value,
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value,
+                issue: document.getElementById('issue').value,
+                cause: document.getElementById('cause').value,
+                solution: document.getElementById('solution').value,
+                rows, total
+            };
+        }
+
+        function formalFileName(ext) {
+            const d = document.getElementById('dateField').value.replaceAll('-', '') || `${year}${month}${day}`;
+            const customer = (document.getElementById('customerName').value.trim() || '客戶').replace(/[\\/:*?"<>|]/g, '_');
+            return `${d}_${customer}_正式維修單.${ext}`;
+        }
+
+        function formalDocumentHtml() {
+            const d = getFormalData();
+            const filledRows = d.rows.map((r, i) => {
+                const subtotal = toNumber(r.qty) * toNumber(r.price);
+                return `<tr><td class="center latin">${i + 1}</td><td>${esc(r.item)}</td><td>${esc(r.spec)}</td><td class="center latin">${esc(r.qty)}</td><td class="right latin">${r.price ? '$' + moneyText(r.price) : ''}</td><td class="right latin">${subtotal ? '$' + moneyText(subtotal) : ''}</td></tr>`;
+            }).join('');
+            const blankRows = Array.from({length: Math.max(0, 3 - d.rows.length)}, () => '<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
+            return `<!DOCTYPE html>
+<html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><meta name="ProgId" content="Word.Document"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title>
+<style>
+@page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
+div.WordSection1 { page:WordSection1; }
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:#fff; color:#000; }
+body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
+body { font-size:10.5pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.doc { width:100%; }
+.company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
+.english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
+.title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
+.contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
+.address-line { margin-bottom:7pt; }
+.contact-line { white-space:nowrap; }
+.contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; }
+.contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
+.rule { display:none; height:0; margin:0; border:0; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; }
+td,th { border:.5pt solid #777; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
+th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
+.meta td { height:23pt; }
+.section { margin-top:9pt; page-break-inside:avoid; }
+.section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
+.desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; }
+.desc .label { width:17%; vertical-align:middle; }
+.parts th,.parts td { height:23pt; }
+.center { text-align:center; } .right { text-align:right; }
+.date-kai { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; }
+.latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
+.total td { height:29pt; border-top:.75pt solid #555; background:transparent; font-weight:normal; }
+.total-label { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; }
+.total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; }
+.tax-note { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
+.remarks-label { font-weight:bold; }
+.remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; }
+.sign { margin-top:9pt; }
+.sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border:.5pt solid #777; font-weight:normal; }
+.sign-label,.engineer { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
+.engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; }
+.notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai",serif; font-size:8.5pt; font-weight:normal; }
+.footer { margin-top:6pt; padding-top:4pt; border-top:.5pt solid #777; text-align:center; font-family:"DFKai-SB","BiauKai",serif; font-size:8pt; font-weight:normal; color:#444; }
+@media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style></head><body><div class="WordSection1"><div class="doc">
+<p class="company">英泰自動控制行</p>
+<p class="english">INTAI AUTO CONTROL</p>
+<p class="title">維 修 單</p>
+<div class="contact"><div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div><div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span>　<span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span>　<span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span>　<span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div></div>
+<table class="meta"><colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
+<tr><td class="label">維修單號</td><td class="latin">${esc(d.orderNo)}</td><td class="label">填單日期</td><td>${d.date}</td></tr>
+<tr><td class="label">客戶名稱</td><td>${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin">${esc(d.machineNo)}</td></tr>
+<tr><td class="label">開始時間</td><td class="latin">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin">${esc(d.endTime)}</td></tr></table>
+<div class="section"><div class="section-title">壹、故障檢測與處理紀錄</div><table class="desc"><tr><td class="label">故障情形</td><td>${nl2br(d.issue)}</td></tr><tr><td class="label">故障原因</td><td>${nl2br(d.cause)}</td></tr><tr><td class="label">處理對策</td><td>${nl2br(d.solution)}</td></tr></table></div>
+<div class="section"><div class="section-title">貳、維修項目及零件明細</div><table class="parts"><colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup><thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead><tbody>${filledRows}${blankRows}</tbody><tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount">NT$ ${moneyText(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot></table></div>
+<div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div>
+<table class="sign"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td><span class="sign-label">客戶簽章：</span></td><td><span class="sign-label">維修人員：</span><span class="engineer">朱文言</span></td></tr></table>
+<p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p><div class="footer">英泰自動控制行　維修服務紀錄</div>
+</div></div></body></html>`;
+        }
+
+        function validateFormal() {
+            const field = document.getElementById('customerName');
+            if (!field.value.trim()) { alert('請先填寫客戶名稱。'); field.focus(); return false; }
+            return true;
+        }
+
+        function exportFormalPDF() {
+            if (!validateFormal()) return;
+            const win = window.open('', '_blank');
+            if (!win) { alert('請允許瀏覽器開啟彈出式視窗，以產生正式 PDF。'); return; }
+            win.document.open();
+            win.document.write(formalDocumentHtml());
+            win.document.close();
+            win.onload = () => setTimeout(() => { win.focus(); win.print(); }, 300);
+        }
+
+        function exportFormalWord() {
+            if (!validateFormal()) return;
+            const blob = new Blob(['\ufeff', formalDocumentHtml()], {type:'application/msword;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = formalFileName('doc');
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+
+        // 3. 計算
+        function calcTotal(input) {
+            const row = input.closest('tr');
+            const qty = parseFloat(row.querySelector('.qty').value) || 0;
+            const price = parseFloat(row.querySelector('.price').value) || 0;
+            const total = Math.round(qty * price);
+            row.querySelector('.subtotal').value = total > 0 ? total : '';
+            updateGrandTotal();
+        }
+
+        function updateGrandTotal() {
+            let sum = 0;
+            document.querySelectorAll('.subtotal').forEach(el => sum += parseFloat(el.value) || 0);
+            document.getElementById('grandTotal').value = sum.toLocaleString();
+        }
+
+        // 4. 新增刪除
+        function addPartRow() {
+            const tbody = document.querySelector('#partsTable tbody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="padding-left: 15px;"><input type="text" style="text-align: left;"></td>
+                <td><input type="text"></td>
+                <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
+                <td><input type="number" class="price" oninput="calcTotal(this)"></td>
+                <td><input type="text" class="subtotal" readonly></td>
+                <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function deleteRow(btn) {
+            const tbody = document.querySelector('#partsTable tbody');
+            if (tbody.rows.length > 1) {
+                btn.closest('tr').remove();
+                updateGrandTotal();
+            }
+        }
+    </script>
+</body>
+</html>
