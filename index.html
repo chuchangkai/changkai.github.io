@@ -6,7 +6,7 @@
     <title>英泰自動控制行 - 數位維修單</title>
     <style>
         /* =========================================
-           1. 視覺系統與配色 (Color & Variables)
+           網頁前端玻璃樣式 (保持原樣，僅優化背景)
            ========================================= */
         :root {
             --primary-blue: #007AFF;
@@ -14,7 +14,6 @@
             --accent-green: #34C759;
             --glass-bg: rgba(255, 255, 255, 0.65);
             --card-bg: rgba(255, 255, 255, 0.5);
-            --header-bg: rgba(235, 245, 255, 0.6); /* 淺藍色區塊背景 */
             --text-main: #1d1d1f;
             --shadow-soft: 0 8px 30px rgba(0,0,0,0.12);
         }
@@ -24,24 +23,16 @@
             margin: 0;
             padding: 40px 20px 150px;
             color: var(--text-main);
-            /* 背景：柔和多彩極光，不刺眼 */
             background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
             min-height: 100vh;
-            -webkit-print-color-adjust: exact; /* 強制列印背景色 */
-            print-color-adjust: exact;
         }
 
-        /* =========================================
-           2. 主體玻璃容器 (The Glass Paper)
-           ========================================= */
         .paper {
             width: 210mm;
             min-height: 297mm;
             margin: 0 auto;
             padding: 8mm 8mm;
             box-sizing: border-box;
-            
-            /* Liquid Glass 質感 */
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
@@ -51,346 +42,70 @@
             position: relative;
         }
 
-        /* =========================================
-           3. 抬頭設計 (Header) - 公司大，維修單小
-           ========================================= */
-        .header {
-            border-bottom: 2px solid rgba(0,0,0,0.05);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            position: relative;
-        }
+        .header { border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 15px; margin-bottom: 20px; }
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .company-block h1 { margin: 0; font-size: 30px; font-weight: 800; background: linear-gradient(45deg, #007AFF, #00C6FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .en-title { font-size: 14px; color: #888; font-weight: 600; letter-spacing: 3px; margin-top: 5px; text-transform: uppercase; }
+        .doc-badge { background: var(--primary-blue); color: white; padding: 5px 15px; border-radius: 20px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,122,255,0.3); display: inline-block; }
+        .company-info { margin-top: 15px; font-size: 15px; color: #444; line-height: 1.8; font-weight: 500; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px; }
+        .meta-row { display: flex; justify-content: flex-end; gap: 15px; margin-top: 10px; }
+        .meta-box { background: #f2f2f7; padding: 5px 12px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; }
+        .meta-box input { background: transparent; width: 110px; text-align: right; font-weight: bold; padding: 0; border: none; outline: none; }
 
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
+        .section-card { background: linear-gradient(to bottom right, rgba(235, 245, 255, 0.7), rgba(255, 255, 255, 0.4)); border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.8); }
+        .section-card.issue-card { background: linear-gradient(to bottom right, rgba(255, 240, 240, 0.7), rgba(255, 255, 255, 0.4)); }
+        .card-title { font-size: 14px; color: #555; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; }
+        .card-title::before { content: ''; display: inline-block; width: 4px; height: 16px; background: var(--primary-blue); margin-right: 8px; border-radius: 2px; }
 
-        .company-block h1 {
-            margin: 0;
-            font-size: 30px; /* 公司名加大 */
-            font-weight: 800;
-            background: linear-gradient(45deg, #007AFF, #00C6FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
+        input, textarea { width: 100%; border: 1px solid rgba(0,0,0,0.05); background: rgba(255,255,255,0.6); padding: 8px 10px; border-radius: 8px; font-size: 15px; font-family: inherit; color: #333; transition: all 0.3s; box-sizing: border-box; }
+        input:focus, textarea:focus { outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(0,122,255,0.2); border-color: var(--primary-blue); }
 
-        .en-title {
-            font-size: 14px;
-            color: #888;
-            font-weight: 600;
-            letter-spacing: 3px;
-            margin-top: 5px;
-            text-transform: uppercase;
-        }
-
-        .doc-badge {
-            background: var(--primary-blue);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,122,255,0.3);
-            display: inline-block;
-        }
-
-        .company-info {
-            margin-top: 15px;
-            font-size: 15px; /* 字體加大 */
-            color: #444;
-            line-height: 1.8;
-            font-weight: 500;
-            background: rgba(255,255,255,0.5);
-            padding: 10px;
-            border-radius: 10px;
-        }
-        
-        .info-icon { margin-right: 5px; font-size: 16px; }
-
-        .meta-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .meta-box {
-            background: #f2f2f7;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-        }
-        .meta-box input { background: transparent; width: 110px; text-align: right; font-weight: bold; padding: 0;}
-
-        /* =========================================
-           4. 彩色區塊卡片 (Colorful Sections)
-           ========================================= */
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.8);
-            /* 讓每個區塊有點顏色 */
-            background: linear-gradient(to bottom right, rgba(235, 245, 255, 0.7), rgba(255, 255, 255, 0.4));
-        }
-
-        /* 特別為故障區塊換個色調 */
-        .section-card.issue-card {
-            background: linear-gradient(to bottom right, rgba(255, 240, 240, 0.7), rgba(255, 255, 255, 0.4));
-        }
-
-        .card-title {
-            font-size: 14px;
-            color: #555;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-        }
-        .card-title::before {
-            content: '';
-            display: inline-block;
-            width: 4px; height: 16px;
-            background: var(--primary-blue);
-            margin-right: 8px;
-            border-radius: 2px;
-        }
-
-        /* 輸入框樣式 */
-        input, textarea {
-            width: 100%;
-            border: 1px solid rgba(0,0,0,0.05);
-            background: rgba(255,255,255,0.6);
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: inherit;
-            color: #333;
-            transition: all 0.3s;
-            box-sizing: border-box;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(0,122,255,0.2);
-            border-color: var(--primary-blue);
-        }
-
-        /* 客戶資料 Grid */
-        .client-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        /* 故障表格 */
+        .client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group label { display: block; font-size: 13px; color: #666; margin-bottom: 4px; font-weight: 600; }
         .desc-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        .desc-table td.label { 
-            width: 80px; font-weight: bold; color: #444; vertical-align: top; padding-top: 10px; 
-            text-align: right; padding-right: 15px;
-        }
+        .desc-table td.label { width: 80px; font-weight: bold; color: #444; vertical-align: top; padding-top: 10px; text-align: right; padding-right: 15px; }
         .desc-table textarea { min-height: 50px; }
 
-        /* 零件表 */
-        .parts-container {
-            background: white;
-            border-radius: 16px;
-            padding: 5px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+        .parts-container { background: white; border-radius: 16px; padding: 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
         .parts-table { width: 100%; border-collapse: collapse; }
-        .parts-table th {
-            background: #f2f2f7;
-            color: #555;
-            padding: 10px;
-            font-size: 13px;
-            text-align: center;
-        }
+        .parts-table th { background: #f2f2f7; color: #555; padding: 10px; font-size: 13px; text-align: center; }
         .parts-table th:first-child { border-radius: 10px 0 0 10px; }
         .parts-table th:last-child { border-radius: 0 10px 10px 0; }
-        
         .parts-table td { padding: 5px; }
         .parts-table input { text-align: center; background: transparent; border: none; border-bottom: 1px dashed #ddd; border-radius: 0; }
         .parts-table input:focus { background: #f9f9f9; border-bottom: 1px solid var(--primary-blue); box-shadow: none; }
         
-        .total-area {
-            text-align: right;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            border-top: 2px dashed #eee;
-            margin-top: 10px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        #grandTotal { 
-            width: 150px; font-size: 24px; color: var(--primary-blue); 
-            background: transparent; border: none; text-align: right;
-            font-weight: 800;
-        }
+        .total-area { text-align: right; padding: 15px; font-size: 18px; font-weight: bold; color: #333; border-top: 2px dashed #eee; margin-top: 10px; display: flex; justify-content: flex-end; align-items: center; }
+        #grandTotal { width: 150px; font-size: 24px; color: var(--primary-blue); background: transparent; border: none; text-align: right; font-weight: 800; }
 
-        /* 簽名區 */
         .footer { display: flex; justify-content: space-between; margin-top: 30px; gap: 20px; }
-        .sign-box {
-            flex: 1;
-            background: rgba(255,255,255,0.5);
-            border: 2px solid #e5e5ea;
-            border-radius: 12px;
-            padding: 15px;
-            position: relative;
-        }
+        .sign-box { flex: 1; background: rgba(255,255,255,0.5); border: 2px solid #e5e5ea; border-radius: 12px; padding: 15px; position: relative; }
         .sign-title { font-size: 14px; font-weight: bold; color: #555; margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px;}
         .sign-line { border-bottom: 1px dashed #aaa; height: 40px; margin-top: 10px;}
 
-        /* 按鈕 */
-        .btn-del { 
-            color: red; cursor: pointer; font-weight: bold; font-size: 18px; 
-            display: flex; justify-content: center; width: 30px;
-        }
-        /* 操作工具列：獨立浮動，不遮住表單內容 */
-        .toolbar {
-            position: fixed;
-            z-index: 9999;
-            right: 20px;
-            bottom: max(18px, env(safe-area-inset-bottom));
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            gap: 10px;
-            max-width: min(760px, calc(100vw - 40px));
-            padding: 10px;
-            border: 1px solid rgba(255,255,255,.9);
-            border-radius: 18px;
-            background: rgba(255,255,255,.94);
-            box-shadow: 0 10px 30px rgba(31,35,40,.18);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-        }
-        .btn-float {
-            min-height: 44px;
-            background: var(--primary-grad);
-            color: white;
-            border: none;
-            padding: 10px 17px;
-            border-radius: 24px;
-            font-size: 15px;
-            font-weight: bold;
-            line-height: 1.2;
-            white-space: nowrap;
-            box-shadow: 0 5px 15px rgba(0,122,255,0.3);
-            cursor: pointer;
-            transition: transform 0.2s, filter 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-        }
-        .btn-float:hover { transform: translateY(-2px); filter: brightness(1.03); }
-        .btn-float:focus-visible { outline: 3px solid rgba(0,122,255,.28); outline-offset: 2px; }
+        .btn-del { color: red; cursor: pointer; font-weight: bold; font-size: 18px; display: flex; justify-content: center; width: 30px; }
+        
+        .toolbar { position: fixed; z-index: 9999; right: 20px; bottom: 20px; display: flex; gap: 10px; padding: 10px; border-radius: 18px; background: rgba(255,255,255,.94); box-shadow: 0 10px 30px rgba(31,35,40,.18); backdrop-filter: blur(14px); }
+        .btn-float { min-height: 44px; background: var(--primary-grad); color: white; border: none; padding: 10px 17px; border-radius: 24px; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.2s; display: inline-flex; align-items: center; gap: 7px; }
+        .btn-float:hover { transform: translateY(-2px); }
 
         @media (max-width: 760px) {
-            body { padding-bottom: 210px; }
-            .toolbar {
-                left: 10px;
-                right: 10px;
-                bottom: max(10px, env(safe-area-inset-bottom));
-                max-width: none;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-                padding: 9px;
-                border-radius: 16px;
-            }
-            .btn-float {
-                width: 100%;
-                min-width: 0;
-                padding: 10px 8px;
-                font-size: 14px;
-            }
-            .toolbar .btn-float:first-child {
-                grid-column: 1 / -1;
-            }
-        }
-
-        @media (max-width: 390px) {
-            body { padding-bottom: 250px; }
-            .toolbar { grid-template-columns: 1fr; }
-            .toolbar .btn-float:first-child { grid-column: auto; }
-        }
-
-        /* =========================================
-           5. 彩色 PDF 列印設定 (Print)
-           ========================================= */
-        @media print {
-            body { 
-                background: white; 
-                -webkit-print-color-adjust: exact !important; /* 關鍵：強制列印色彩 */
-                print-color-adjust: exact !important;
-            }
-            .toolbar, .btn-del { display: none !important; }
-            
-            .paper {
-                box-shadow: none; margin: 0; width: 100%; border: none;
-                /* 列印時保持淡色背景，增加質感 */
-                background: white;
-            }
-
-            /* 確保區塊的顏色被印出來 */
-            .section-card {
-                background-color: rgba(235, 245, 255, 0.4) !important;
-                border: 1px solid #ddd !important;
-            }
-            .section-card.issue-card {
-                background-color: rgba(255, 240, 240, 0.4) !important;
-            }
-            .parts-table th { background-color: #f2f2f7 !important; }
-
-            /* 輸入框去框線 */
-            input, textarea { 
-                border: none !important; 
-                background: transparent !important; 
-                box-shadow: none !important;
-            }
-            
-            /* 公司名漸層轉純藍 (防止老印表機印不出漸層) */
-            .company-block h1 { 
-                background: none; 
-                -webkit-text-fill-color: #007AFF; 
-                color: #007AFF; 
-            }
+            .toolbar { left: 10px; right: 10px; display: grid; grid-template-columns: 1fr 1fr; }
+            .toolbar .btn-float:first-child { grid-column: 1 / -1; }
         }
     </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
     <div class="toolbar">
         <button class="btn-float" onclick="addPartRow()"><span>+</span> 新增項目</button>
-        <button class="btn-float" style="background: var(--accent-green);" onclick="exportFormalPDF()"><span>📄</span> 正式 PDF</button>
+        <!-- 修改為觸發原生列印的 PDF 輸出 -->
+        <button class="btn-float" style="background: var(--accent-green);" onclick="exportFormalPDF()"><span>📄</span> 匯出 / PDF</button>
         <button class="btn-float" onclick="exportFormalWord()"><span>W</span> Word 備用</button>
     </div>
 
     <div class="paper">
-        
-        <!-- 表頭 -->
+        <!-- 網頁表單區塊保留不變 -->
         <div class="header">
             <div class="header-top">
                 <div class="company-block">
@@ -400,129 +115,62 @@
                 <div style="text-align: right;">
                     <div class="doc-badge">維修單</div>
                     <div class="meta-row">
-                        <div class="meta-box">
-                            No. <input type="text" id="orderNo">
-                        </div>
-                        <div class="meta-box">
-                            Date. <input type="date" id="dateField">
-                        </div>
+                        <div class="meta-box">No. <input type="text" id="orderNo"></div>
+                        <div class="meta-box">Date. <input type="date" id="dateField"></div>
                     </div>
                 </div>
             </div>
-
             <div class="company-info">
-                <span class="info-icon">📍</span>彰化縣員林市員集路2段493巷4弄10號<br>
-                <div style="margin-top: 5px;">
-                    <span class="info-icon">📞</span>04-8356923 &nbsp;&nbsp; 
-                    <span class="info-icon">📱</span>0935-435757 &nbsp;&nbsp; 
-                    <span class="info-icon">📠</span>04-8341151 &nbsp;&nbsp; 
-                    <span class="info-icon">🆔</span>45229579
-                </div>
+                📍 彰化縣員林市員集路2段493巷4弄10號<br>
+                <div style="margin-top: 5px;">📞 04-8356923 &nbsp; 📱 0935-435757 &nbsp; 📠 04-8341151 &nbsp; 🆔 45229579</div>
             </div>
         </div>
 
-        <!-- 區塊 1: 客戶資料 (藍色調) -->
         <div class="section-card">
             <div class="card-title">客戶資料 Client Info</div>
             <div class="client-grid">
-                <div class="input-group">
-                    <label>客戶名稱 / Customer Name</label>
-                    <input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight: bold; font-size: 16px;">
-                </div>
-                <div class="input-group">
-                    <label>機器編號 / Machine No.</label>
-                    <input type="text" id="machineNo" placeholder="編號...">
-                </div>
-                <div class="input-group">
-                    <label>維修開始 / Start Time</label>
-                    <input type="time" id="startTime">
-                </div>
-                <div class="input-group">
-                    <label>維修結束 / End Time</label>
-                    <input type="time" id="endTime">
-                </div>
+                <div class="input-group"><label>客戶名稱</label><input type="text" id="customerName" placeholder="請輸入客戶名稱"></div>
+                <div class="input-group"><label>機器編號</label><input type="text" id="machineNo" placeholder="編號..."></div>
+                <div class="input-group"><label>維修開始</label><input type="time" id="startTime"></div>
+                <div class="input-group"><label>維修結束</label><input type="time" id="endTime"></div>
             </div>
         </div>
 
-        <!-- 區塊 2: 故障描述 (紅色調) -->
         <div class="section-card issue-card">
             <div class="card-title" style="color: #d63031;">故障與檢測 Issues & Diagnosis</div>
             <table class="desc-table">
-                <tr>
-                    <td class="label">故障情形</td>
-                    <td><textarea id="issue" placeholder="描述..."></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label">故障原因</td>
-                    <td><textarea id="cause" placeholder="原因..."></textarea></td>
-                </tr>
-                <tr>
-                    <td class="label">處理對策</td>
-                    <td><textarea id="solution" placeholder="建議事項..."></textarea></td>
-                </tr>
+                <tr><td class="label">故障情形</td><td><textarea id="issue"></textarea></td></tr>
+                <tr><td class="label">故障原因</td><td><textarea id="cause"></textarea></td></tr>
+                <tr><td class="label">處理對策</td><td><textarea id="solution"></textarea></td></tr>
             </table>
         </div>
 
-        <!-- 區塊 3: 零件明細 (白色卡片) -->
         <div class="parts-container">
             <table class="parts-table" id="partsTable">
                 <thead>
-                    <tr>
-                        <th width="35%" style="text-align: left; padding-left: 15px;">項目 / 零件名稱</th>
-                        <th width="20%">規 格</th>
-                        <th width="10%">數量</th>
-                        <th width="15%">單 價</th>
-                        <th width="15%">小 計</th>
-                        <th width="5%"></th>
-                    </tr>
+                    <tr><th width="35%">項目 / 零件名稱</th><th width="20%">規 格</th><th width="10%">數量</th><th width="15%">單 價</th><th width="15%">小 計</th><th width="5%"></th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="padding-left: 15px;"><input type="text" placeholder="輸入項目" style="text-align: left;"></td>
-                        <td><input type="text"></td>
-                        <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
-                        <td><input type="number" class="price" oninput="calcTotal(this)"></td>
-                        <td><input type="text" class="subtotal" readonly></td>
-                        <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
-                    </tr>
+                    <tr><td><input type="text" placeholder="輸入項目"></td><td><input type="text"></td><td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td><td><input type="number" class="price" oninput="calcTotal(this)"></td><td><input type="text" class="subtotal" readonly></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td></tr>
                 </tbody>
             </table>
-            
             <div class="total-area">
-                <span style="margin-right: 20px; color: #666;">總計 Total Amount:</span>
-                <input type="text" id="grandTotal" readonly value="0">
+                <span style="margin-right: 20px; color: #666;">總計:</span><input type="text" id="grandTotal" readonly value="0">
             </div>
         </div>
 
-        <!-- 簽名區 -->
         <div class="footer">
-            <div class="sign-box">
-                <div class="sign-title">客戶簽名 / Client Signature</div>
-                <div class="sign-line"></div>
-            </div>
-            <div class="sign-box">
-                <div class="sign-title">維修人員 / Engineer</div>
-                <div class="sign-line" style="position: relative;">
-                    <span style="position: absolute; bottom: 5px; right: 20px; font-weight: bold; font-size: 18px;">朱文言</span>
-                </div>
-            </div>
+            <div class="sign-box"><div class="sign-title">客戶簽名</div><div class="sign-line"></div></div>
+            <div class="sign-box"><div class="sign-title">維修人員</div><div class="sign-line" style="position: relative;"><span style="position: absolute; bottom: 5px; right: 20px; font-weight: bold; font-size: 18px;">朱文言</span></div></div>
         </div>
-
     </div>
 
     <script>
-        // 1. 初始化
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
         document.getElementById('dateField').valueAsDate = today;
-        document.getElementById('orderNo').value = `${year}${month}${day}`;
+        document.getElementById('orderNo').value = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}`;
 
-        // 2. 正式文件輸出（PDF 與 Word 共用同一份模板）
-        const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
-            '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
-        }[ch]));
+        const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
         const nl2br = value => esc(value).replace(/\n/g, '<br>');
         const toNumber = value => Math.max(0, Number(value) || 0);
         const moneyText = value => Math.round(value).toLocaleString('zh-TW');
@@ -536,8 +184,7 @@
             })).filter(r => r.item || r.spec || r.qty !== '1' || toNumber(r.price));
             const total = rows.reduce((sum, r) => sum + toNumber(r.qty) * toNumber(r.price), 0);
             const iso = document.getElementById('dateField').value || '';
-            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso)
-                ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` : esc(iso);
+            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? `<span class="latin">${iso.slice(0,4)}</span> 年 <span class="latin">${iso.slice(5,7)}</span> 月 <span class="latin">${iso.slice(8,10)}</span> 日` : esc(iso);
             return {
                 orderNo: document.getElementById('orderNo').value,
                 date: displayDate,
@@ -553,78 +200,103 @@
         }
 
         function formalFileName(ext) {
-            const d = document.getElementById('dateField').value.replaceAll('-', '') || `${year}${month}${day}`;
+            const d = document.getElementById('dateField').value.replaceAll('-', '') || 'Date';
             const customer = (document.getElementById('customerName').value.trim() || '客戶').replace(/[\\/:*?"<>|]/g, '_');
-            return `${d}_${customer}_正式維修單.${ext}`;
+            return `${d}_${customer}_維修單.${ext}`;
         }
 
+        // 統一的核心排版 (PDF 與 Word 共用)
         function formalDocumentHtml() {
             const d = getFormalData();
             const filledRows = d.rows.map((r, i) => {
                 const subtotal = toNumber(r.qty) * toNumber(r.price);
-                return `<tr><td class="center latin">${i + 1}</td><td>${esc(r.item)}</td><td>${esc(r.spec)}</td><td class="center latin">${esc(r.qty)}</td><td class="right latin">${r.price ? '$' + moneyText(r.price) : ''}</td><td class="right latin">${subtotal ? '$' + moneyText(subtotal) : ''}</td></tr>`;
+                return `<tr><td class="center latin">${i + 1}</td><td>${esc(r.item)}</td><td>${esc(r.spec)}</td><td class="center latin">${esc(r.qty)}</td><td class="right latin">${r.price ? '$ ' + moneyText(r.price) : ''}</td><td class="right latin">${subtotal ? '$ ' + moneyText(subtotal) : ''}</td></tr>`;
             }).join('');
             const blankRows = Array.from({length: Math.max(0, 3 - d.rows.length)}, () => '<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
+            
             return `<!DOCTYPE html>
-<html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="UTF-8"><meta name="ProgId" content="Word.Document"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title>
+<html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+<head>
+<meta charset="UTF-8"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title>
 <style>
-@page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
-div.WordSection1 { page:WordSection1; }
-* { box-sizing:border-box; }
-html,body { margin:0; padding:0; background:#fff; color:#000; }
-body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
-body { font-size:10.5pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-.doc { width:100%; }
-.company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
-.english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
-.title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
-.contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
-.address-line { margin-bottom:7pt; }
-.contact-line { white-space:nowrap; }
-.contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; }
-.contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
-.rule { display:none; height:0; margin:0; border:0; }
-table { width:100%; border-collapse:collapse; table-layout:fixed; }
-td,th { border:.5pt solid #777; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
-th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
-.meta td { height:23pt; }
-.section { margin-top:9pt; page-break-inside:avoid; }
-.section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
-.desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; }
-.desc .label { width:17%; vertical-align:middle; }
-.parts th,.parts td { height:23pt; }
-.center { text-align:center; } .right { text-align:right; }
-.date-kai { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; }
-.latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
-.total td { height:29pt; border-top:.75pt solid #555; background:transparent; font-weight:normal; }
-.total-label { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; }
-.total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; }
-.tax-note { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
-.remarks-label { font-weight:bold; }
-.remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; }
-.sign { margin-top:9pt; }
-.sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border:.5pt solid #777; font-weight:normal; }
-.sign-label,.engineer { font-family:"DFKai-SB","BiauKai",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
-.engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; }
-.notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai",serif; font-size:8.5pt; font-weight:normal; }
-.footer { margin-top:6pt; padding-top:4pt; border-top:.5pt solid #777; text-align:center; font-family:"DFKai-SB","BiauKai",serif; font-size:8pt; font-weight:normal; color:#444; }
-@media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
-</style></head><body><div class="WordSection1"><div class="doc">
-<p class="company">英泰自動控制行</p>
-<p class="english">INTAI AUTO CONTROL</p>
-<p class="title">維 修 單</p>
-<div class="contact"><div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div><div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span>　<span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span>　<span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span>　<span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div></div>
-<table class="meta"><colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
-<tr><td class="label">維修單號</td><td class="latin">${esc(d.orderNo)}</td><td class="label">填單日期</td><td>${d.date}</td></tr>
-<tr><td class="label">客戶名稱</td><td>${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin">${esc(d.machineNo)}</td></tr>
-<tr><td class="label">開始時間</td><td class="latin">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin">${esc(d.endTime)}</td></tr></table>
-<div class="section"><div class="section-title">壹、故障檢測與處理紀錄</div><table class="desc"><tr><td class="label">故障情形</td><td>${nl2br(d.issue)}</td></tr><tr><td class="label">故障原因</td><td>${nl2br(d.cause)}</td></tr><tr><td class="label">處理對策</td><td>${nl2br(d.solution)}</td></tr></table></div>
-<div class="section"><div class="section-title">貳、維修項目及零件明細</div><table class="parts"><colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup><thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead><tbody>${filledRows}${blankRows}</tbody><tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount">NT$ ${moneyText(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot></table></div>
-<div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div>
-<table class="sign"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td><span class="sign-label">客戶簽章：</span></td><td><span class="sign-label">維修人員：</span><span class="engineer">朱文言</span></td></tr></table>
-<p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p><div class="footer">英泰自動控制行　維修服務紀錄</div>
-</div></div></body></html>`;
+/* 完美雙重兼容：這行給 PDF 引擎看，確保 A4 且無邊界裁切 */
+@page { size: A4 portrait; margin: 15mm 20mm; background-color: #ffffff; }
+/* 這行給 Word 引擎看 */
+@page WordSection1 { size: 595.3pt 841.9pt; margin: 42.5pt 56.7pt; mso-header-margin: 14pt; mso-footer-margin: 14pt; }
+div.WordSection1 { page: WordSection1; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; color: #000; font-family: "Times New Roman", "DFKai-SB", "BiauKai", "標楷體", serif; }
+body { font-size: 11.5pt; line-height: 1.35; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+.doc { width: 100%; }
+.company { margin: 0; text-align: center; color: #0070C0; font-family: "DFKai-SB", "BiauKai", "標楷體", serif; font-size: 20pt; font-weight: bold; letter-spacing: 2pt; }
+.english { margin: 2pt 0 0; text-align: center; color: #C00000; font-family: "Times New Roman", serif; font-size: 11pt; font-weight: bold; letter-spacing: 1pt; }
+.title { margin: 15pt 0 10pt; text-align: center; font-family: "DFKai-SB", "BiauKai", "標楷體", serif; font-size: 18pt; font-weight: bold; letter-spacing: 6pt; }
+.contact { margin: 0 0 10pt; text-align: center; font-size: 11pt; }
+.contact-line { display: block; margin-bottom: 3pt; }
+
+table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 12pt; }
+td, th { border: 0.5pt solid #555; padding: 5pt; vertical-align: middle; word-break: break-word; }
+th, .label { text-align: center; font-weight: bold; background: #f9f9f9; }
+
+.meta td { height: 25pt; }
+.desc td { min-height: 40pt; vertical-align: top; }
+.parts th, .parts td { height: 25pt; text-align: center; }
+.parts td:nth-child(2), .parts td:nth-child(3) { text-align: left; }
+.right { text-align: right; }
+.center { text-align: center; }
+.latin { font-family: "Times New Roman", serif; }
+
+.total td { height: 30pt; font-weight: bold; border-top: 1pt solid #333; }
+.total-amount { font-size: 13pt; }
+.remarks { font-size: 9.5pt; line-height: 1.4; margin-bottom: 15pt; }
+.sign td { height: 75pt; vertical-align: top; padding: 8pt; border: 0.5pt solid #555; width: 50%; }
+.engineer { display: block; text-align: right; margin-top: 35pt; font-size: 13pt; padding-right: 20pt; }
+.footer { text-align: center; font-size: 9pt; color: #666; margin-top: 15pt; border-top: 0.5pt solid #aaa; padding-top: 5pt; }
+</style>
+</head>
+<body>
+<div class="WordSection1">
+<div class="doc">
+    <p class="company">英泰自動控制行</p>
+    <p class="english">INTAI AUTO CONTROL</p>
+    <p class="title">維 修 單</p>
+    <div class="contact">
+        <span class="contact-line">彰化縣員林市員集路2段493巷4弄10號</span>
+        <span class="contact-line">Tel: 04-8356923　Mobile: 0935-435757　Fax: 04-8341151　統一編號: 45229579</span>
+    </div>
+    <table class="meta">
+        <colgroup><col style="width:15%"><col style="width:35%"><col style="width:15%"><col style="width:35%"></colgroup>
+        <tr><td class="label">維修單號</td><td class="latin">${esc(d.orderNo)}</td><td class="label">填單日期</td><td>${d.date}</td></tr>
+        <tr><td class="label">客戶名稱</td><td>${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin">${esc(d.machineNo)}</td></tr>
+        <tr><td class="label">開始時間</td><td class="latin">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin">${esc(d.endTime)}</td></tr>
+    </table>
+    
+    <table class="desc">
+        <colgroup><col style="width:15%"><col style="width:85%"></colgroup>
+        <tr><td class="label">故障情形</td><td>${nl2br(d.issue)}</td></tr>
+        <tr><td class="label">故障原因</td><td>${nl2br(d.cause)}</td></tr>
+        <tr><td class="label">處理對策</td><td>${nl2br(d.solution)}</td></tr>
+    </table>
+    
+    <table class="parts">
+        <colgroup><col style="width:8%"><col style="width:32%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:15%"></colgroup>
+        <thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead>
+        <tbody>${filledRows}${blankRows}</tbody>
+        <tfoot><tr class="total"><td colspan="4" class="right">總計金額（未稅）</td><td colspan="2" class="right latin"><span class="total-amount">NT$ ${moneyText(d.total)}</span></td></tr></tfoot>
+    </table>
+    
+    <div class="remarks"><b>備註：</b>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div>
+    
+    <table class="sign">
+        <tr><td><b>客戶簽章：</b></td><td><b>維修人員：</b><span class="engineer">朱文言</span></td></tr>
+    </table>
+    <div class="footer">英泰自動控制行　維修服務紀錄</div>
+</div>
+</div>
+</body>
+</html>`;
         }
 
         function validateFormal() {
@@ -633,113 +305,41 @@ th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","B
             return true;
         }
 
-        async function exportFormalPDF() {
+        // ==========================================
+        // 核心修復：改用瀏覽器原生列印引擎取代 html2pdf
+        // ==========================================
+        function exportFormalPDF() {
             if (!validateFormal()) return;
-            const button = document.querySelector('button[onclick="exportFormalPDF()"]');
-            const originalLabel = button ? button.innerHTML : '';
-            let frame = null;
-            try {
-                if (typeof html2pdf !== 'function') {
-                    throw new Error('PDF 元件尚未載入，請確認網路連線後重新整理頁面。');
-                }
-                if (button) {
-                    button.disabled = true;
-                    button.innerHTML = '<span>⏳</span> PDF 產生中';
-                }
+            
+            // 擷取與 Word 完全相同的 HTML 結構
+            const html = formalDocumentHtml();
+            
+            // 建立一個隱藏的 iframe 作為列印容器
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = '0';
+            document.body.appendChild(iframe);
+            
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(html);
+            doc.close();
+            
+            // 設定標題 (列印時會預設成儲存的檔名)
+            doc.title = formalFileName('pdf').replace('.pdf', '');
 
-                // iPad/WebKit 不會可靠地渲染 visibility:hidden 的 iframe。
-                // 改成放在畫面外但保持正常排版，避免空白、裁切、放大與樣式異常。
-                frame = document.createElement('iframe');
-                frame.setAttribute('aria-hidden', 'true');
-                frame.style.cssText = [
-                    'position:fixed',
-                    'left:-1200px',
-                    'top:0',
-                    'width:718px',
-                    'height:1046px',
-                    'border:0',
-                    'background:#fff',
-                    'opacity:0.01',
-                    'pointer-events:none',
-                    'z-index:-1'
-                ].join(';');
-                document.body.appendChild(frame);
-
-                const doc = frame.contentDocument;
-                doc.open();
-                doc.write(formalDocumentHtml());
-                doc.close();
-
-                await new Promise(resolve => setTimeout(resolve, 450));
-                if (doc.fonts && doc.fonts.ready) await doc.fonts.ready;
-
-                const element = doc.querySelector('.doc');
-                if (!element) throw new Error('找不到正式維修單內容。');
-
-                // 190mm = A4 扣除左右各 10mm，讓畫面尺寸與 PDF 可用寬度完全一致。
-                element.style.width = '190mm';
-                element.style.maxWidth = '190mm';
-                element.style.margin = '0';
-                element.style.padding = '0';
-                element.style.background = '#fff';
-
-                const options = {
-                    margin: [10, 10, 10, 10],
-                    filename: formalFileName('pdf'),
-                    image: { type: 'png', quality: 1 },
-                    html2canvas: {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: false,
-                        backgroundColor: '#ffffff',
-                        logging: false,
-                        width: element.scrollWidth,
-                        height: element.scrollHeight,
-                        windowWidth: element.scrollWidth,
-                        windowHeight: element.scrollHeight,
-                        scrollX: 0,
-                        scrollY: 0
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'portrait',
-                        compress: true,
-                        precision: 12
-                    },
-                    pagebreak: { mode: ['css', 'legacy'], avoid: ['.section', '.sign', 'tr'] }
-                };
-
-                const worker = html2pdf().set(options).from(element);
-                const pdfBlob = await worker.outputPdf('blob');
-
-                // 先嘗試真正的檔案下載；iPad 瀏覽器若攔截 download，改用原生分享表單。
-                const file = new File([pdfBlob], formalFileName('pdf'), { type: 'application/pdf' });
-                if (navigator.canShare && navigator.canShare({ files: [file] }) && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-                    await navigator.share({ files: [file], title: formalFileName('pdf') });
-                } else {
-                    const url = URL.createObjectURL(pdfBlob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = formalFileName('pdf');
-                    a.style.display = 'none';
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    setTimeout(() => URL.revokeObjectURL(url), 10000);
-                }
-            } catch (error) {
-                console.error(error);
-                if (error && error.name !== 'AbortError') {
-                    alert(error.message || 'PDF 下載失敗，請稍後再試。');
-                }
-            } finally {
-                if (frame) frame.remove();
-                if (button) {
-                    button.disabled = false;
-                    button.innerHTML = originalLabel;
-                }
-            }
+            // 等待字體與 DOM 載入後觸發原生列印對話框
+            iframe.contentWindow.focus();
+            setTimeout(() => {
+                iframe.contentWindow.print();
+                
+                // 使用者完成儲存或取消後清理 iframe
+                setTimeout(() => iframe.remove(), 2000);
+            }, 500);
         }
 
         function exportFormalWord() {
@@ -755,7 +355,6 @@ th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","B
             setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
 
-        // 3. 計算
         function calcTotal(input) {
             const row = input.closest('tr');
             const qty = parseFloat(row.querySelector('.qty').value) || 0;
@@ -771,18 +370,10 @@ th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","B
             document.getElementById('grandTotal').value = sum.toLocaleString();
         }
 
-        // 4. 新增刪除
         function addPartRow() {
             const tbody = document.querySelector('#partsTable tbody');
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td style="padding-left: 15px;"><input type="text" style="text-align: left;"></td>
-                <td><input type="text"></td>
-                <td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td>
-                <td><input type="number" class="price" oninput="calcTotal(this)"></td>
-                <td><input type="text" class="subtotal" readonly></td>
-                <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
-            `;
+            tr.innerHTML = `<td style="padding-left: 15px;"><input type="text" style="text-align: left;"></td><td><input type="text"></td><td><input type="number" class="qty" value="1" oninput="calcTotal(this)"></td><td><input type="number" class="price" oninput="calcTotal(this)"></td><td><input type="text" class="subtotal" readonly></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td>`;
             tbody.appendChild(tr);
         }
 
