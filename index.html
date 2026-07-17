@@ -377,6 +377,8 @@
             }
         }
     </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
@@ -631,14 +633,59 @@ th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","B
             return true;
         }
 
-        function exportFormalPDF() {
+        async function exportFormalPDF() {
             if (!validateFormal()) return;
-            const win = window.open('', '_blank');
-            if (!win) { alert('請允許瀏覽器開啟彈出式視窗，以產生正式 PDF。'); return; }
-            win.document.open();
-            win.document.write(formalDocumentHtml());
-            win.document.close();
-            win.onload = () => setTimeout(() => { win.focus(); win.print(); }, 300);
+            const button = document.querySelector('button[onclick="exportFormalPDF()"]');
+            const originalLabel = button ? button.innerHTML : '';
+            try {
+                if (typeof html2pdf !== 'function') {
+                    throw new Error('PDF 元件尚未載入，請確認網路連線後重新整理頁面。');
+                }
+                if (button) {
+                    button.disabled = true;
+                    button.innerHTML = '<span>⏳</span> PDF 產生中';
+                }
+
+                const frame = document.createElement('iframe');
+                frame.setAttribute('aria-hidden', 'true');
+                frame.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;height:1123px;border:0;visibility:hidden;';
+                document.body.appendChild(frame);
+                const doc = frame.contentDocument;
+                doc.open();
+                doc.write(formalDocumentHtml());
+                doc.close();
+
+                await new Promise(resolve => setTimeout(resolve, 250));
+                if (doc.fonts && doc.fonts.ready) await doc.fonts.ready;
+                const element = doc.querySelector('.WordSection1');
+                if (!element) throw new Error('找不到正式維修單內容。');
+
+                const options = {
+                    margin: [10, 10, 10, 10],
+                    filename: formalFileName('pdf'),
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: Math.min(2, window.devicePixelRatio || 2),
+                        useCORS: true,
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        windowWidth: 794
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+                    pagebreak: { mode: ['css', 'legacy'], avoid: ['table', '.section', '.sign'] }
+                };
+
+                await html2pdf().set(options).from(element).save();
+                frame.remove();
+            } catch (error) {
+                console.error(error);
+                alert(error.message || 'PDF 下載失敗，請稍後再試。');
+            } finally {
+                if (button) {
+                    button.disabled = false;
+                    button.innerHTML = originalLabel;
+                }
+            }
         }
 
         function exportFormalWord() {
