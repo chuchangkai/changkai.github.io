@@ -637,6 +637,7 @@ th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","B
             if (!validateFormal()) return;
             const button = document.querySelector('button[onclick="exportFormalPDF()"]');
             const originalLabel = button ? button.innerHTML : '';
+            let frame = null;
             try {
                 if (typeof html2pdf !== 'function') {
                     throw new Error('PDF 元件尚未載入，請確認網路連線後重新整理頁面。');
@@ -646,41 +647,94 @@ th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","B
                     button.innerHTML = '<span>⏳</span> PDF 產生中';
                 }
 
-                const frame = document.createElement('iframe');
+                // iPad/WebKit 不會可靠地渲染 visibility:hidden 的 iframe。
+                // 改成放在畫面外但保持正常排版，避免空白、裁切、放大與樣式異常。
+                frame = document.createElement('iframe');
                 frame.setAttribute('aria-hidden', 'true');
-                frame.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;height:1123px;border:0;visibility:hidden;';
+                frame.style.cssText = [
+                    'position:fixed',
+                    'left:-1200px',
+                    'top:0',
+                    'width:718px',
+                    'height:1046px',
+                    'border:0',
+                    'background:#fff',
+                    'opacity:0.01',
+                    'pointer-events:none',
+                    'z-index:-1'
+                ].join(';');
                 document.body.appendChild(frame);
+
                 const doc = frame.contentDocument;
                 doc.open();
                 doc.write(formalDocumentHtml());
                 doc.close();
 
-                await new Promise(resolve => setTimeout(resolve, 250));
+                await new Promise(resolve => setTimeout(resolve, 450));
                 if (doc.fonts && doc.fonts.ready) await doc.fonts.ready;
-                const element = doc.querySelector('.WordSection1');
+
+                const element = doc.querySelector('.doc');
                 if (!element) throw new Error('找不到正式維修單內容。');
+
+                // 190mm = A4 扣除左右各 10mm，讓畫面尺寸與 PDF 可用寬度完全一致。
+                element.style.width = '190mm';
+                element.style.maxWidth = '190mm';
+                element.style.margin = '0';
+                element.style.padding = '0';
+                element.style.background = '#fff';
 
                 const options = {
                     margin: [10, 10, 10, 10],
                     filename: formalFileName('pdf'),
-                    image: { type: 'jpeg', quality: 0.98 },
+                    image: { type: 'png', quality: 1 },
                     html2canvas: {
-                        scale: Math.min(2, window.devicePixelRatio || 2),
+                        scale: 2,
                         useCORS: true,
+                        allowTaint: false,
                         backgroundColor: '#ffffff',
                         logging: false,
-                        windowWidth: 794
+                        width: element.scrollWidth,
+                        height: element.scrollHeight,
+                        windowWidth: element.scrollWidth,
+                        windowHeight: element.scrollHeight,
+                        scrollX: 0,
+                        scrollY: 0
                     },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-                    pagebreak: { mode: ['css', 'legacy'], avoid: ['table', '.section', '.sign'] }
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait',
+                        compress: true,
+                        precision: 12
+                    },
+                    pagebreak: { mode: ['css', 'legacy'], avoid: ['.section', '.sign', 'tr'] }
                 };
 
-                await html2pdf().set(options).from(element).save();
-                frame.remove();
+                const worker = html2pdf().set(options).from(element);
+                const pdfBlob = await worker.outputPdf('blob');
+
+                // 先嘗試真正的檔案下載；iPad 瀏覽器若攔截 download，改用原生分享表單。
+                const file = new File([pdfBlob], formalFileName('pdf'), { type: 'application/pdf' });
+                if (navigator.canShare && navigator.canShare({ files: [file] }) && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+                    await navigator.share({ files: [file], title: formalFileName('pdf') });
+                } else {
+                    const url = URL.createObjectURL(pdfBlob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = formalFileName('pdf');
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(url), 10000);
+                }
             } catch (error) {
                 console.error(error);
-                alert(error.message || 'PDF 下載失敗，請稍後再試。');
+                if (error && error.name !== 'AbortError') {
+                    alert(error.message || 'PDF 下載失敗，請稍後再試。');
+                }
             } finally {
+                if (frame) frame.remove();
                 if (button) {
                     button.disabled = false;
                     button.innerHTML = originalLabel;
