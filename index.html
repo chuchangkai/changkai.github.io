@@ -183,6 +183,15 @@
             color: var(--primary-blue); 
         }
         .meta-box input:focus { color: var(--primary-blue); }
+        /* 單號與日期維持藍色；不改動原本按鈕與工具列 */
+        .meta-box input[type="text"],
+        .meta-box input[type="date"] {
+            color: #0878F9 !important;
+            -webkit-text-fill-color: #0878F9;
+            caret-color: #0878F9;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
 
         /* 卡片 */
         .section-card {
@@ -576,7 +585,6 @@
         .desc .label { width:17%; vertical-align:middle; }
         .parts th,.parts td { height:23pt; }
         .center { text-align:center; } .right { text-align:right; }
-        /* 固定欄位維持黑色；使用者輸入內容使用清楚的企業藍 */
         .data-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
         .data-value span { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
         .money-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
