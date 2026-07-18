@@ -533,7 +533,7 @@
             return `${d}_${cust}_正式維修單.${ext}`;
         }
 
-        // 輸出文件模板（已修正格式）
+// 輸出文件模板（已修正手機隱藏線條的 Bug）
         function formalDocumentHtml(){
             const d = getFormalData();
             const filledRows = d.rows.map((r,i)=>{
@@ -566,7 +566,8 @@
         .contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; }
         .contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
         table { width:100%; border-collapse:collapse; table-layout:fixed; }
-        td,th { border:.5pt solid #777; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
+        /* 🚨 修正：將 .5pt 改為 1px，解決手機 Safari 渲染不到線條的問題 */
+        td,th { border: 1px solid #555; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
         th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
         .meta td { height:23pt; }
         .section { margin-top:9pt; page-break-inside:avoid; }
@@ -577,18 +578,21 @@
         .center { text-align:center; } .right { text-align:right; }
         .date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; }
         .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
-        .total td { height:29pt; border-top:.75pt solid #555; background:transparent; font-weight:normal; }
+        /* 🚨 修正：將 .75pt 改為 1.5px */
+        .total td { height:29pt; border-top: 1.5px solid #333; background:transparent; font-weight:normal; }
         .total-label { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; }
         .total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; }
         .tax-note { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
         .remarks-label { font-weight:bold; }
         .remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; }
         .sign { margin-top:9pt; }
-        .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border:.5pt solid #777; font-weight:normal; }
+        /* 🚨 修正：將 .5pt 改為 1px */
+        .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border: 1px solid #555; font-weight:normal; }
         .sign-label,.engineer { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
         .engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; }
         .notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8.5pt; font-weight:normal; }
-        .footer { margin-top:6pt; padding-top:4pt; border-top:.5pt solid #777; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; }
+        /* 🚨 修正：將 .5pt 改為 1px */
+        .footer { margin-top:6pt; padding-top:4pt; border-top: 1px solid #555; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; }
         @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
     </style>
 </head>
@@ -600,7 +604,7 @@
         <p class="title">維 修 單</p>
         <div class="contact">
             <div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div>
-            <div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span>　<span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span>　<span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span>　<span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div>
+            <div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span> <span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span> <span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span> <span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div>
         </div>
         <table class="meta">
             <colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
@@ -631,7 +635,7 @@
             <tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer">朱文言</span></td></tr>
         </table>
         <p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p>
-        <div class="footer">英泰自動控制行　維修服務紀錄</div>
+        <div class="footer">英泰自動控制行 維修服務紀錄</div>
     </div>
 </div>
 </body>
@@ -644,11 +648,14 @@
             return true;
         }
 
-        function exportFormalPDF(){
+function exportFormalPDF(){
             if(!validateFormal()) return;
             const html = formalDocumentHtml();
             const iframe = document.createElement('iframe');
-            iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+            
+            // 🚨 關鍵修正：不能用 0 寬高，改用 100% 寬高並藏在背景，強制 iOS 渲染表格線條
+            iframe.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; border:0; z-index:-9999; opacity:0; pointer-events:none;';
+            
             document.body.appendChild(iframe);
             const doc = iframe.contentWindow.document;
             doc.open(); doc.write(html); doc.close();
