@@ -383,6 +383,103 @@
             .toolbar { flex-direction: column; align-items: stretch; }
         }
 
+
+        /* 本輪介面細節調整 */
+        .meta-box input[type="text"],
+        .meta-box input[type="date"] {
+            color: #0878f9 !important;
+            -webkit-text-fill-color: #0878f9;
+            caret-color: #0878f9;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+        .meta-box input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: .9;
+            filter: none;
+        }
+
+        .toolbar {
+            padding: 13px 16px;
+            gap: 14px;
+            border-radius: 32px;
+        }
+        .btn-float {
+            min-height: 58px;
+            padding: 13px 30px;
+            border-radius: 999px;
+            font-size: 17px;
+            font-weight: 800;
+            justify-content: center;
+            box-shadow: 0 7px 18px rgba(50, 72, 150, .25), inset 0 1px 0 rgba(255,255,255,.35);
+        }
+        .btn-float .action-icon {
+            display: inline-grid;
+            place-items: center;
+            width: 22px;
+            height: 22px;
+            font-size: 16px;
+            line-height: 1;
+        }
+        .btn-float:active { transform: scale(.98); }
+
+        .parts-actions {
+            display: block;
+            padding: 16px 2px 4px;
+        }
+        .parts-add-btn {
+            width: 100%;
+            min-height: 78px;
+            border: 2px dashed #1682ff;
+            border-radius: 18px;
+            color: #0878f9;
+            background: rgba(73, 145, 255, .08);
+            box-shadow: none;
+            font-size: 17px;
+            font-weight: 800;
+        }
+        .parts-add-btn .add-icon {
+            display: inline-grid;
+            place-items: center;
+            width: 26px;
+            height: 26px;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 1;
+        }
+        .parts-add-btn:hover {
+            transform: translateY(-1px);
+            color: #006ee6;
+            border-color: #006ee6;
+            background: rgba(73, 145, 255, .13);
+            box-shadow: 0 6px 16px rgba(0,122,255,.10);
+        }
+        .parts-add-btn:active { transform: scale(.995); }
+
+        .btn-del {
+            display: grid;
+            place-items: center;
+            padding: 0;
+            line-height: 1;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 22px;
+            font-weight: 500;
+            translate: none;
+        }
+        .btn-del:hover { transform: scale(1.06); }
+
+        @media (max-width: 768px) {
+            .toolbar { padding: 10px; gap: 9px; border-radius: 25px; }
+            .btn-float { flex: 1 1 0; min-height: 54px; padding: 11px 16px; font-size: 16px; }
+            .parts-add-btn { min-height: 72px; }
+        }
+        @media (max-width: 480px) {
+            .toolbar { flex-direction: row; align-items: stretch; }
+            .btn-float { min-width: 0; padding: 10px 9px; font-size: 14px; }
+            .btn-float .action-icon { width: 18px; height: 18px; font-size: 14px; }
+            .parts-add-btn { min-height: 68px; font-size: 16px; border-radius: 16px; }
+        }
+
         @media print {
             body { background: #fff !important; padding: 0 !important; }
             .toolbar, .btn-del, .parts-actions, .parts-add-btn { display: none !important; }
@@ -394,8 +491,8 @@
 <body>
 
     <div class="toolbar">
-        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span>📄</span> 正式 PDF</button>
-        <button class="btn-float btn-word" onclick="exportFormalWord()"><span>📝</span> Word 備用</button>
+        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span class="action-icon">▤</span> 儲存 PDF</button>
+        <button class="btn-float btn-word" onclick="exportFormalWord()"><span class="action-icon">📝</span> 下載 Word</button>
     </div>
 
     <div class="form-container">
@@ -459,7 +556,7 @@
                 </table>
             </div>
             <div class="parts-actions">
-                <button class="parts-add-btn" onclick="addPartRow()"><span>＋</span> 新增零件項目</button>
+                <button type="button" class="parts-add-btn" onclick="addPartRow()"><span class="add-icon">＋</span> 新增維修項目</button>
             </div>
             <div class="total-area">
                 <span>💰 總計金額</span>
