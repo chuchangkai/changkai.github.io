@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英泰自動控制行 - 數位維修單 (iOS Glass)</title>
+    <title>英泰自動控制行 - 數位維修單</title>
     <style>
         /* =========================================
-           1. 設計變數 — iOS 液態玻璃風格
+           1. 設計系統與變數 (Design Tokens)
            ========================================= */
         :root {
             --primary-blue: #007AFF;
@@ -15,41 +15,56 @@
             --accent-green: #34C759;
             --accent-red: #d63031;
 
-            --glass-bg: rgba(255, 255, 255, 0.72);
-            --glass-border: rgba(255, 255, 255, 0.9);
-            --glass-card-bg: rgba(255, 255, 255, 0.5);
-            --glass-issue-bg: rgba(255, 240, 240, 0.55);
-            --blur-amount: 24px;
-
-            --surface-input: rgba(255, 255, 255, 0.88);
-            --surface-readonly: rgba(240, 242, 247, 0.75);
+            /* iOS Liquid Glass 背景 */
+            --bg-body: radial-gradient(ellipse at 20% 0%, #e0c3fc 0%, transparent 50%),
+                       radial-gradient(ellipse at 80% 20%, #8ec5fc 0%, transparent 50%),
+                       radial-gradient(ellipse at 40% 80%, #a8edea 0%, transparent 50%),
+                       radial-gradient(ellipse at 90% 90%, #fed6e3 0%, transparent 50%),
+                       linear-gradient(160deg, #d4b8f0 0%, #a8d0fa 35%, #b8e6f5 70%, #d0f0e8 100%);
+            --surface-card: rgba(255, 255, 255, 0.55);
+            --surface-input: rgba(255, 255, 255, 0.72);
+            --surface-readonly: rgba(244, 244, 247, 0.65);
+            --surface-issue: rgba(255, 245, 245, 0.6);
 
             --text-primary: #1a1a1f;
             --text-secondary: #5c5c66;
-            --text-label: #555;
-            --text-placeholder: #9a9aa8;
+            --text-label: #444;
+            --text-placeholder: #999;
 
-            --border-input: rgba(0, 0, 0, 0.12);
+            --border-input: rgba(120, 130, 150, 0.28);
             --border-focus: #007AFF;
-            --border-card: rgba(255, 255, 255, 0.7);
+            --border-card: rgba(255, 255, 255, 0.5);
+            --border-light: rgba(255, 255, 255, 0.35);
 
-            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06), 0 0 0 0.5px rgba(0,0,0,0.04);
-            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08);
-            --shadow-input-focus: 0 0 0 3px rgba(0, 122, 255, 0.2);
-            --shadow-toolbar: 0 12px 40px rgba(31, 35, 40, 0.2);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+            --shadow-card-hover: 0 16px 48px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+            --shadow-input-focus: 0 0 0 4px rgba(0, 122, 255, 0.15);
+            --shadow-toolbar: 0 12px 40px rgba(0, 0, 0, 0.12);
 
-            --radius-sm: 12px;
-            --radius-md: 18px;
+            /* Liquid Glass tokens */
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-bg-strong: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.55);
+            --glass-border-outer: rgba(255, 255, 255, 0.35);
+            --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+            --glass-blur: blur(24px) saturate(1.8);
+            --glass-blur-heavy: blur(40px) saturate(2);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
             --radius-lg: 24px;
             --radius-xl: 28px;
 
-            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-                "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC",
+                "Noto Sans TC", "Microsoft JhengHei", sans-serif;
 
-            --transition-fast: 0.18s ease;
-            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* =========================================
+           2. 基礎重置與全域樣式
+           ========================================= */
         *,
         *::before,
         *::after {
@@ -65,9 +80,10 @@
         body {
             font-family: var(--font-stack);
             margin: 0;
-            padding: 24px 20px 200px;
+            padding: 24px 16px 200px;
             color: var(--text-primary);
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background: var(--bg-body);
+            background-attachment: fixed;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -76,27 +92,39 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            background-attachment: fixed;
         }
 
+        /* =========================================
+           3. 主容器 — 響應式表單卡片
+           ========================================= */
         .form-container {
             width: 100%;
             max-width: 860px;
             margin: 0 auto;
-            padding: clamp(20px, 3vw, 36px) clamp(16px, 3vw, 32px);
+            padding: clamp(20px, 3.5vw, 36px) clamp(16px, 3vw, 32px);
             background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-glass);
+            box-shadow: var(--shadow-card);
             border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.7);
             display: flex;
             flex-direction: column;
-            gap: clamp(18px, 2.5vw, 28px);
+            gap: clamp(18px, 3vw, 28px);
             transition: all var(--transition-smooth);
         }
 
-        /* 頁首 */
+        @media (hover: hover) {
+            .form-container:hover {
+                box-shadow: var(--shadow-card-hover);
+                background: var(--glass-bg-strong);
+            }
+        }
+
+        /* =========================================
+           4. 頁首區塊
+           ========================================= */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -104,12 +132,17 @@
             align-items: flex-start;
             gap: 16px;
             padding-bottom: 18px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .company-block {
+            flex: 1 1 auto;
+            min-width: 200px;
         }
 
         .company-block h1 {
             margin: 0;
-            font-size: clamp(22px, 3.5vw, 32px);
+            font-size: clamp(22px, 3.5vw, 30px);
             font-weight: 800;
             background: linear-gradient(45deg, #007AFF, #00A8FF);
             -webkit-background-clip: text;
@@ -139,12 +172,12 @@
         .doc-badge {
             background: var(--primary-grad);
             color: #fff;
-            padding: 7px 22px;
+            padding: 7px 20px;
             border-radius: 22px;
             font-size: 15px;
             font-weight: 700;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3);
+            box-shadow: 0 3px 12px rgba(0, 122, 255, 0.28);
             white-space: nowrap;
         }
 
@@ -158,16 +191,15 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 7px 14px;
+            background: rgba(245, 245, 249, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
             border-radius: var(--radius-sm);
             font-size: 13px;
             font-weight: 500;
             color: var(--text-secondary);
-            border: 1px solid rgba(255,255,255,0.6);
             white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.4);
         }
         .meta-box input {
             width: 105px;
@@ -183,50 +215,77 @@
         .meta-box input:focus {
             color: var(--primary-blue);
         }
+        .meta-box input[type="date"] {
+            width: 120px;
+            font-family: var(--font-stack);
+        }
 
+        /* 公司資訊條 */
         .company-info {
-            margin-top: 14px;
+            margin-top: 12px;
             font-size: 14px;
             color: #555;
             line-height: 1.7;
             font-weight: 500;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 12px 16px;
+            background: rgba(249, 250, 252, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 12px 14px;
             border-radius: var(--radius-md);
-            border: 1px solid rgba(255,255,255,0.7);
+            border: 1px solid var(--border-light);
             display: flex;
             flex-wrap: wrap;
             gap: 4px 16px;
             align-items: center;
         }
-        .info-icon { margin-right: 3px; font-size: 15px; }
-        .info-sep { color: #ccc; margin: 0 2px; }
+        .company-info .info-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 14px;
+            align-items: center;
+        }
+        .info-icon {
+            margin-right: 3px;
+            font-size: 15px;
+        }
+        .info-sep {
+            color: #ccc;
+            margin: 0 2px;
+        }
 
-        /* 卡片 */
+        /* =========================================
+           5. 區塊卡片 (Section Cards)
+           ========================================= */
         .section-card {
-            background: var(--glass-card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(16px) saturate(1.5);
+            -webkit-backdrop-filter: blur(16px) saturate(1.5);
             border-radius: var(--radius-md);
             padding: clamp(16px, 2.5vw, 24px);
-            border: 1px solid rgba(255, 255, 255, 0.65);
-            transition: border-color var(--transition-fast);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.5);
+            transition: all var(--transition-fast);
         }
         .section-card:focus-within {
-            border-color: rgba(0, 122, 255, 0.3);
+            border-color: rgba(0, 122, 255, 0.35);
+            box-shadow: 0 4px 20px rgba(0, 122, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.6);
         }
+
         .section-card.issue-card {
-            background: var(--glass-issue-bg);
-            border-color: rgba(255, 200, 200, 0.5);
+            background: rgba(255, 245, 245, 0.55);
+            border-color: rgba(255, 180, 180, 0.35);
+            border-top: 1px solid rgba(255,255,255,0.6);
+        }
+        .section-card.issue-card:focus-within {
+            border-color: rgba(214, 48, 49, 0.3);
+            box-shadow: 0 4px 20px rgba(214, 48, 49, 0.06), inset 0 1px 0 rgba(255,255,255,0.6);
         }
 
         .card-title {
             font-size: 13px;
             color: var(--text-secondary);
             font-weight: 700;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             display: flex;
@@ -249,20 +308,20 @@
             background: var(--accent-red);
         }
 
-        /* 輸入框加大清晰 */
+        /* =========================================
+           6. 輸入框系統 — 清晰可見、加大
+           ========================================= */
         input[type="text"],
         input[type="number"],
         input[type="date"],
         input[type="time"],
         textarea {
             width: 100%;
-            border: 1.8px solid var(--border-input);
+            border: 2px solid var(--border-input);
             background: var(--surface-input);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 12px 14px;
+            padding: 14px 16px;
             border-radius: var(--radius-sm);
-            font-size: 16px;
+            font-size: 17px;
             font-family: var(--font-stack);
             color: var(--text-primary);
             transition: all var(--transition-fast);
@@ -270,138 +329,229 @@
             line-height: 1.5;
             -webkit-appearance: none;
             appearance: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
         }
+
         input::placeholder,
         textarea::placeholder {
             color: var(--text-placeholder);
             font-weight: 400;
+            font-style: normal;
+            font-size: 16px;
         }
+
         input:hover,
         textarea:hover {
-            border-color: rgba(0,0,0,0.2);
-            background: rgba(255,255,255,0.95);
+            border-color: rgba(0, 122, 255, 0.35);
+            background: rgba(255, 255, 255, 0.85);
         }
+
         input:focus,
         textarea:focus {
             outline: none;
             border-color: var(--border-focus);
             background: #fff;
-            box-shadow: var(--shadow-input-focus);
+            box-shadow: var(--shadow-input-focus), 0 2px 8px rgba(0, 122, 255, 0.08);
+            transform: translateY(-1px);
         }
+
+        /* readonly 輸入框 */
         input[readonly] {
             background: var(--surface-readonly);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border-color: rgba(0,0,0,0.08);
+            border-color: rgba(200, 205, 215, 0.5);
             color: #555;
             cursor: default;
             font-weight: 600;
         }
+        input[readonly]:focus {
+            box-shadow: none;
+            border-color: rgba(200, 205, 215, 0.5);
+            transform: none;
+        }
+
+        /* 總計欄位 */
         #grandTotal {
             font-size: 24px;
             font-weight: 800;
             color: var(--primary-blue);
-            background: rgba(240, 248, 255, 0.8);
-            border-color: rgba(0, 122, 255, 0.2);
+            background: rgba(246, 249, 255, 0.7);
+            border-color: rgba(0, 122, 255, 0.25);
             text-align: right;
-        }
-        textarea {
-            min-height: 68px;
-            resize: vertical;
+            letter-spacing: 0.5px;
         }
 
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           7. 客戶資料網格
+           ========================================= */
         .client-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px 20px;
+            gap: 14px 18px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
         .input-group label {
-            font-size: 13px;
+            font-size: 12.5px;
             color: var(--text-label);
             font-weight: 700;
             letter-spacing: 0.3px;
             text-transform: uppercase;
         }
 
+        /* =========================================
+           8. 描述表格（故障檢測）
+           ========================================= */
         .desc-table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 10px;
+            border-spacing: 0 8px;
         }
         .desc-table td.label {
             width: 85px;
             font-weight: 700;
             color: #555;
             vertical-align: top;
-            padding-top: 14px;
+            padding-top: 12px;
             text-align: right;
             padding-right: 14px;
-            font-size: 15px;
+            font-size: 14px;
             white-space: nowrap;
         }
+        .desc-table td {
+            vertical-align: top;
+        }
 
-        /* 零件容器 */
+        /* =========================================
+           9. 零件表格區域
+           ========================================= */
         .parts-container {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(16px) saturate(1.5);
+            -webkit-backdrop-filter: blur(16px) saturate(1.5);
             border-radius: var(--radius-md);
             padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.5);
             overflow: hidden;
         }
+
+        /* 零件區塊內的新增按鈕 */
+        .parts-add-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: var(--primary-grad);
+            color: #fff;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.28);
+            margin: 8px 4px 4px;
+            letter-spacing: 0.3px;
+        }
+        .parts-add-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 7px 20px rgba(0, 122, 255, 0.35);
+        }
+        .parts-add-btn:active {
+            transform: translateY(0);
+            filter: brightness(0.96);
+        }
+        .parts-actions {
+            display: flex;
+            justify-content: flex-start;
+            padding: 4px 6px 2px;
+        }
+
         .parts-table-wrap {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            margin: 0 -10px;
-            padding: 0 10px;
+            border-radius: var(--radius-sm);
         }
         .parts-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px;
+            min-width: 560px;
             table-layout: auto;
         }
         .parts-table th {
-            background: rgba(240, 242, 247, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(241, 243, 247, 0.7);
             color: #555;
-            padding: 12px 8px;
-            font-size: 13px;
+            padding: 10px 7px;
+            font-size: 12.5px;
             font-weight: 700;
             text-align: center;
             letter-spacing: 0.4px;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
+            white-space: nowrap;
+            border-bottom: 2px solid #e0e3ea;
         }
+        .parts-table th:first-child {
+            border-radius: 10px 0 0 0;
+            padding-left: 14px;
+            text-align: left;
+        }
+        .parts-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
         .parts-table td {
-            padding: 8px 6px;
+            padding: 6px 5px;
             vertical-align: middle;
+        }
+        .parts-table td:first-child {
+            padding-left: 8px;
         }
         .parts-table input {
             text-align: center;
-            background: rgba(255,255,255,0.8);
-            border: 1.5px solid rgba(0,0,0,0.08);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid rgba(180, 190, 210, 0.35);
+            border-radius: 8px;
             padding: 12px 8px;
-            font-size: 15px;
+            font-size: 16px;
             width: 100%;
             min-width: 50px;
             transition: all var(--transition-fast);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
         }
         .parts-table td:first-child input {
             text-align: left;
         }
         .parts-table input:focus {
             border-color: var(--border-focus);
-            box-shadow: 0 0 0 2.5px rgba(0, 122, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12), inset 0 1px 2px rgba(0,0,0,0.03);
             background: #fff;
+            z-index: 1;
+            position: relative;
+            transform: translateY(-1px);
         }
-        .parts-table .subtotal {
+        .parts-table input[readonly] {
+            background: rgba(246, 247, 250, 0.6);
+            border-color: rgba(200, 205, 215, 0.4);
+            color: #555;
             font-weight: 600;
-            color: #222;
+        }
+        .parts-table .qty,
+        .parts-table .price {
+            text-align: center;
         }
 
+        /* 刪除按鈕 */
         .btn-del {
             display: inline-flex;
             align-items: center;
@@ -412,107 +562,93 @@
             color: #e04040;
             cursor: pointer;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 18px;
             transition: all var(--transition-fast);
             user-select: none;
-            background: rgba(255,255,255,0.7);
-            border: 1px solid rgba(255,200,200,0.6);
+            background: #fff;
+            border: 1.5px solid #f5d0d0;
             line-height: 1;
             margin: 0 auto;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
         }
         .btn-del:hover {
             background: #ffe8e8;
             border-color: #e04040;
+            color: #c02020;
             transform: scale(1.08);
         }
-
-        .parts-add-btn {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 14px;
-            padding-left: 4px;
-        }
-        .btn-add-part {
-            background: rgba(0, 122, 255, 0.1);
-            border: 1px dashed rgba(0, 122, 255, 0.4);
-            color: #007AFF;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all var(--transition-fast);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.6);
-        }
-        .btn-add-part:hover {
-            background: rgba(0, 122, 255, 0.15);
-            border-color: #007AFF;
-            transform: translateY(-1px);
+        .btn-del:active {
+            transform: scale(0.94);
+            background: #ffd4d4;
         }
 
+        /* 總計區域 */
         .total-area {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 16px;
-            padding: 18px 10px 8px;
-            border-top: 2px dashed rgba(0,0,0,0.08);
-            margin-top: 14px;
+            gap: 14px;
+            padding: 16px 10px 8px;
+            border-top: 2px dashed #e8ebf1;
+            margin-top: 8px;
             flex-wrap: wrap;
         }
         .total-area span {
-            color: #555;
+            color: #666;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+        .total-area input {
+            width: 150px;
+            text-align: right;
         }
 
+        /* =========================================
+           10. 頁尾簽名區
+           ========================================= */
         .footer {
             display: flex;
-            gap: 18px;
+            gap: 16px;
             flex-wrap: wrap;
         }
         .sign-box {
             flex: 1 1 180px;
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.7);
+            background: rgba(250, 251, 253, 0.6);
+            backdrop-filter: blur(8px);
+            border: 2px solid #e5e8ef;
             border-radius: var(--radius-md);
-            padding: 18px;
+            padding: 16px;
             position: relative;
             min-width: 140px;
         }
         .sign-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #555;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
-            padding-bottom: 8px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid #e0e3ea;
+            padding-bottom: 7px;
+            letter-spacing: 0.5px;
         }
         .sign-line {
-            border-bottom: 1.5px dashed rgba(0,0,0,0.2);
-            height: 42px;
+            border-bottom: 1.5px dashed #c5c9d4;
+            height: 40px;
             margin-top: 8px;
+            position: relative;
         }
-        .engineer-name {
+        .sign-line .engineer-name {
             position: absolute;
-            bottom: 14px;
-            right: 22px;
+            bottom: 5px;
+            right: 18px;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 17px;
             color: #333;
             letter-spacing: 1px;
         }
 
-        /* 工具列 */
+        /* =========================================
+           11. 浮動工具列
+           ========================================= */
         .toolbar {
             position: fixed;
             z-index: 9999;
@@ -522,21 +658,21 @@
             flex-wrap: wrap;
             justify-content: flex-end;
             gap: 10px;
-            max-width: min(400px, calc(100vw - 40px));
+            max-width: min(760px, calc(100vw - 40px));
             padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 18px;
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.35);
             box-shadow: var(--shadow-toolbar);
+            backdrop-filter: blur(24px) saturate(1.8);
+            -webkit-backdrop-filter: blur(24px) saturate(1.8);
         }
         .btn-float {
             min-height: 44px;
             background: var(--primary-grad);
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 24px;
             font-size: 14.5px;
             font-weight: 700;
@@ -547,179 +683,386 @@
             transition: all var(--transition-fast);
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             letter-spacing: 0.3px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .btn-float:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.04);
+            box-shadow: 0 7px 20px rgba(0, 122, 255, 0.35);
+        }
+        .btn-float:active {
+            transform: translateY(0);
+            filter: brightness(0.96);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+        }
+        .btn-float:focus-visible {
+            outline: 3px solid rgba(0, 122, 255, 0.3);
+            outline-offset: 3px;
         }
         .btn-float.btn-green {
-            background: linear-gradient(135deg, #34C759, #28a745);
+            background: linear-gradient(135deg, #34C759 0%, #28a745 100%);
+            box-shadow: 0 4px 14px rgba(52, 199, 89, 0.3);
+        }
+        .btn-float.btn-green:hover {
+            box-shadow: 0 7px 20px rgba(52, 199, 89, 0.38);
         }
         .btn-float.btn-word {
-            background: linear-gradient(135deg, #5c6bc0, #3f51b5);
+            background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+            box-shadow: 0 4px 14px rgba(63, 81, 181, 0.3);
+        }
+        .btn-float.btn-word:hover {
+            box-shadow: 0 7px 20px rgba(63, 81, 181, 0.38);
         }
 
-        /* ========== 響應式強化 ========== */
-        @media (max-width: 768px) {
+        /* =========================================
+           12. 響應式斷點 — 平板 (768px - 1024px)
+           ========================================= */
+        @media (max-width: 1024px) {
             body {
                 padding: 16px 12px 180px;
             }
             .form-container {
-                padding: 16px 12px;
-                gap: 16px;
+                max-width: 100%;
                 border-radius: var(--radius-md);
+                padding: 20px 16px;
+                gap: 18px;
             }
             .header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .header-right {
-                flex-direction: row;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 8px;
-            }
-            .client-grid {
-                grid-template-columns: 1fr;
-            }
-            .desc-table td.label {
-                width: 70px;
-                font-size: 14px;
-            }
-            input,
-            textarea {
-                font-size: 15px;
-                padding: 10px 12px;
-            }
-            .parts-table {
-                min-width: 520px;
-            }
-            .parts-table input {
-                font-size: 14px;
-                padding: 10px 6px;
-            }
-            .total-area {
-                flex-direction: column;
-                align-items: flex-end;
-            }
-            .toolbar {
-                left: 12px;
-                right: 12px;
-                max-width: none;
-                justify-content: center;
-                gap: 8px;
-                bottom: max(12px, env(safe-area-inset-bottom));
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 8px 4px 200px;
-            }
-            .form-container {
-                padding: 12px 8px;
-                border-radius: 14px;
                 gap: 12px;
             }
             .company-block h1 {
-                font-size: 20px;
+                font-size: 24px;
+            }
+            .client-grid {
+                gap: 12px 14px;
+            }
+            .parts-table {
+                min-width: 500px;
+            }
+            .parts-table th,
+            .parts-table td {
+                padding: 7px 4px;
+                font-size: 12px;
+            }
+            .parts-table input {
+                padding: 7px 4px;
+                font-size: 13px;
+            }
+            .toolbar {
+                right: 12px;
+                bottom: max(12px, env(safe-area-inset-bottom));
+                gap: 8px;
+                padding: 9px 10px;
+                border-radius: 16px;
+            }
+            .btn-float {
+                padding: 9px 15px;
+                font-size: 13.5px;
+                min-height: 40px;
+            }
+        }
+
+        /* =========================================
+           13. 響應式斷點 — 手機 (< 640px)
+           ========================================= */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px 8px 210px;
+                background: var(--bg-body);
+                background-attachment: fixed;
+            }
+            .form-container {
+                border-radius: var(--radius-md);
+                padding: 16px 12px;
+                gap: 16px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            }
+
+            /* 頁首改為垂直排列 */
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding-bottom: 12px;
+            }
+            .header-right {
+                align-items: flex-start;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .doc-badge {
+                font-size: 13px;
+                padding: 5px 14px;
+                border-radius: 18px;
             }
             .meta-row {
-                flex-direction: column;
                 gap: 6px;
             }
             .meta-box {
-                justify-content: space-between;
-                width: 100%;
+                font-size: 12px;
+                padding: 5px 10px;
             }
             .meta-box input {
-                width: 100%;
+                width: 85px;
+                font-size: 12px;
+            }
+            .meta-box input[type="date"] {
+                width: 105px;
+            }
+            .company-block h1 {
+                font-size: 22px;
+            }
+            .en-title {
+                font-size: 11px;
+                letter-spacing: 2px;
+            }
+            .company-info {
+                font-size: 12.5px;
+                padding: 10px;
+                gap: 2px 8px;
+                line-height: 1.6;
+            }
+
+            /* 客戶網格改單欄 */
+            .client-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            /* 描述表格 */
+            .desc-table td.label {
+                width: 60px;
+                font-size: 12.5px;
+                padding-right: 8px;
+                white-space: nowrap;
+            }
+            textarea {
+                min-height: 48px;
+                font-size: 14px;
+            }
+
+            /* 零件表格 — 水平滾動 */
+            .parts-table-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             .parts-table {
-                min-width: 460px;
+                min-width: 480px;
+            }
+            .parts-table th {
+                font-size: 11px;
+                padding: 8px 3px;
+            }
+            .parts-table td {
+                padding: 4px 3px;
             }
             .parts-table input {
-                font-size: 13px;
-                padding: 8px 4px;
+                font-size: 12.5px;
+                padding: 7px 3px;
+                border-radius: 5px;
+                border-width: 1.5px;
             }
             .btn-del {
                 width: 28px;
                 height: 28px;
-                font-size: 18px;
+                font-size: 16px;
+            }
+
+            /* 總計 */
+            .total-area {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 8px;
+                padding: 12px 6px 6px;
+            }
+            .total-area span {
+                font-size: 14px;
+            }
+            .total-area input {
+                width: 130px;
+                font-size: 20px;
+            }
+
+            /* 簽名區 */
+            .footer {
+                flex-direction: column;
+                gap: 10px;
             }
             .sign-box {
-                min-width: 120px;
-                padding: 14px;
+                min-width: auto;
             }
-            .btn-float {
-                padding: 8px 12px;
-                font-size: 13px;
-                min-height: 40px;
+            .sign-line {
+                height: 32px;
             }
+
+            /* 工具列 — 手機底部 */
             .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 8px 10px;
+                left: 8px;
+                right: 8px;
+                bottom: max(8px, env(safe-area-inset-bottom));
+                max-width: none;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 7px;
+                padding: 9px;
                 border-radius: 16px;
             }
-            .toolbar .btn-float {
+            .btn-float {
                 width: 100%;
+                min-width: 0;
+                padding: 10px 6px;
+                font-size: 13px;
+                min-height: 42px;
+                border-radius: 20px;
+            }
+            .toolbar .btn-float:first-child {
+                grid-column: 1 / -1;
             }
         }
 
+        /* 超窄手機 (< 380px) */
         @media (max-width: 380px) {
+            body {
+                padding: 6px 4px 230px;
+            }
+            .form-container {
+                padding: 12px 8px;
+                gap: 12px;
+                border-radius: 14px;
+            }
+            .toolbar {
+                grid-template-columns: 1fr;
+                gap: 6px;
+                padding: 7px;
+                border-radius: 14px;
+            }
+            .toolbar .btn-float:first-child {
+                grid-column: auto;
+            }
+            .btn-float {
+                padding: 9px 5px;
+                font-size: 12.5px;
+                min-height: 38px;
+            }
             .parts-table {
                 min-width: 420px;
             }
             .parts-table input {
-                font-size: 12px;
-                padding: 7px 2px;
+                font-size: 11.5px;
+                padding: 6px 2px;
             }
             .btn-del {
                 width: 26px;
                 height: 26px;
-                font-size: 16px;
+                font-size: 15px;
             }
-            body {
-                padding-bottom: 220px;
+            .header-right {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .meta-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .meta-box {
+                justify-content: space-between;
             }
         }
 
-        /* 列印樣式 */
+        /* =========================================
+           14. 列印樣式 (保留供瀏覽器原生列印)
+           ========================================= */
         @media print {
             body {
-                background: white !important;
+                background: #fff !important;
                 padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             .toolbar,
             .btn-del,
+            .parts-actions,
             .parts-add-btn {
                 display: none !important;
             }
             .form-container {
-                backdrop-filter: none;
-                -webkit-backdrop-filter: none;
-                background: white;
-                box-shadow: none;
-                border: none;
-                padding: 10mm 8mm;
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border: none !important;
+                background: #fff !important;
+                border-radius: 0 !important;
+                padding: 10mm 8mm !important;
+                gap: 10px !important;
+            }
+            .section-card {
+                background-color: rgba(235, 245, 255, 0.4) !important;
+                border: 1px solid #ddd !important;
+            }
+            .section-card.issue-card {
+                background-color: rgba(255, 240, 240, 0.4) !important;
+            }
+            .parts-table th {
+                background-color: #f2f2f7 !important;
+            }
+            .parts-table input {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
             }
             input,
             textarea {
-                border: 1px solid #ccc !important;
-                background: white !important;
-                backdrop-filter: none;
-                -webkit-backdrop-filter: none;
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+            input[readonly] {
+                background: transparent !important;
+            }
+            #grandTotal {
+                background: transparent !important;
+                border: none !important;
+            }
+            .company-block h1 {
+                background: none !important;
+                -webkit-text-fill-color: #007AFF !important;
+                color: #007AFF !important;
+            }
+            .company-info {
+                background: transparent !important;
+                border: 1px solid #eee !important;
+            }
+            .sign-box {
+                background: transparent !important;
+            }
+            .btn-del {
+                display: none !important;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- ========== 浮動工具列 ========== -->
     <div class="toolbar">
-        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span>📄</span> 正式 PDF</button>
-        <button class="btn-float btn-word" onclick="exportFormalWord()"><span>📝</span> Word 備用</button>
+        <button class="btn-float btn-green" onclick="exportFormalPDF()">
+            <span>📄</span> 正式 PDF
+        </button>
+        <button class="btn-float btn-word" onclick="exportFormalWord()">
+            <span>📝</span> Word 備用
+        </button>
     </div>
 
+    <!-- ========== 主表單容器 ========== -->
     <div class="form-container">
+
+        <!-- 頁首 -->
         <div class="header">
             <div class="company-block">
                 <h1>英泰自動控制行</h1>
@@ -728,45 +1071,81 @@
             <div class="header-right">
                 <div class="doc-badge">🔧 維修單</div>
                 <div class="meta-row">
-                    <div class="meta-box">單號 <input type="text" id="orderNo"></div>
-                    <div class="meta-box">日期 <input type="date" id="dateField"></div>
+                    <div class="meta-box">
+                        單號 <input type="text" id="orderNo" placeholder="自動產生">
+                    </div>
+                    <div class="meta-box">
+                        日期 <input type="date" id="dateField">
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- 公司資訊 -->
         <div class="company-info">
             <span class="info-icon">📍</span> 彰化縣員林市員集路2段493巷4弄10號
-            <span class="info-sep">｜</span> 📞 04-8356923 ｜ 📱 0935-435757 ｜ 📠 04-8341151 ｜ 🆔 45229579
+            <span class="info-sep">｜</span>
+            <span class="info-icon">📞</span> 04-8356923
+            <span class="info-sep">｜</span>
+            <span class="info-icon">📱</span> 0935-435757
+            <span class="info-sep">｜</span>
+            <span class="info-icon">📠</span> 04-8341151
+            <span class="info-sep">｜</span>
+            <span class="info-icon">🆔</span> 45229579
         </div>
 
+        <!-- 客戶資料 -->
         <div class="section-card">
             <div class="card-title">客戶資料 Client Info</div>
             <div class="client-grid">
-                <div class="input-group"><label>客戶名稱</label><input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight:600;"></div>
-                <div class="input-group"><label>機器編號</label><input type="text" id="machineNo" placeholder="編號..."></div>
-                <div class="input-group"><label>維修開始</label><input type="time" id="startTime"></div>
-                <div class="input-group"><label>維修結束</label><input type="time" id="endTime"></div>
+                <div class="input-group">
+                    <label>客戶名稱 / Customer Name</label>
+                    <input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight: 600; font-size: 16px;">
+                </div>
+                <div class="input-group">
+                    <label>機器編號 / Machine No.</label>
+                    <input type="text" id="machineNo" placeholder="編號...">
+                </div>
+                <div class="input-group">
+                    <label>維修開始 / Start Time</label>
+                    <input type="time" id="startTime">
+                </div>
+                <div class="input-group">
+                    <label>維修結束 / End Time</label>
+                    <input type="time" id="endTime">
+                </div>
             </div>
         </div>
 
+        <!-- 故障與檢測 -->
         <div class="section-card issue-card">
-            <div class="card-title">故障與檢測</div>
+            <div class="card-title">故障與檢測 Issues &amp; Diagnosis</div>
             <table class="desc-table">
-                <tr><td class="label">故障情形</td><td><textarea id="issue" placeholder="描述..."></textarea></td></tr>
-                <tr><td class="label">故障原因</td><td><textarea id="cause" placeholder="原因..."></textarea></td></tr>
-                <tr><td class="label">處理對策</td><td><textarea id="solution" placeholder="建議事項..."></textarea></td></tr>
+                <tr>
+                    <td class="label">故障情形</td>
+                    <td><textarea id="issue" placeholder="請描述故障情形..."></textarea></td>
+                </tr>
+                <tr>
+                    <td class="label">故障原因</td>
+                    <td><textarea id="cause" placeholder="請描述故障原因..."></textarea></td>
+                </tr>
+                <tr>
+                    <td class="label">處理對策</td>
+                    <td><textarea id="solution" placeholder="請描述處理對策或建議事項..."></textarea></td>
+                </tr>
             </table>
         </div>
 
+        <!-- 零件明細 -->
         <div class="parts-container">
             <div class="parts-table-wrap">
                 <table class="parts-table" id="partsTable">
                     <thead>
                         <tr>
-                            <th style="width:30%; text-align:left; padding-left:14px;">項目 / 零件名稱</th>
+                            <th style="width:28%; text-align:left; padding-left:14px;">項目 / 零件名稱</th>
                             <th style="width:18%;">規格</th>
                             <th style="width:10%;">數量</th>
-                            <th style="width:16%;">單價</th>
+                            <th style="width:14%;">單價</th>
                             <th style="width:16%;">小計</th>
                             <th style="width:10%;"></th>
                         </tr>
@@ -775,38 +1154,47 @@
                         <tr>
                             <td><input type="text" placeholder="輸入項目" style="text-align:left;"></td>
                             <td><input type="text" placeholder="規格"></td>
-                            <td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td>
-                            <td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td>
-                            <td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td>
-                            <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
+                            <td><input type="number" class="qty" value="1" min="1" oninput="calcTotal(this)"></td>
+                            <td><input type="number" class="price" min="0" oninput="calcTotal(this)" placeholder="0"></td>
+                            <td><input type="text" class="subtotal" oninput="updateGrandTotal()" placeholder="0"></td>
+                            <td><div class="btn-del" onclick="deleteRow(this)" title="刪除此列">×</div></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="parts-add-btn">
-                <button class="btn-add-part" onclick="addPartRow()"><span>＋</span> 新增零件項目</button>
+
+            <div class="parts-actions">
+                <button class="parts-add-btn" onclick="addPartRow()">
+                    <span>＋</span> 新增零件項目
+                </button>
             </div>
+
             <div class="total-area">
-                <span>💰 總計金額</span>
+                <span>💰 總計金額 Total</span>
                 <input type="text" id="grandTotal" readonly value="0">
             </div>
         </div>
 
+        <!-- 簽名區 -->
         <div class="footer">
             <div class="sign-box">
-                <div class="sign-title">✍️ 客戶簽名</div>
+                <div class="sign-title">✍️ 客戶簽名 / Client Signature</div>
                 <div class="sign-line"></div>
             </div>
-            <div class="sign-box" style="position:relative;">
-                <div class="sign-title">🔩 維修人員</div>
-                <div class="sign-line"></div>
-                <span class="engineer-name">朱文言</span>
+            <div class="sign-box">
+                <div class="sign-title">🔩 維修人員 / Engineer</div>
+                <div class="sign-line">
+                    <span class="engineer-name">朱文言</span>
+                </div>
             </div>
         </div>
+
     </div>
 
     <script>
-        // 初始化日期與單號
+        // =========================================
+        // 1. 初始化日期與單號
+        // =========================================
         const today = new Date();
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -814,24 +1202,44 @@
         document.getElementById('dateField').valueAsDate = today;
         document.getElementById('orderNo').value = `${year}${month}${day}`;
 
-        const esc = v => String(v??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-        const nl2br = v => esc(v).replace(/\n/g,'<br>');
-        const toNum = v => Math.max(0, Number(v)||0);
-        const money = v => Math.round(v).toLocaleString('zh-TW');
+        // =========================================
+        // 2. 工具函式
+        // =========================================
+        const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[ch]));
+        const nl2br = value => esc(value).replace(/\n/g, '<br>');
+        const toNumber = value => Math.max(0, Number(value) || 0);
+        const moneyText = value => Math.round(value).toLocaleString('zh-TW');
 
-        function getFormalData(){
-            const rows = [...document.querySelectorAll('#partsTable tbody tr')].map(tr=>{
-                const item = tr.cells[0]?.querySelector('input')?.value || '';
-                const spec = tr.cells[1]?.querySelector('input')?.value || '';
+        // =========================================
+        // 3. 收集正式文件資料
+        // =========================================
+        function getFormalData() {
+            const rows = [...document.querySelectorAll('#partsTable tbody tr')].map(tr => {
                 const qty = tr.querySelector('.qty')?.value || '';
                 const price = tr.querySelector('.price')?.value || '';
-                return {item,spec,qty,price};
-            }).filter(r=>r.item||r.spec||r.qty!=='1'||toNum(r.price));
-            const total = rows.reduce((s,r)=>s+toNum(r.qty)*toNum(r.price),0);
-            const iso = document.getElementById('dateField').value||'';
-            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso)
-                ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>`
-                : esc(iso);
+                const subtotalVal = tr.querySelector('.subtotal')?.value || '';
+                const subtotalNum = parseFloat(String(subtotalVal).replace(/,/g, '')) || 0;
+                const autoSubtotal = toNumber(qty) * toNumber(price);
+                const finalSubtotal = subtotalNum > 0 ? subtotalNum : autoSubtotal;
+                return {
+                    item: tr.cells[0]?.querySelector('input')?.value || '',
+                    spec: tr.cells[1]?.querySelector('input')?.value || '',
+                    qty: qty,
+                    price: price,
+                    subtotal: finalSubtotal
+                };
+            }).filter(r => r.item || r.spec || r.qty !== '1' || toNumber(r.price) || r.subtotal > 0);
+            const total = rows.reduce((sum, r) => sum + r.subtotal, 0);
+            const iso = document.getElementById('dateField').value || '';
+            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso) ?
+                `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` :
+                esc(iso);
             return {
                 orderNo: document.getElementById('orderNo').value,
                 date: displayDate,
@@ -842,116 +1250,229 @@
                 issue: document.getElementById('issue').value,
                 cause: document.getElementById('cause').value,
                 solution: document.getElementById('solution').value,
-                rows, total
+                rows,
+                total
             };
         }
 
-        function formalFileName(ext){
-            const d = document.getElementById('dateField').value.replaceAll('-','')||`${year}${month}${day}`;
-            const cust = (document.getElementById('customerName').value.trim()||'客戶').replace(/[\\/:*?"<>|]/g,'_');
-            return `${d}_${cust}_正式維修單.${ext}`;
+        // =========================================
+        // 4. 正式檔案名稱
+        // =========================================
+        function formalFileName(ext) {
+            const d = document.getElementById('dateField').value.replaceAll('-', '') || `${year}${month}${day}`;
+            const customer = (document.getElementById('customerName').value.trim() || '客戶').replace(/[\\/:*?"<>|]/g,
+                '_');
+            return `${d}_${customer}_正式維修單.${ext}`;
         }
 
-        function formalDocumentHtml(){
+        // =========================================
+        // 5. 正式文件 HTML 模板（PDF / Word 共用）
+        // =========================================
+        function formalDocumentHtml() {
             const d = getFormalData();
-            const filledRows = d.rows.map((r,i)=>{
-                const subtotal = toNum(r.qty)*toNum(r.price);
-                return `<tr><td class="center latin">${i+1}</td><td>${esc(r.item)}</td><td>${esc(r.spec)}</td><td class="center latin">${esc(r.qty)}</td><td class="right latin">${r.price?'$'+money(r.price):''}</td><td class="right latin">${subtotal?'$'+money(subtotal):''}</td></tr>`;
+            const filledRows = d.rows.map((r, i) => {
+                const subtotal = r.subtotal || toNumber(r.qty) * toNumber(r.price);
+                return `<tr><td class="center latin">${i + 1}</td><td>${esc(r.item)}</td><td>${esc(r.spec)}</td><td class="center latin">${esc(r.qty)}</td><td class="right latin">${r.price ? '$' + moneyText(r.price) : ''}</td><td class="right latin">${subtotal ? '$' + moneyText(subtotal) : ''}</td></tr>`;
             }).join('');
-            const blankRows = Array.from({length:Math.max(0,3-d.rows.length)},()=>'<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
-            return `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title><style>@page{size:A4 portrait;margin:15mm 20mm;}body{font-family:"Times New Roman","DFKai-SB",serif;font-size:11pt;line-height:1.28;}table{width:100%;border-collapse:collapse;}td,th{border:.5pt solid #777;padding:4pt 5pt;}.latin{font-family:"Times New Roman",serif;}.date-kai{font-family:"DFKai-SB",serif;}</style></head><body><p style="text-align:center;color:#0070C0;font-size:18pt;font-weight:bold;">英泰自動控制行</p><p style="text-align:center;color:#C00000;font-size:10pt;">INTAI AUTO CONTROL</p><p style="text-align:center;font-size:18pt;font-weight:bold;">維 修 單</p><p style="text-align:center;">彰化縣員林市員集路2段493巷4弄10號<br>Tel:04-8356923 Mobile:0935-435757 Fax:04-8341151 統編:45229579</p><table><tr><td>維修單號</td><td>${esc(d.orderNo)}</td><td>填單日期</td><td>${d.date}</td></tr><tr><td>客戶名稱</td><td>${esc(d.customer)}</td><td>機器編號</td><td>${esc(d.machineNo)}</td></tr><tr><td>開始時間</td><td>${esc(d.startTime)}</td><td>完成時間</td><td>${esc(d.endTime)}</td></tr></table><p><b>故障情形</b><br>${nl2br(d.issue)}</p><p><b>故障原因</b><br>${nl2br(d.cause)}</p><p><b>處理對策</b><br>${nl2br(d.solution)}</p><table><tr><th>項次</th><th>項目</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr>${filledRows}${blankRows}</table><p style="text-align:right;">總計: NT$ ${money(d.total)} (未稅)</p><table><tr><td>客戶簽章:</td><td>維修人員: 朱文言</td></tr></table></body></html>`;
+            const blankRows = Array.from({ length: Math.max(0, 3 - d.rows.length) }, () =>
+                '<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
+            return `<!DOCTYPE html>
+        <html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="UTF-8"><meta name="ProgId" content="Word.Document"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title>
+        <style>
+        @page { size: A4 portrait; margin: 15mm 20mm; background-color: #ffffff; }
+        @page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
+        div.WordSection1 { page:WordSection1; }
+        * { box-sizing:border-box; }
+        html,body { margin:0; padding:0; background:#fff; color:#000; }
+        body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
+        body { font-size:11pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .doc { width:100%; }
+        .company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
+        .english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
+        .title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
+        .contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
+        .address-line { margin-bottom:7pt; }
+        .contact-line { white-space:nowrap; }
+        .contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; }
+        .contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
+        .rule { display:none; height:0; margin:0; border:0; }
+        table { width:100%; border-collapse:collapse; table-layout:fixed; }
+        td,th { border:.5pt solid #777; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
+        th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
+        .meta td { height:23pt; }
+        .section { margin-top:9pt; page-break-inside:avoid; }
+        .section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
+        .desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; }
+        .desc .label { width:17%; vertical-align:middle; }
+        .parts th,.parts td { height:23pt; }
+        .center { text-align:center; } .right { text-align:right; }
+        .date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; }
+        .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
+        .total td { height:29pt; border-top:.75pt solid #555; background:transparent; font-weight:normal; }
+        .total-label { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; }
+        .total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; }
+        .tax-note { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
+        .remarks-label { font-weight:bold; }
+        .remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; }
+        .sign { margin-top:9pt; }
+        .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border:.5pt solid #777; font-weight:normal; }
+        .sign-label,.engineer { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
+        .engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; }
+        .notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8.5pt; font-weight:normal; }
+        .footer { margin-top:6pt; padding-top:4pt; border-top:.5pt solid #777; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; }
+        @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+        </style></head><body><div class="WordSection1"><div class="doc">
+        <p class="company">英泰自動控制行</p>
+        <p class="english">INTAI AUTO CONTROL</p>
+        <p class="title">維 修 單</p>
+        <div class="contact"><div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div><div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span>　<span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span>　<span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span>　<span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div></div>
+        <table class="meta"><colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
+        <tr><td class="label">維修單號</td><td class="latin">${esc(d.orderNo)}</td><td class="label">填單日期</td><td>${d.date}</td></tr>
+        <tr><td class="label">客戶名稱</td><td>${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin">${esc(d.machineNo)}</td></tr>
+        <tr><td class="label">開始時間</td><td class="latin">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin">${esc(d.endTime)}</td></tr></table>
+        <div class="section"><div class="section-title">壹、故障檢測與處理紀錄</div><table class="desc"><tr><td class="label">故障情形</td><td>${nl2br(d.issue)}</td></tr><tr><td class="label">故障原因</td><td>${nl2br(d.cause)}</td></tr><tr><td class="label">處理對策</td><td>${nl2br(d.solution)}</td></tr></table></div>
+        <div class="section"><div class="section-title">貳、維修項目及零件明細</div><table class="parts"><colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup><thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead><tbody>${filledRows}${blankRows}</tbody><tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount">NT$ ${moneyText(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot></table></div>
+        <div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div>
+        <table class="sign"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td><span class="sign-label">客戶簽章：</span></td><td><span class="sign-label">維修人員：</span><span class="engineer">朱文言</span></td></tr></table>
+        <p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p><div class="footer">英泰自動控制行　維修服務紀錄</div>
+        </div></div></body></html>`;
         }
 
-        function validateFormal(){
-            const f = document.getElementById('customerName');
-            if(!f.value.trim()){ alert('請填寫客戶名稱'); f.focus(); return false; }
+        // =========================================
+        // 6. 驗證
+        // =========================================
+        function validateFormal() {
+            const field = document.getElementById('customerName');
+            if (!field.value.trim()) {
+                alert('⚠️ 請先填寫【客戶名稱】再輸出正式文件。');
+                field.focus();
+                return false;
+            }
             return true;
         }
 
-        function exportFormalPDF(){
-            if(!validateFormal()) return;
+        // =========================================
+        // 7. 輸出正式 PDF（使用隱藏 iframe 觸發原生列印）
+        // =========================================
+        function exportFormalPDF() {
+            if (!validateFormal()) return;
+
             const html = formalDocumentHtml();
+
             const iframe = document.createElement('iframe');
-            iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = '0';
             document.body.appendChild(iframe);
+
             const doc = iframe.contentWindow.document;
-            doc.open(); doc.write(html); doc.close();
-            doc.title = formalFileName('pdf').replace('.pdf','');
+            doc.open();
+            doc.write(html);
+            doc.close();
+
+            doc.title = formalFileName('pdf').replace('.pdf', '');
+
             iframe.contentWindow.focus();
-            setTimeout(()=>{ iframe.contentWindow.print(); setTimeout(()=>iframe.remove(),2000); },500);
+            setTimeout(() => {
+                iframe.contentWindow.print();
+                setTimeout(() => iframe.remove(), 2000);
+            }, 500);
         }
 
-        function exportFormalWord(){
-            if(!validateFormal()) return;
-            const blob = new Blob(['\ufeff',formalDocumentHtml()],{type:'application/msword;charset=utf-8'});
+        // =========================================
+        // 8. 輸出 Word 備用檔
+        // =========================================
+        function exportFormalWord() {
+            if (!validateFormal()) return;
+            const blob = new Blob(['\ufeff', formalDocumentHtml()], { type: 'application/msword;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
+            a.href = url;
             a.download = formalFileName('doc');
-            document.body.appendChild(a); a.click(); a.remove();
-            setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
 
-        function calcSubtotal(row){
-            const qty = toNum(row.querySelector('.qty').value);
-            const price = toNum(row.querySelector('.price').value);
-            const subtotalInput = row.querySelector('.subtotal');
-            if(row.dataset.manual === 'true') return;
-            const calc = qty * price;
-            subtotalInput.value = calc > 0 ? calc.toLocaleString() : '';
+        // =========================================
+        // 9. 零件表格 — 即時計算
+        // =========================================
+        function calcTotal(input) {
+            const row = input.closest('tr');
+            const qty = parseFloat(row.querySelector('.qty').value) || 0;
+            const price = parseFloat(row.querySelector('.price').value) || 0;
+            const subtotalEl = row.querySelector('.subtotal');
+            
+            // 當數量和單價都有值時，自動計算小計
+            if (qty > 0 && price > 0) {
+                const total = Math.round(qty * price);
+                subtotalEl.value = total > 0 ? total.toLocaleString() : '';
+            }
             updateGrandTotal();
         }
 
-        function onQtyPriceChange(input){
-            const row = input.closest('tr');
-            row.dataset.manual = 'false';
-            calcSubtotal(row);
-        }
-
-        function onSubtotalManual(input){
-            const row = input.closest('tr');
-            row.dataset.manual = 'true';
-            updateGrandTotal();
-        }
-
-        function updateGrandTotal(){
+        function updateGrandTotal() {
             let sum = 0;
-            document.querySelectorAll('#partsTable tbody tr').forEach(tr => {
-                const val = tr.querySelector('.subtotal').value;
-                const num = parseFloat(String(val).replace(/,/g,'')) || 0;
-                sum += num;
+            document.querySelectorAll('.subtotal').forEach(el => {
+                const val = parseFloat(String(el.value).replace(/,/g, '')) || 0;
+                sum += val;
             });
-            document.getElementById('grandTotal').value = sum.toLocaleString();
+            document.getElementById('grandTotal').value = sum > 0 ? sum.toLocaleString() : '0';
         }
 
-        function addPartRow(){
+        // =========================================
+        // 10. 新增 / 刪除零件列
+        // =========================================
+        function addPartRow() {
             const tbody = document.querySelector('#partsTable tbody');
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><input type="text" placeholder="輸入項目" style="text-align:left;"></td>
                 <td><input type="text" placeholder="規格"></td>
-                <td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td>
-                <td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td>
-                <td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td>
-                <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
+                <td><input type="number" class="qty" value="1" min="1" oninput="calcTotal(this)"></td>
+                <td><input type="number" class="price" min="0" oninput="calcTotal(this)" placeholder="0"></td>
+                <td><input type="text" class="subtotal" oninput="updateGrandTotal()" placeholder="0"></td>
+                <td><div class="btn-del" onclick="deleteRow(this)" title="刪除此列">×</div></td>
             `;
             tbody.appendChild(tr);
-            tr.querySelector('input').focus();
-            updateGrandTotal();
+            // 自動聚焦到新列的項目輸入框
+            setTimeout(() => {
+                const newInput = tr.querySelector('input');
+                if (newInput) newInput.focus();
+            }, 150);
         }
 
-        function deleteRow(btn){
+        function deleteRow(btn) {
             const tbody = document.querySelector('#partsTable tbody');
-            if(tbody.rows.length <= 1){
-                const row = btn.closest('tr');
-                row.querySelectorAll('input').forEach(inp => { if(!inp.classList.contains('qty')) inp.value = ''; else inp.value = '1'; });
-                row.querySelector('.subtotal').value = '';
-                row.dataset.manual = 'false';
+            if (tbody.rows.length > 1) {
+                btn.closest('tr').remove();
                 updateGrandTotal();
             } else {
-                btn.closest('tr').remove();
+                // 如果只剩一列，清空內容而非刪除
+                const row = btn.closest('tr');
+                row.querySelectorAll('input').forEach(inp => {
+                    if (!inp.classList.contains('qty')) inp.value = '';
+                    else inp.value = '1';
+                });
+                row.querySelector('.subtotal').value = '';
                 updateGrandTotal();
             }
         }
+
+        // =========================================
+        // 11. 鍵盤快捷鍵：Enter 新增列（在最後一個 price 欄位時）
+        // =========================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('price')) {
+                e.preventDefault();
+                addPartRow();
+            }
+        });
     </script>
 </body>
 </html>
