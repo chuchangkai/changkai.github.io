@@ -392,6 +392,81 @@
             .toolbar { flex-direction: column; align-items: stretch; }
         }
 
+
+        /* 最終版：圓潤膠囊式輸出按鈕 */
+        .toolbar {
+            padding: 13px 15px;
+            gap: 14px;
+            border-radius: 34px;
+            background: rgba(255,255,255,.52);
+            border: 1px solid rgba(255,255,255,.78);
+            box-shadow: 0 14px 38px rgba(55,82,125,.18), inset 0 1px 0 rgba(255,255,255,.92);
+        }
+        .btn-float {
+            min-height: 58px;
+            padding: 13px 30px;
+            border-radius: 999px;
+            justify-content: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1;
+            box-shadow: 0 8px 20px rgba(45,70,145,.24), inset 0 1px 0 rgba(255,255,255,.30);
+        }
+        .btn-float.btn-green {
+            background: linear-gradient(135deg, #36ca5a 0%, #24aa45 100%);
+        }
+        .btn-float.btn-word {
+            background: linear-gradient(135deg, #6575d4 0%, #394ab5 100%);
+        }
+        .output-icon {
+            display: inline-grid;
+            width: 23px;
+            height: 23px;
+            place-items: center;
+            flex: 0 0 23px;
+            font-size: 18px;
+            line-height: 1;
+        }
+        .btn-float:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.04);
+        }
+        .btn-float:active { transform: scale(.98); }
+
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 11px;
+                gap: 10px;
+                border-radius: 28px;
+            }
+            .btn-float {
+                flex: 1 1 0;
+                min-width: 0;
+                min-height: 56px;
+                padding: 12px 16px;
+                font-size: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            .toolbar {
+                flex-direction: row;
+                align-items: stretch;
+            }
+            .btn-float {
+                min-height: 54px;
+                padding: 10px 8px;
+                font-size: 14px;
+                gap: 6px;
+            }
+            .output-icon {
+                width: 19px;
+                height: 19px;
+                flex-basis: 19px;
+                font-size: 15px;
+            }
+        }
+
         @media print {
             body { background: #fff !important; padding: 0 !important; }
             .toolbar, .btn-del, .parts-actions, .parts-add-btn { display: none !important; }
@@ -403,8 +478,8 @@
 <body>
 
     <div class="toolbar">
-        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span>📄</span> 正式 PDF</button>
-        <button class="btn-float btn-word" onclick="exportFormalWord()"><span>📝</span> Word 備用</button>
+        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span class="output-icon">📄</span><span>儲存 PDF</span></button>
+        <button class="btn-float btn-word" onclick="exportFormalWord()"><span class="output-icon">📝</span><span>下載 Word</span></button>
     </div>
 
     <div class="form-container">
