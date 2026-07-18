@@ -383,103 +383,6 @@
             .toolbar { flex-direction: column; align-items: stretch; }
         }
 
-
-        /* 本輪介面細節調整 */
-        .meta-box input[type="text"],
-        .meta-box input[type="date"] {
-            color: #0878f9 !important;
-            -webkit-text-fill-color: #0878f9;
-            caret-color: #0878f9;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-        }
-        .meta-box input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: .9;
-            filter: none;
-        }
-
-        .toolbar {
-            padding: 13px 16px;
-            gap: 14px;
-            border-radius: 32px;
-        }
-        .btn-float {
-            min-height: 58px;
-            padding: 13px 30px;
-            border-radius: 999px;
-            font-size: 17px;
-            font-weight: 800;
-            justify-content: center;
-            box-shadow: 0 7px 18px rgba(50, 72, 150, .25), inset 0 1px 0 rgba(255,255,255,.35);
-        }
-        .btn-float .action-icon {
-            display: inline-grid;
-            place-items: center;
-            width: 22px;
-            height: 22px;
-            font-size: 16px;
-            line-height: 1;
-        }
-        .btn-float:active { transform: scale(.98); }
-
-        .parts-actions {
-            display: block;
-            padding: 16px 2px 4px;
-        }
-        .parts-add-btn {
-            width: 100%;
-            min-height: 78px;
-            border: 2px dashed #1682ff;
-            border-radius: 18px;
-            color: #0878f9;
-            background: rgba(73, 145, 255, .08);
-            box-shadow: none;
-            font-size: 17px;
-            font-weight: 800;
-        }
-        .parts-add-btn .add-icon {
-            display: inline-grid;
-            place-items: center;
-            width: 26px;
-            height: 26px;
-            font-size: 28px;
-            font-weight: 500;
-            line-height: 1;
-        }
-        .parts-add-btn:hover {
-            transform: translateY(-1px);
-            color: #006ee6;
-            border-color: #006ee6;
-            background: rgba(73, 145, 255, .13);
-            box-shadow: 0 6px 16px rgba(0,122,255,.10);
-        }
-        .parts-add-btn:active { transform: scale(.995); }
-
-        .btn-del {
-            display: grid;
-            place-items: center;
-            padding: 0;
-            line-height: 1;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            font-size: 22px;
-            font-weight: 500;
-            translate: none;
-        }
-        .btn-del:hover { transform: scale(1.06); }
-
-        @media (max-width: 768px) {
-            .toolbar { padding: 10px; gap: 9px; border-radius: 25px; }
-            .btn-float { flex: 1 1 0; min-height: 54px; padding: 11px 16px; font-size: 16px; }
-            .parts-add-btn { min-height: 72px; }
-        }
-        @media (max-width: 480px) {
-            .toolbar { flex-direction: row; align-items: stretch; }
-            .btn-float { min-width: 0; padding: 10px 9px; font-size: 14px; }
-            .btn-float .action-icon { width: 18px; height: 18px; font-size: 14px; }
-            .parts-add-btn { min-height: 68px; font-size: 16px; border-radius: 16px; }
-        }
-
         @media print {
             body { background: #fff !important; padding: 0 !important; }
             .toolbar, .btn-del, .parts-actions, .parts-add-btn { display: none !important; }
@@ -491,8 +394,8 @@
 <body>
 
     <div class="toolbar">
-        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span class="action-icon">▤</span> 儲存 PDF</button>
-        <button class="btn-float btn-word" onclick="exportFormalWord()"><span class="action-icon">📝</span> 下載 Word</button>
+        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span>📄</span> 正式 PDF</button>
+        <button class="btn-float btn-word" onclick="exportFormalWord()"><span>📝</span> Word 備用</button>
     </div>
 
     <div class="form-container">
@@ -556,7 +459,7 @@
                 </table>
             </div>
             <div class="parts-actions">
-                <button type="button" class="parts-add-btn" onclick="addPartRow()"><span class="add-icon">＋</span> 新增維修項目</button>
+                <button class="parts-add-btn" onclick="addPartRow()"><span>＋</span> 新增零件項目</button>
             </div>
             <div class="total-area">
                 <span>💰 總計金額</span>
@@ -635,10 +538,10 @@
             const d = getFormalData();
             const filledRows = d.rows.map((r,i)=>{
                 const subtotal = r.subtotal || toNum(r.qty)*toNum(r.price);
-                return `<tr><td class="center latin">${i+1}</td><td>${esc(r.item)}</td><td>${esc(r.spec)}</td><td class="center latin">${esc(r.qty)}</td><td class="right latin">${r.price?'$'+money(r.price):''}</td><td class="right latin">${subtotal?'$'+money(subtotal):''}</td></tr>`;
+                return `<tr><td class="center latin">${i+1}</td><td class="data-value" style="color:#0070C0;">${esc(r.item)}</td><td class="data-value" style="color:#0070C0;">${esc(r.spec)}</td><td class="center latin data-value" style="color:#0070C0;">${esc(r.qty)}</td><td class="right latin data-value" style="color:#0070C0;">${r.price?'$'+money(r.price):''}</td><td class="right latin data-value" style="color:#0070C0;">${subtotal?'$'+money(subtotal):''}</td></tr>`;
             }).join('');
             const blankRows = Array.from({length:Math.max(0,3-d.rows.length)},()=>'<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
-            const clientSignDisplay = d.clientSignName ? `客戶簽章：${esc(d.clientSignName)}` : '客戶簽章：';
+            const clientSignDisplay = d.clientSignName ? `客戶簽章：<span class="signature-value" style="color:#0070C0;">${esc(d.clientSignName)}</span>` : '客戶簽章：';
             return `<!DOCTYPE html>
 <html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
@@ -673,6 +576,11 @@
         .desc .label { width:17%; vertical-align:middle; }
         .parts th,.parts td { height:23pt; }
         .center { text-align:center; } .right { text-align:right; }
+        /* 固定欄位維持黑色；使用者輸入內容使用清楚的企業藍 */
+        .data-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
+        .data-value span { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
+        .money-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
+        .signature-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
         .date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; }
         .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
         /* 🚨 修正：將 .75pt 改為 1.5px */
@@ -705,16 +613,16 @@
         </div>
         <table class="meta">
             <colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
-            <tr><td class="label">維修單號</td><td class="latin">${esc(d.orderNo)}</td><td class="label">填單日期</td><td>${d.date}</td></tr>
-            <tr><td class="label">客戶名稱</td><td>${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin">${esc(d.machineNo)}</td></tr>
-            <tr><td class="label">開始時間</td><td class="latin">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin">${esc(d.endTime)}</td></tr>
+            <tr><td class="label">維修單號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.orderNo)}</td><td class="label">填單日期</td><td class="data-value" style="color:#0070C0;">${d.date}</td></tr>
+            <tr><td class="label">客戶名稱</td><td class="data-value" style="color:#0070C0;">${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.machineNo)}</td></tr>
+            <tr><td class="label">開始時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.endTime)}</td></tr>
         </table>
         <div class="section">
             <div class="section-title">壹、故障檢測與處理紀錄</div>
             <table class="desc">
-                <tr><td class="label">故障情形</td><td>${nl2br(d.issue)}</td></tr>
-                <tr><td class="label">故障原因</td><td>${nl2br(d.cause)}</td></tr>
-                <tr><td class="label">處理對策</td><td>${nl2br(d.solution)}</td></tr>
+                <tr><td class="label">故障情形</td><td class="data-value" style="color:#0070C0;">${nl2br(d.issue)}</td></tr>
+                <tr><td class="label">故障原因</td><td class="data-value" style="color:#0070C0;">${nl2br(d.cause)}</td></tr>
+                <tr><td class="label">處理對策</td><td class="data-value" style="color:#0070C0;">${nl2br(d.solution)}</td></tr>
             </table>
         </div>
         <div class="section">
@@ -723,13 +631,13 @@
                 <colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup>
                 <thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead>
                 <tbody>${filledRows}${blankRows}</tbody>
-                <tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount">NT$ ${money(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot>
+                <tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount money-value" style="color:#0070C0;">NT$ ${money(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot>
             </table>
         </div>
         <div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div>
         <table class="sign">
             <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
-            <tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer">朱文言</span></td></tr>
+            <tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer signature-value" style="color:#0070C0;">朱文言</span></td></tr>
         </table>
         <p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p>
         <div class="footer">英泰自動控制行 維修服務紀錄</div>
