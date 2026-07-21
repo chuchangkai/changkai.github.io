@@ -2,568 +2,418 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英泰自動控制行 - 數位維修單 (iOS Glass)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>英泰自動控制行 - 數位維修單 Liquid Glass</title>
     <style>
-        /* =========================================
-           1. 設計系統與變數 (iOS Liquid Glass)
-           ========================================= */
+        /* =========================================================
+           英泰自動控制行｜Liquid Service Desk UI
+           重點：保留既有功能，只重構操作介面與版面
+           ========================================================= */
         :root {
             --primary-blue: #007AFF;
-            --primary-dark: #0055b3;
-            --primary-grad: linear-gradient(135deg, #007AFF 0%, #0055b3 100%);
+            --primary-dark: #0057D9;
+            --primary-grad: linear-gradient(135deg, #007AFF 0%, #0057D9 100%);
+            --accent-cyan: #64D2FF;
+            --accent-mint: #34C7B8;
             --accent-green: #34C759;
-            --accent-red: #d63031;
+            --accent-red: #FF3B30;
 
-            --bg-body: radial-gradient(ellipse at 20% 0%, #e0c3fc 0%, transparent 50%),
-                       radial-gradient(ellipse at 80% 20%, #8ec5fc 0%, transparent 50%),
-                       radial-gradient(ellipse at 40% 80%, #a8edea 0%, transparent 50%),
-                       radial-gradient(ellipse at 90% 90%, #fed6e3 0%, transparent 50%),
-                       linear-gradient(160deg, #d4b8f0 0%, #a8d0fa 35%, #b8e6f5 70%, #d0f0e8 100%);
-            --surface-card: rgba(255, 255, 255, 0.55);
-            --surface-input: rgba(255, 255, 255, 0.75);
-            --surface-readonly: rgba(244, 244, 247, 0.7);
-            --surface-issue: rgba(255, 245, 245, 0.55);
+            --text-primary: rgba(17, 24, 39, .94);
+            --text-secondary: rgba(31, 41, 55, .68);
+            --text-label: rgba(31, 41, 55, .72);
+            --text-placeholder: rgba(75, 85, 99, .48);
 
-            --text-primary: #1a1a1f;
-            --text-secondary: #5c5c66;
-            --text-label: #444;
-            --text-placeholder: #999;
+            --glass-clear: rgba(255,255,255,.18);
+            --glass-panel: rgba(255,255,255,.34);
+            --glass-panel-strong: rgba(255,255,255,.46);
+            --glass-field: rgba(255,255,255,.40);
+            --glass-field-focus: rgba(255,255,255,.62);
+            --glass-danger: rgba(255, 245, 246, .38);
+            --glass-readonly: rgba(245, 249, 255, .50);
 
-            --border-input: rgba(120, 130, 150, 0.3);
-            --border-focus: #007AFF;
-            --border-card: rgba(255, 255, 255, 0.5);
-            --border-light: rgba(255, 255, 255, 0.35);
+            --stroke-glass: rgba(255,255,255,.58);
+            --stroke-strong: rgba(255,255,255,.82);
+            --stroke-field: rgba(255,255,255,.54);
+            --shadow-float: 0 28px 72px rgba(39, 69, 121, .18), 0 8px 24px rgba(39, 69, 121, .10);
+            --shadow-soft: 0 14px 40px rgba(39, 69, 121, .12), inset 0 1px 0 rgba(255,255,255,.72);
+            --shadow-focus: 0 0 0 5px rgba(0,122,255,.12), 0 12px 28px rgba(0,122,255,.12);
 
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255,255,255,0.6);
-            --shadow-input-focus: 0 0 0 4px rgba(0, 122, 255, 0.15);
-            --shadow-toolbar: 0 12px 40px rgba(0, 0, 0, 0.12);
+            --blur-clear: blur(30px) saturate(1.9) brightness(1.04);
+            --blur-panel: blur(22px) saturate(1.55);
+            --blur-field: blur(16px) saturate(1.35);
 
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-bg-strong: rgba(255, 255, 255, 0.65);
-            --glass-blur: blur(24px) saturate(1.8);
+            --radius-sm: 16px;
+            --radius-md: 24px;
+            --radius-lg: 34px;
+            --radius-xl: 44px;
+            --radius-pill: 999px;
 
-            --radius-sm: 12px;
-            --radius-md: 18px;
-            --radius-lg: 26px;
-
-            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial,
                 "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-
-            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.2s cubic-bezier(.2,.8,.2,1);
+            --transition-smooth: 0.42s cubic-bezier(.2,.8,.2,1);
         }
 
-        *,
-        *::before,
-        *::after { box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
-        }
-
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         body {
             font-family: var(--font-stack);
             margin: 0;
-            padding: 28px 20px 210px;
+            padding: 28px 20px 150px;
             color: var(--text-primary);
-            background: var(--bg-body);
-            background-attachment: fixed;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            background:
+                radial-gradient(circle at 16% 8%, rgba(0,122,255,.20), transparent 34%),
+                radial-gradient(circle at 78% 12%, rgba(116, 88, 255, .16), transparent 31%),
+                radial-gradient(circle at 48% 86%, rgba(52,199,184,.18), transparent 36%),
+                linear-gradient(160deg, #f8fbff 0%, #eef6ff 42%, #f7fbfb 100%);
+            overflow-x: hidden;
+        }
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -22%;
+            pointer-events: none;
+            z-index: -2;
+            filter: blur(38px);
+            opacity: .78;
+        }
+        body::before {
+            background:
+                radial-gradient(circle at 26% 38%, rgba(0,122,255,.24), transparent 28%),
+                radial-gradient(circle at 76% 62%, rgba(0,220,190,.17), transparent 31%);
+            animation: liquidDrift 16s ease-in-out infinite alternate;
+        }
+        body::after {
+            z-index: -1;
+            background:
+                radial-gradient(circle at 64% 22%, rgba(255,255,255,.76), transparent 22%),
+                radial-gradient(circle at 22% 78%, rgba(175,210,255,.20), transparent 26%);
+            animation: liquidDrift2 22s ease-in-out infinite alternate;
+        }
+        @keyframes liquidDrift {
+            from { transform: translate3d(-1.4%, -1%, 0) scale(1); }
+            to   { transform: translate3d(1.6%, 1.1%, 0) scale(1.045); }
+        }
+        @keyframes liquidDrift2 {
+            from { transform: translate3d(1%, -1.2%, 0) scale(1.03); }
+            to   { transform: translate3d(-1.1%, 1.3%, 0) scale(1); }
         }
 
         .form-container {
-            width: 100%;
-            max-width: 980px;
+            width: min(1180px, calc(100vw - 40px));
             margin: 0 auto;
-            padding: clamp(24px, 3.5vw, 42px) clamp(20px, 3vw, 38px);
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border-card);
-            border-top: 1px solid rgba(255,255,255,0.7);
             display: flex;
             flex-direction: column;
-            gap: clamp(20px, 3vw, 30px);
-            transition: all var(--transition-smooth);
+            gap: 22px;
         }
 
-        /* 頁首 */
+        .glass-panel,
+        .header,
+        .section-card,
+        .parts-container,
+        .sign-box,
+        .toolbar {
+            position: relative;
+            isolation: isolate;
+            border: 1px solid var(--stroke-glass);
+            border-top-color: var(--stroke-strong);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: var(--blur-panel);
+            -webkit-backdrop-filter: var(--blur-panel);
+        }
+        .glass-panel::before,
+        .header::before,
+        .section-card::before,
+        .parts-container::before,
+        .sign-box::before,
+        .toolbar::before {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            pointer-events: none;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.64), transparent 34%),
+                radial-gradient(circle at 84% 0%, rgba(255,255,255,.54), transparent 30%);
+            mix-blend-mode: screen;
+            opacity: .72;
+            z-index: -1;
+        }
+
         .header {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+            gap: 22px;
+            align-items: stretch;
+            padding: clamp(26px, 4vw, 46px);
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.16));
+            box-shadow: var(--shadow-float), inset 0 1px 0 rgba(255,255,255,.80);
+            backdrop-filter: var(--blur-clear);
+            -webkit-backdrop-filter: var(--blur-clear);
+        }
+        .company-block { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
             align-items: center;
-            gap: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-light);
-        }
-        .company-block { text-align: center; }
-        .company-block h1 {
-            margin: 0;
-            font-size: clamp(26px, 4vw, 38px);
-            font-weight: 800;
-            background: linear-gradient(45deg, #007AFF, #00A8FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
-            line-height: 1.2;
-        }
-        .en-title {
-            font-size: 15px;
-            color: #999;
-            font-weight: 600;
-            letter-spacing: 4px;
-            margin-top: 4px;
+            gap: 8px;
+            padding: 8px 13px;
+            border-radius: var(--radius-pill);
+            color: rgba(0, 91, 190, .88);
+            background: rgba(255,255,255,.34);
+            border: 1px solid rgba(255,255,255,.56);
+            font-size: 12px;
+            font-weight: 850;
+            letter-spacing: 2.8px;
             text-transform: uppercase;
         }
-/* =========================================
-           修改這裡：使用 Grid 讓單號與日期「依照空間平分」
-           ========================================= */
+        .company-block h1 {
+            margin: 0;
+            font-size: clamp(34px, 5.2vw, 64px);
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -1.8px;
+            color: var(--text-primary);
+            text-wrap: balance;
+        }
+        .company-block h1 span {
+            background: linear-gradient(135deg, #007AFF 0%, #0057D9 52%, #34C7B8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .en-title {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: clamp(15px, 2vw, 19px);
+            font-weight: 700;
+            letter-spacing: .12em;
+        }
+        .brand-copy {
+            margin: 0;
+            max-width: 620px;
+            color: rgba(31,41,55,.66);
+            font-size: clamp(16px, 2vw, 19px);
+            line-height: 1.65;
+            font-weight: 600;
+        }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+        .start-pill,
+        .ghost-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 0 18px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 850;
+            letter-spacing: .02em;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+        }
+        .start-pill { color: #fff; background: var(--primary-grad); box-shadow: 0 14px 28px rgba(0,122,255,.24), inset 0 1px 0 rgba(255,255,255,.30); }
+        .ghost-pill { color: rgba(0, 91, 190, .86); background: rgba(255,255,255,.30); border: 1px solid rgba(255,255,255,.58); }
+        .start-pill:active, .ghost-pill:active { transform: scale(.98); }
+
         .meta-row {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* ★ 核心：1fr 1fr 代表完美平分成兩等份 */
+            grid-template-columns: 1fr;
             gap: 14px;
-            width: 100%;
-            max-width: 460px; /* 控制最大寬度，避免在電腦大螢幕上拉得太長，可自由微調 */
-            margin: 0 auto;
+            align-content: center;
+            padding: 18px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(255,255,255,.46), rgba(255,255,255,.18));
+            border: 1px solid rgba(255,255,255,.58);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.80);
+            backdrop-filter: blur(18px) saturate(1.55);
+            -webkit-backdrop-filter: blur(18px) saturate(1.55);
         }
-
         .meta-box {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
             align-items: center;
-            justify-content: space-between; /* 讓「單號/日期」靠左，輸入的文字靠右 */
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 9px 18px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 600;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: 23px;
+            background: rgba(255,255,255,.36);
+            border: 1px solid rgba(255,255,255,.52);
             color: var(--text-secondary);
-            border: 1px solid rgba(255,255,255,0.5);
-            white-space: nowrap; /* ★ 確保「單號」兩個字絕對不會變成上下兩行 */
-            box-sizing: border-box;
+            font-size: 14px;
+            font-weight: 850;
+            white-space: nowrap;
         }
-
-/* =========================================
-           強制修正：確保抬頭輸入框維持透明無框，不被下方樣式干擾
-           ========================================= */
         .meta-box input[type="text"],
         .meta-box input[type="date"] {
-            flex: 1; 
             width: 100%;
-            min-width: 0; 
+            min-width: 0;
             text-align: right;
-            font-weight: 700;
             font-size: 15px;
-            color: var(--text-primary);
-            outline: none;
-            /* 👇 關鍵修正：加上 !important 強制壓過下方的通用 input 設定 */
+            font-weight: 850;
+            color: #0878F9 !important;
+            -webkit-text-fill-color: #0878F9;
+            caret-color: #0878F9;
             background: transparent !important;
             border: none !important;
             padding: 0 !important;
             box-shadow: none !important;
             height: auto !important;
-        }
-
-        .meta-box input:focus { 
-            color: var(--primary-blue); 
-        }
-        .meta-box input:focus { color: var(--primary-blue); }
-        /* 單號與日期維持藍色；不改動原本按鈕與工具列 */
-        .meta-box input[type="text"],
-        .meta-box input[type="date"] {
-            color: #0878F9 !important;
-            -webkit-text-fill-color: #0878F9;
-            caret-color: #0878F9;
-            font-weight: 800;
             font-variant-numeric: tabular-nums;
         }
 
-        /* 卡片 */
-        .section-card {
-            background: var(--glass-bg-strong);
-            backdrop-filter: blur(16px) saturate(1.5);
-            -webkit-backdrop-filter: blur(16px) saturate(1.5);
-            border-radius: var(--radius-md);
-            padding: clamp(18px, 2.5vw, 26px);
-            border: 1px solid var(--border-card);
-            border-top: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5);
-            transition: all var(--transition-fast);
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr);
+            gap: 22px;
+            align-items: start;
         }
-        .section-card:focus-within {
-            border-color: rgba(0, 122, 255, 0.35);
-            box-shadow: 0 6px 24px rgba(0, 122, 255, 0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+        .work-column,
+        .summary-column { display: grid; gap: 18px; }
+        .summary-column { position: sticky; top: 22px; }
+        .section-card,
+        .parts-container,
+        .sign-box {
+            border-radius: var(--radius-lg);
+            padding: clamp(18px, 2.5vw, 28px);
+            background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.18));
         }
-        .section-card.issue-card {
-            background: var(--surface-issue);
-            border-color: rgba(255, 180, 180, 0.4);
-        }
-        .card-title {
-            font-size: 14px;
-            color: var(--text-secondary);
-            font-weight: 700;
-            margin-bottom: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1.4px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .card-title::before {
-            content: '';
-            display: inline-block;
-            width: 5px;
-            height: 19px;
-            background: var(--primary-blue);
-            border-radius: 3px;
-            flex-shrink: 0;
-        }
-        .section-card.issue-card .card-title { color: #b03030; }
-        .section-card.issue-card .card-title::before { background: var(--accent-red); }
+        .section-card.issue-card { background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,246,248,.22)); border-color: rgba(255,255,255,.58); }
+        .section-card:focus-within,
+        .parts-container:focus-within,
+        .sign-box:focus-within { border-color: rgba(0,122,255,.46); box-shadow: var(--shadow-focus), inset 0 1px 0 rgba(255,255,255,.82); }
+        .card-title { margin: 0 0 15px; display: flex; align-items: center; gap: 11px; color: var(--text-secondary); font-size: 13px; font-weight: 900; letter-spacing: 1.35px; text-transform: uppercase; }
+        .card-title::before { content: ""; width: 7px; height: 24px; border-radius: 999px; background: linear-gradient(180deg, var(--primary-blue), var(--accent-cyan)); box-shadow: 0 8px 18px rgba(0,122,255,.28); flex-shrink: 0; }
+        .section-card.issue-card .card-title::before { background: linear-gradient(180deg, #ff6b6b, #ff3b30); }
 
-        /* 輸入框 */
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        input[type="time"],
-        textarea {
-            width: 100%;
-            border: 2px solid var(--border-input);
-            background: var(--surface-input);
-            padding: 16px 18px;
-            border-radius: var(--radius-sm);
-            font-size: 17px;
-            font-family: var(--font-stack);
-            color: var(--text-primary);
-            transition: all var(--transition-fast);
-            box-sizing: border-box;
-            line-height: 1.5;
-            -webkit-appearance: none;
-            appearance: none;
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.04);
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], textarea {
+            width: 100%; border: 1px solid var(--stroke-field); border-top-color: rgba(255,255,255,.86);
+            background: linear-gradient(180deg, rgba(255,255,255,.48), rgba(255,255,255,.27)); padding: 15px 16px; border-radius: 18px; font-size: 17px; font-family: var(--font-stack); color: var(--text-primary);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+            line-height: 1.5; -webkit-appearance: none; appearance: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.68), inset 0 -1px 0 rgba(0,0,0,.035); backdrop-filter: var(--blur-field); -webkit-backdrop-filter: var(--blur-field);
         }
         input::placeholder, textarea::placeholder { color: var(--text-placeholder); font-size: 16px; }
-        input:hover, textarea:hover { border-color: rgba(0, 122, 255, 0.4); background: rgba(255,255,255,0.9); }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--border-focus);
-            background: #fff;
-            box-shadow: var(--shadow-input-focus), 0 2px 10px rgba(0,122,255,0.08);
-            transform: translateY(-1px);
-        }
-        input[readonly] {
-            background: var(--surface-readonly);
-            border-color: rgba(200,205,215,0.5);
-            color: #555;
-            cursor: default;
-            font-weight: 600;
-        }
-        #grandTotal {
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--primary-blue);
-            background: rgba(246,249,255,0.8);
-            border-color: rgba(0,122,255,0.25);
-            text-align: right;
-        }
-        textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+        input:hover, textarea:hover { border-color: rgba(0,122,255,.35); background: rgba(255,255,255,.50); }
+        input:focus, textarea:focus { outline: none; border-color: rgba(0,122,255,.62); background: var(--glass-field-focus); box-shadow: var(--shadow-focus), inset 0 1px 0 rgba(255,255,255,.82); transform: translateY(-1px); }
+        input[readonly] { background: var(--glass-readonly); border-color: rgba(255,255,255,.62); color: rgba(31,41,55,.74); cursor: default; font-weight: 850; }
+        textarea { min-height: 112px; resize: vertical; line-height: 1.65; }
+        .client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
+        .input-group { display: flex; flex-direction: column; gap: 7px; }
+        .input-group label { font-size: 13px; color: var(--text-label); font-weight: 850; letter-spacing: .35px; }
+        .desc-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .desc-table td.label { width: 92px; font-weight: 850; color: var(--text-label); vertical-align: top; padding-top: 16px; text-align: right; padding-right: 16px; font-size: 16px; white-space: nowrap; }
 
-        .client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
-        .input-group { display: flex; flex-direction: column; gap: 6px; }
-        .input-group label { font-size: 13px; color: var(--text-label); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
-
-        .desc-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        .desc-table td.label { width: 90px; font-weight: 700; color: #555; vertical-align: top; padding-top: 16px; text-align: right; padding-right: 16px; font-size: 16px; white-space: nowrap; }
-
-        .parts-container {
-            background: var(--glass-bg-strong);
-            backdrop-filter: blur(16px) saturate(1.5);
-            -webkit-backdrop-filter: blur(16px) saturate(1.5);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            border: 1px solid var(--border-card);
-            border-top: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5);
-            overflow: hidden;
-        }
-        .parts-actions { display: flex; justify-content: flex-start; padding: 6px 8px 2px; }
-        .parts-add-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: var(--primary-grad);
-            color: #fff;
-            border: none;
-            padding: 13px 24px;
-            border-radius: 26px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            box-shadow: 0 4px 14px rgba(0,122,255,0.3);
-        }
-        .parts-add-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(0,122,255,0.4); }
-
-        .parts-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-sm); }
-        .parts-table { width: 100%; border-collapse: collapse; min-width: 620px; table-layout: auto; }
-        .parts-table th {
-            background: rgba(241,243,247,0.75);
-            color: #555; padding: 12px 8px; font-size: 13px; font-weight: 700;
-            text-align: center; letter-spacing: 0.5px; border-bottom: 2px solid #e0e3ea;
-        }
+        .parts-container { overflow: hidden; padding: 14px; }
+        .parts-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 24px; }
+        .parts-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 620px; table-layout: auto; }
+        .parts-table th { background: rgba(255,255,255,.42); color: rgba(31,41,55,.64); padding: 13px 8px; font-size: 13px; font-weight: 900; text-align: center; letter-spacing: .5px; border-bottom: 1px solid rgba(255,255,255,.58); }
+        .parts-table th:first-child { border-radius: 18px 0 0 18px; } .parts-table th:last-child { border-radius: 0 18px 18px 0; }
         .parts-table td { padding: 8px 6px; vertical-align: middle; }
-        .parts-table input {
-            text-align: center; background: rgba(255,255,255,0.8); border: 2px solid rgba(180,190,210,0.4);
-            border-radius: 10px; padding: 14px 8px; font-size: 16px; width: 100%; min-width: 50px;
-            transition: all var(--transition-fast); box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
-        }
+        .parts-table input { text-align: center; background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.56); border-radius: 14px; padding: 13px 8px; font-size: 16px; width: 100%; min-width: 50px; box-shadow: inset 0 1px 0 rgba(255,255,255,.70); }
         .parts-table td:first-child input { text-align: left; }
-        .parts-table input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(0,122,255,0.12); background: #fff; }
-        .btn-del {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 34px; height: 34px; border-radius: 50%; color: #e04040; cursor: pointer;
-            font-weight: 700; font-size: 20px; background: #fff; border: 2px solid #f5d0d0;
-            transition: all var(--transition-fast); margin: 0 auto;
-        }
-        .btn-del:hover { background: #ffe8e8; border-color: #e04040; color: #c02020; transform: scale(1.08); }
+        .parts-table input:focus { border-color: rgba(0,122,255,.60); background: rgba(255,255,255,.62); box-shadow: var(--shadow-focus); }
+        .parts-actions { display: flex; justify-content: flex-start; padding: 12px 4px 4px; }
+        .parts-add-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,.32); color: rgba(0,91,190,.90); border: 1px solid rgba(255,255,255,.64); padding: 13px 18px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 900; cursor: pointer; transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast); box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 10px 24px rgba(39,69,121,.10); }
+        .parts-add-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,.44); }
+        .btn-del { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: #e33b38; cursor: pointer; font-weight: 900; font-size: 21px; background: rgba(255,255,255,.42); border: 1px solid rgba(255,120,120,.32); transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast); margin: 0 auto; }
+        .btn-del:hover { background: rgba(255,235,235,.70); border-color: rgba(255,59,48,.52); transform: scale(1.06); }
+        .total-area { margin-top: 14px; padding: 18px; display: grid; grid-template-columns: 1fr minmax(160px, 220px); align-items: center; gap: 14px; border-radius: 28px; background: linear-gradient(135deg, rgba(0,122,255,.15), rgba(255,255,255,.28)); border: 1px solid rgba(255,255,255,.62); box-shadow: inset 0 1px 0 rgba(255,255,255,.80); }
+        .total-area span { color: rgba(31,41,55,.72); font-weight: 900; font-size: 17px; }
+        #grandTotal { font-size: clamp(26px, 4vw, 36px); font-weight: 950; color: var(--primary-blue); text-align: right; background: transparent; border: none; box-shadow: none; padding: 0; min-height: auto; font-variant-numeric: tabular-nums; }
 
-        .total-area {
-            display: flex; justify-content: flex-end; align-items: center; gap: 16px;
-            padding: 18px 10px 8px; border-top: 2px dashed #e8ebf1; margin-top: 10px; flex-wrap: wrap;
-        }
-        .total-area span { color: #666; font-weight: 700; font-size: 18px; }
+        .signature-area { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .sign-box { min-width: 0; padding: 20px; border-radius: 30px; background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.16)); }
+        .sign-title { margin-bottom: 14px; display: flex; align-items: center; gap: 8px; color: rgba(31,41,55,.72); font-size: 14px; font-weight: 900; letter-spacing: .6px; }
+        .client-sign-name { margin-bottom: 14px; }
+        .sign-line { height: 76px; border-radius: 24px; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.09)); border: 1px solid rgba(255,255,255,.44); position: relative; overflow: hidden; }
+        .sign-line::after { content: ""; position: absolute; left: 20px; right: 20px; bottom: 20px; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,122,255,.56), transparent); }
+        .engineer-name { position: absolute; right: 24px; bottom: 28px; font-size: 20px; font-weight: 900; color: rgba(17,24,39,.84); }
 
-        .footer { display: flex; gap: 20px; flex-wrap: wrap; }
-        .sign-box {
-            flex: 1 1 200px; background: rgba(250,251,253,0.65); backdrop-filter: blur(8px);
-            border: 2px solid #e5e8ef; border-radius: var(--radius-md); padding: 20px;
-            position: relative; min-width: 160px;
-        }
-        .sign-title { font-size: 15px; font-weight: 700; color: #555; margin-bottom: 10px; border-bottom: 1px solid #e0e3ea; padding-bottom: 8px; }
-        .client-sign-name { margin-bottom: 16px; }
-        .sign-line { border-bottom: 1.5px dashed #c5c9d4; height: 44px; margin-top: 10px; position: relative; }
-        .engineer-name { position: absolute; bottom: 8px; right: 20px; font-weight: 700; font-size: 18px; color: #333; }
-
-        .toolbar {
-            position: fixed; z-index: 9999; right: 24px; bottom: max(24px, env(safe-area-inset-bottom));
-            display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 16px;
-            border: 1px solid rgba(255,255,255,0.6); border-radius: 22px;
-            background: rgba(255,255,255,0.4); backdrop-filter: blur(24px) saturate(1.8);
-            -webkit-backdrop-filter: blur(24px) saturate(1.8); box-shadow: var(--shadow-toolbar);
-        }
-        .btn-float {
-            min-height: 46px; background: var(--primary-grad); color: #fff; border: none;
-            padding: 12px 22px; border-radius: 26px; font-size: 15px; font-weight: 700;
-            cursor: pointer; transition: all var(--transition-fast); display: inline-flex;
-            align-items: center; gap: 6px; letter-spacing: 0.3px;
-            box-shadow: 0 4px 14px rgba(0,122,255,0.28);
-        }
-        .btn-float:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(0,122,255,0.38); }
-        .btn-float.btn-green { background: linear-gradient(135deg, #34C759, #28a745); }
-        .btn-float.btn-word { background: linear-gradient(135deg, #5c6bc0, #3f51b5); }
-
-@media (max-width: 768px) {
-    body { padding: 20px 12px 190px; }
-    .form-container { padding: 20px 14px; }
-    .client-grid { grid-template-columns: 1fr; }
-    .meta-row { flex-direction: column; align-items: center; } /* 👈 這行還留著舊的設定 */
-    .toolbar { left: 12px; right: 12px; max-width: none; justify-content: center; }
-}
-        @media (max-width: 480px) {
-            body { padding: 10px 6px 220px; }
-            .parts-table { min-width: 480px; }
-            .btn-float { padding: 10px 14px; font-size: 14px; }
-            .toolbar { flex-direction: column; align-items: stretch; }
-        }
-
-
-        /* 最終版：圓潤膠囊式輸出按鈕 */
-        .toolbar {
-            padding: 13px 15px;
-            gap: 14px;
-            border-radius: 34px;
-            background: rgba(255,255,255,.52);
-            border: 1px solid rgba(255,255,255,.78);
-            box-shadow: 0 14px 38px rgba(55,82,125,.18), inset 0 1px 0 rgba(255,255,255,.92);
-        }
-        .btn-float {
-            min-height: 58px;
-            padding: 13px 30px;
-            border-radius: 999px;
-            justify-content: center;
-            gap: 10px;
-            font-size: 17px;
-            font-weight: 800;
-            line-height: 1;
-            box-shadow: 0 8px 20px rgba(45,70,145,.24), inset 0 1px 0 rgba(255,255,255,.30);
-        }
-        .btn-float.btn-green {
-            background: linear-gradient(135deg, #36ca5a 0%, #24aa45 100%);
-        }
-        .btn-float.btn-word {
-            background: linear-gradient(135deg, #6575d4 0%, #394ab5 100%);
-        }
-        .output-icon {
-            display: inline-grid;
-            width: 23px;
-            height: 23px;
-            place-items: center;
-            flex: 0 0 23px;
-            font-size: 18px;
-            line-height: 1;
-        }
-        .btn-float:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.04);
-        }
+        .toolbar { position: fixed; left: 50%; bottom: max(22px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 9999; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; border-radius: var(--radius-pill); background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.15)); box-shadow: 0 22px 60px rgba(38,66,110,.22), inset 0 1px 0 rgba(255,255,255,.88); backdrop-filter: blur(30px) saturate(1.9); -webkit-backdrop-filter: blur(30px) saturate(1.9); max-width: calc(100vw - 24px); }
+        .toolbar-label { display: inline-flex; align-items: center; gap: 8px; padding: 0 12px; min-height: 48px; color: rgba(31,41,55,.64); font-size: 13px; font-weight: 900; white-space: nowrap; }
+        .btn-float { min-height: 58px; border: none; border-radius: var(--radius-pill); padding: 0 22px; color: #fff; font-size: 17px; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 9px; letter-spacing: .02em; transition: transform var(--transition-fast), filter var(--transition-fast), box-shadow var(--transition-fast); box-shadow: 0 10px 24px rgba(0,122,255,.26), inset 0 1px 0 rgba(255,255,255,.32); }
+        .btn-float.btn-green { background: linear-gradient(135deg, #34C759, #24A844); }
+        .btn-float.btn-word { background: linear-gradient(135deg, #6575D4, #394AB5); }
+        .btn-float:hover { transform: translateY(-2px); filter: brightness(1.04); }
         .btn-float:active { transform: scale(.98); }
+        .output-icon { display: inline-grid; width: 22px; height: 22px; place-items: center; font-size: 18px; line-height: 1; }
 
-        @media (max-width: 768px) {
-            .toolbar {
-                padding: 11px;
-                gap: 10px;
-                border-radius: 28px;
-            }
-            .btn-float {
-                flex: 1 1 0;
-                min-width: 0;
-                min-height: 56px;
-                padding: 12px 16px;
-                font-size: 16px;
-            }
-        }
-        @media (max-width: 480px) {
-            .toolbar {
-                flex-direction: row;
-                align-items: stretch;
-            }
-            .btn-float {
-                min-height: 54px;
-                padding: 10px 8px;
-                font-size: 14px;
-                gap: 6px;
-            }
-            .output-icon {
-                width: 19px;
-                height: 19px;
-                flex-basis: 19px;
-                font-size: 15px;
-            }
-        }
-
-        @media print {
-            body { background: #fff !important; padding: 0 !important; }
-            .toolbar, .btn-del, .parts-actions, .parts-add-btn { display: none !important; }
-            .form-container { backdrop-filter: none; background: #fff; box-shadow: none; border: none; padding: 10mm 8mm; }
-            input, textarea { border: 1px solid #ccc !important; background: #fff !important; }
-        }
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .header, .section-card, .parts-container, .sign-box, .toolbar, input, textarea { background: rgba(255,255,255,.86) !important; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; } }
+        @media (max-width: 920px) { body { padding: 18px 14px 150px; } .form-container { width: min(100%, 780px); } .header { grid-template-columns: 1fr; padding: 28px; } .meta-row { grid-template-columns: 1fr 1fr; } .workspace { grid-template-columns: 1fr; } .summary-column { position: static; } }
+        @media (max-width: 640px) { body { padding: 12px 8px 170px; } .form-container { width: 100%; gap: 14px; } .header, .section-card, .parts-container, .sign-box { border-radius: 28px; } .header { padding: 22px; } .company-block h1 { font-size: 38px; letter-spacing: -1px; } .brand-copy { font-size: 15px; } .hero-actions { display: none; } .meta-row, .client-grid, .signature-area { grid-template-columns: 1fr; } .desc-table, .desc-table tbody, .desc-table tr, .desc-table td { display: block; width: 100%; } .desc-table { border-spacing: 0; } .desc-table tr { margin-bottom: 14px; } .desc-table td.label { width: 100%; text-align: left; padding: 0 0 7px; } .parts-table { min-width: 520px; } .total-area { grid-template-columns: 1fr; } #grandTotal { text-align: left; } .toolbar { left: 10px; right: 10px; transform: none; width: auto; justify-content: stretch; gap: 8px; padding: 9px; } .toolbar-label { display: none; } .btn-float { flex: 1 1 0; min-width: 0; min-height: 56px; padding: 0 12px; font-size: 15px; } }
+        @media (max-width: 390px) { .btn-float { font-size: 14px; gap: 6px; } .output-icon { width: 18px; height: 18px; font-size: 15px; } }
+        @media print { body { background: #fff !important; padding: 0 !important; } body::before, body::after, .toolbar, .btn-del, .parts-actions, .parts-add-btn, .hero-actions { display: none !important; } .form-container { width: 100%; max-width: none; gap: 10mm; } .header, .section-card, .parts-container, .sign-box { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #fff !important; box-shadow: none !important; border: 1px solid #ddd !important; } input, textarea { border: 1px solid #ccc !important; background: #fff !important; box-shadow: none !important; } }
     </style>
 </head>
 <body>
-
-    <div class="toolbar">
+    <div class="toolbar" role="toolbar" aria-label="輸出控制列">
+        <span class="toolbar-label">INTAI SERVICE</span>
         <button class="btn-float btn-green" onclick="exportFormalPDF()"><span class="output-icon">📄</span><span>儲存 PDF</span></button>
         <button class="btn-float btn-word" onclick="exportFormalWord()"><span class="output-icon">📝</span><span>下載 Word</span></button>
     </div>
-
-    <div class="form-container">
-        <div class="header">
+    <main class="form-container" id="repairForm">
+        <section class="header" aria-label="品牌歡迎區">
             <div class="company-block">
-                <h1>英泰自動控制行</h1>
-                <div class="en-title">INTAI AUTO CONTROL</div>
+                <div class="eyebrow">INTAI AUTO CONTROL</div>
+                <h1><span>英泰</span>自動控制行</h1>
+                <p class="en-title">Liquid Service Desk</p>
+                <p class="brand-copy">精密控制・快速維修・專業留存。填寫完成後可直接列印成 PDF，或下載 Word 留存編輯。</p>
+                <div class="hero-actions">
+                    <a class="start-pill" href="#customerName">開始填寫維修單</a>
+                    <a class="ghost-pill" href="#partsTable">前往零件明細</a>
+                </div>
             </div>
             <div class="meta-row">
-                <div class="meta-box">
-                    單號 <input type="text" id="orderNo" placeholder="自動產生">
+                <div class="meta-box"><span>單號</span><input type="text" id="orderNo" placeholder="自動產生"></div>
+                <div class="meta-box"><span>日期</span><input type="date" id="dateField"></div>
+            </div>
+        </section>
+        <section class="workspace" aria-label="維修單工作區">
+            <div class="work-column">
+                <div class="section-card">
+                    <div class="card-title">客戶資料 Client Info</div>
+                    <div class="client-grid">
+                        <div class="input-group"><label>客戶名稱</label><input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight:700;"></div>
+                        <div class="input-group"><label>機器編號</label><input type="text" id="machineNo" placeholder="編號..."></div>
+                        <div class="input-group"><label>維修開始</label><input type="time" id="startTime"></div>
+                        <div class="input-group"><label>維修結束</label><input type="time" id="endTime"></div>
+                    </div>
                 </div>
-                <div class="meta-box">
-                    日期 <input type="date" id="dateField">
+                <div class="section-card issue-card">
+                    <div class="card-title">故障與檢測 Diagnostics</div>
+                    <table class="desc-table">
+                        <tr><td class="label">故障情形</td><td><textarea id="issue" placeholder="描述客戶反應、設備異常、現場狀況..."></textarea></td></tr>
+                        <tr><td class="label">故障原因</td><td><textarea id="cause" placeholder="檢測後研判原因..."></textarea></td></tr>
+                        <tr><td class="label">處理對策</td><td><textarea id="solution" placeholder="維修方式、建議事項、後續處理..."></textarea></td></tr>
+                    </table>
                 </div>
             </div>
-        </div>
-
-        <div class="section-card">
-            <div class="card-title">客戶資料 Client Info</div>
-            <div class="client-grid">
-                <div class="input-group"><label>客戶名稱</label><input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight:600;"></div>
-                <div class="input-group"><label>機器編號</label><input type="text" id="machineNo" placeholder="編號..."></div>
-                <div class="input-group"><label>維修開始</label><input type="time" id="startTime"></div>
-                <div class="input-group"><label>維修結束</label><input type="time" id="endTime"></div>
-            </div>
-        </div>
-
-        <div class="section-card issue-card">
-            <div class="card-title">故障與檢測</div>
-            <table class="desc-table">
-                <tr><td class="label">故障情形</td><td><textarea id="issue" placeholder="描述..."></textarea></td></tr>
-                <tr><td class="label">故障原因</td><td><textarea id="cause" placeholder="原因..."></textarea></td></tr>
-                <tr><td class="label">處理對策</td><td><textarea id="solution" placeholder="建議事項..."></textarea></td></tr>
-            </table>
-        </div>
-
-        <div class="parts-container">
-            <div class="parts-table-wrap">
-                <table class="parts-table" id="partsTable">
-                    <thead>
-                        <tr>
-                            <th style="width:28%; text-align:left; padding-left:14px;">項目 / 零件名稱</th>
-                            <th style="width:18%;">規格</th>
-                            <th style="width:10%;">數量</th>
-                            <th style="width:14%;">單價</th>
-                            <th style="width:16%;">小計</th>
-                            <th style="width:10%;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" placeholder="輸入項目" style="text-align:left;"></td>
-                            <td><input type="text" placeholder="規格"></td>
-                            <td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td>
-                            <td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td>
-                            <td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td>
-                            <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="parts-actions">
-                <button class="parts-add-btn" onclick="addPartRow()"><span>＋</span> 新增零件項目</button>
-            </div>
-            <div class="total-area">
-                <span>💰 總計金額</span>
-                <input type="text" id="grandTotal" readonly value="0">
-            </div>
-        </div>
-
-        <div class="footer">
-            <div class="sign-box">
-                <div class="sign-title">✍️ 客戶簽名</div>
-                <input type="text" class="client-sign-name" placeholder="請輸入客戶姓名" style="width:100%; margin-bottom:12px;">
-                <div class="sign-line"></div>
-            </div>
-            <div class="sign-box" style="position:relative;">
-                <div class="sign-title">🔩 維修人員</div>
-                <div class="sign-line"></div>
-                <span class="engineer-name">朱文言</span>
-            </div>
-        </div>
-    </div>
+            <aside class="summary-column" aria-label="零件與簽署區">
+                <div class="parts-container">
+                    <div class="card-title">維修項目與零件明細 Parts</div>
+                    <div class="parts-table-wrap">
+                        <table class="parts-table" id="partsTable">
+                            <thead><tr><th style="width:28%; text-align:left; padding-left:14px;">項目 / 零件名稱</th><th style="width:18%;">規格</th><th style="width:10%;">數量</th><th style="width:14%;">單價</th><th style="width:16%;">小計</th><th style="width:10%;"></th></tr></thead>
+                            <tbody><tr><td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="parts-actions"><button class="parts-add-btn" onclick="addPartRow()"><span>＋</span> 新增零件項目</button></div>
+                    <div class="total-area"><span>總計金額</span><input type="text" id="grandTotal" readonly value="0"></div>
+                </div>
+                <div class="signature-area">
+                    <div class="sign-box"><div class="sign-title">✍️ 客戶簽署確認</div><input type="text" class="client-sign-name" placeholder="請輸入客戶姓名" style="width:100%;"><div class="sign-line"></div></div>
+                    <div class="sign-box" style="position:relative;"><div class="sign-title">🔩 維修人員</div><div class="sign-line"></div><span class="engineer-name">朱文言</span></div>
+                </div>
+            </aside>
+        </section>
+    </main>
 
     <script>
         const today = new Date();
@@ -572,12 +422,10 @@
         const day = String(today.getDate()).padStart(2, '0');
         document.getElementById('dateField').valueAsDate = today;
         document.getElementById('orderNo').value = `${year}${month}${day}`;
-
         const esc = v => String(v??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         const nl2br = v => esc(v).replace(/\n/g,'<br>');
         const toNum = v => Math.max(0, Number(v)||0);
         const money = v => Math.round(v).toLocaleString('zh-TW');
-
         function getFormalData(){
             const rows = [...document.querySelectorAll('#partsTable tbody tr')].map(tr=>{
                 const qty = tr.querySelector('.qty')?.value || '';
@@ -586,38 +434,18 @@
                 const subtotalNum = parseFloat(String(subtotalVal).replace(/,/g,'')) || 0;
                 const autoSubtotal = toNum(qty) * toNum(price);
                 const finalSubtotal = subtotalNum > 0 ? subtotalNum : autoSubtotal;
-                return {
-                    item: tr.cells[0]?.querySelector('input')?.value || '',
-                    spec: tr.cells[1]?.querySelector('input')?.value || '',
-                    qty, price, subtotal: finalSubtotal
-                };
+                return { item: tr.cells[0]?.querySelector('input')?.value || '', spec: tr.cells[1]?.querySelector('input')?.value || '', qty, price, subtotal: finalSubtotal };
             }).filter(r=>r.item||r.spec||r.qty!=='1'||toNum(r.price)||r.subtotal>0);
             const total = rows.reduce((s,r)=>s+r.subtotal,0);
             const iso = document.getElementById('dateField').value||'';
-            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso)
-                ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` : esc(iso);
-            return {
-                orderNo: document.getElementById('orderNo').value,
-                date: displayDate,
-                customer: document.getElementById('customerName').value.trim(),
-                machineNo: document.getElementById('machineNo').value,
-                startTime: document.getElementById('startTime').value,
-                endTime: document.getElementById('endTime').value,
-                issue: document.getElementById('issue').value,
-                cause: document.getElementById('cause').value,
-                solution: document.getElementById('solution').value,
-                rows, total,
-                clientSignName: document.querySelector('.client-sign-name').value.trim()
-            };
+            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` : esc(iso);
+            return { orderNo: document.getElementById('orderNo').value, date: displayDate, customer: document.getElementById('customerName').value.trim(), machineNo: document.getElementById('machineNo').value, startTime: document.getElementById('startTime').value, endTime: document.getElementById('endTime').value, issue: document.getElementById('issue').value, cause: document.getElementById('cause').value, solution: document.getElementById('solution').value, rows, total, clientSignName: document.querySelector('.client-sign-name').value.trim() };
         }
-
         function formalFileName(ext){
             const d = document.getElementById('dateField').value.replaceAll('-','')||`${year}${month}${day}`;
             const cust = (document.getElementById('customerName').value.trim()||'客戶').replace(/[\\/:*?"<>|]/g,'_');
             return `${d}_${cust}_正式維修單.${ext}`;
         }
-
-// 輸出文件模板（已修正手機隱藏線條的 Bug）
         function formalDocumentHtml(){
             const d = getFormalData();
             const filledRows = d.rows.map((r,i)=>{
@@ -628,204 +456,41 @@
             const clientSignDisplay = d.clientSignName ? `客戶簽章：<span class="signature-value" style="color:#0070C0;">${esc(d.clientSignName)}</span>` : '客戶簽章：';
             return `<!DOCTYPE html>
 <html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-    <meta charset="UTF-8">
-    <meta name="ProgId" content="Word.Document">
-    <title>${esc(formalFileName('pdf').replace('.pdf',''))}</title>
-    <style>
-        @page { size: A4 portrait; margin: 15mm 20mm; background-color: #ffffff; }
-        @page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
-        div.WordSection1 { page:WordSection1; }
-        * { box-sizing:border-box; }
-        html,body { margin:0; padding:0; background:#fff; color:#000; }
-        body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
-        body { font-size:11pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-        .doc { width:100%; }
-        .company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
-        .english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
-        .title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
-        .contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
-        .address-line { margin-bottom:7pt; }
-        .contact-line { white-space:nowrap; }
-        .contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; }
-        .contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
-        table { width:100%; border-collapse:collapse; table-layout:fixed; }
-        /* 🚨 修正：將 .5pt 改為 1px，解決手機 Safari 渲染不到線條的問題 */
-        td,th { border: 1px solid #555; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
-        th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
-        .meta td { height:23pt; }
-        .section { margin-top:9pt; page-break-inside:avoid; }
-        .section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
-        .desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; }
-        .desc .label { width:17%; vertical-align:middle; }
-        .parts th,.parts td { height:23pt; }
-        .center { text-align:center; } .right { text-align:right; }
-        .data-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
-        .data-value span { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
-        .money-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
-        .signature-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
-        .date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; }
-        .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
-        /* 🚨 修正：將 .75pt 改為 1.5px */
-        .total td { height:29pt; border-top: 1.5px solid #333; background:transparent; font-weight:normal; }
-        .total-label { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; }
-        .total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; }
-        .tax-note { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
-        .remarks-label { font-weight:bold; }
-        .remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; }
-        .sign { margin-top:9pt; }
-        /* 🚨 修正：將 .5pt 改為 1px */
-        .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border: 1px solid #555; font-weight:normal; }
-        .sign-label,.engineer { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; }
-        .engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; }
-        .notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8.5pt; font-weight:normal; }
-        /* 🚨 修正：將 .5pt 改為 1px */
-        .footer { margin-top:6pt; padding-top:4pt; border-top: 1px solid #555; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; }
-        @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
-    </style>
-</head>
-<body>
-<div class="WordSection1">
-    <div class="doc">
-        <p class="company">英泰自動控制行</p>
-        <p class="english">INTAI AUTO CONTROL</p>
-        <p class="title">維 修 單</p>
-        <div class="contact">
-            <div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div>
-            <div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span> <span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span> <span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span> <span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div>
-        </div>
-        <table class="meta">
-            <colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
-            <tr><td class="label">維修單號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.orderNo)}</td><td class="label">填單日期</td><td class="data-value" style="color:#0070C0;">${d.date}</td></tr>
-            <tr><td class="label">客戶名稱</td><td class="data-value" style="color:#0070C0;">${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.machineNo)}</td></tr>
-            <tr><td class="label">開始時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.endTime)}</td></tr>
-        </table>
-        <div class="section">
-            <div class="section-title">壹、故障檢測與處理紀錄</div>
-            <table class="desc">
-                <tr><td class="label">故障情形</td><td class="data-value" style="color:#0070C0;">${nl2br(d.issue)}</td></tr>
-                <tr><td class="label">故障原因</td><td class="data-value" style="color:#0070C0;">${nl2br(d.cause)}</td></tr>
-                <tr><td class="label">處理對策</td><td class="data-value" style="color:#0070C0;">${nl2br(d.solution)}</td></tr>
-            </table>
-        </div>
-        <div class="section">
-            <div class="section-title">貳、維修項目及零件明細</div>
-            <table class="parts">
-                <colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup>
-                <thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead>
-                <tbody>${filledRows}${blankRows}</tbody>
-                <tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount money-value" style="color:#0070C0;">NT$ ${money(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot>
-            </table>
-        </div>
-        <div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div>
-        <table class="sign">
-            <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
-            <tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer signature-value" style="color:#0070C0;">朱文言</span></td></tr>
-        </table>
-        <p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p>
-        <div class="footer">英泰自動控制行 維修服務紀錄</div>
-    </div>
-</div>
-</body>
-</html>`;
+<head><meta charset="UTF-8"><meta name="ProgId" content="Word.Document"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title><style>
+@page { size: A4 portrait; margin: 15mm 20mm; background-color: #ffffff; }
+@page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
+div.WordSection1 { page:WordSection1; } * { box-sizing:border-box; } html,body { margin:0; padding:0; background:#fff; color:#000; }
+body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
+body { font-size:11pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; } .doc { width:100%; }
+.company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
+.english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
+.title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
+.contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
+.address-line { margin-bottom:7pt; } .contact-line { white-space:nowrap; } .contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; } .contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; } td,th { border: 1px solid #555; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
+th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; } .meta td { height:23pt; } .section { margin-top:9pt; page-break-inside:avoid; }
+.section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
+.desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; } .desc .label { width:17%; vertical-align:middle; } .parts th,.parts td { height:23pt; } .center { text-align:center; } .right { text-align:right; }
+.data-value, .data-value span, .money-value, .signature-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
+.date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; } .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
+.total td { height:29pt; border-top: 1.5px solid #333; background:transparent; font-weight:normal; } .total-label { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; } .total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; } .tax-note { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
+.remarks-label { font-weight:bold; } .remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; } .sign { margin-top:9pt; } .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border: 1px solid #555; font-weight:normal; } .sign-label,.engineer { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; } .engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; } .notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8.5pt; font-weight:normal; } .footer { margin-top:6pt; padding-top:4pt; border-top: 1px solid #555; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; } @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style></head><body><div class="WordSection1"><div class="doc"><p class="company">英泰自動控制行</p><p class="english">INTAI AUTO CONTROL</p><p class="title">維 修 單</p><div class="contact"><div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div><div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span> <span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span> <span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span> <span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div></div>
+<table class="meta"><colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup><tr><td class="label">維修單號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.orderNo)}</td><td class="label">填單日期</td><td class="data-value" style="color:#0070C0;">${d.date}</td></tr><tr><td class="label">客戶名稱</td><td class="data-value" style="color:#0070C0;">${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.machineNo)}</td></tr><tr><td class="label">開始時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.endTime)}</td></tr></table>
+<div class="section"><div class="section-title">壹、故障檢測與處理紀錄</div><table class="desc"><tr><td class="label">故障情形</td><td class="data-value" style="color:#0070C0;">${nl2br(d.issue)}</td></tr><tr><td class="label">故障原因</td><td class="data-value" style="color:#0070C0;">${nl2br(d.cause)}</td></tr><tr><td class="label">處理對策</td><td class="data-value" style="color:#0070C0;">${nl2br(d.solution)}</td></tr></table></div>
+<div class="section"><div class="section-title">貳、維修項目及零件明細</div><table class="parts"><colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup><thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead><tbody>${filledRows}${blankRows}</tbody><tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount money-value" style="color:#0070C0;">NT$ ${money(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot></table></div>
+<div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div><table class="sign"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer signature-value" style="color:#0070C0;">朱文言</span></td></tr></table><p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p><div class="footer">英泰自動控制行 維修服務紀錄</div></div></div></body></html>`;
         }
-
-        function validateFormal(){
-            const f = document.getElementById('customerName');
-            if(!f.value.trim()){ alert('請填寫客戶名稱'); f.focus(); return false; }
-            return true;
-        }
-
-function exportFormalPDF(){
-            if(!validateFormal()) return;
-            const html = formalDocumentHtml();
-            const iframe = document.createElement('iframe');
-            
-            // 🚨 關鍵修正：不能用 0 寬高，改用 100% 寬高並藏在背景，強制 iOS 渲染表格線條
-            iframe.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; border:0; z-index:-9999; opacity:0; pointer-events:none;';
-            
-            document.body.appendChild(iframe);
-            const doc = iframe.contentWindow.document;
-            doc.open(); doc.write(html); doc.close();
-            doc.title = formalFileName('pdf').replace('.pdf','');
-            iframe.contentWindow.focus();
-            setTimeout(()=>{ iframe.contentWindow.print(); setTimeout(()=>iframe.remove(),2000); },500);
-        }
-
-        function exportFormalWord(){
-            if(!validateFormal()) return;
-            const blob = new Blob(['\ufeff',formalDocumentHtml()],{type:'application/msword;charset=utf-8'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = formalFileName('doc');
-            document.body.appendChild(a); a.click(); a.remove();
-            setTimeout(()=>URL.revokeObjectURL(a.href),1500);
-        }
-
-        function calcSubtotal(row){
-            const qty = toNum(row.querySelector('.qty').value);
-            const price = toNum(row.querySelector('.price').value);
-            const subtotalEl = row.querySelector('.subtotal');
-            if(row.dataset.manual === 'true') return;
-            const calc = qty * price;
-            subtotalEl.value = calc > 0 ? calc.toLocaleString() : '';
-            updateGrandTotal();
-        }
-        function onQtyPriceChange(input){
-            const row = input.closest('tr');
-            row.dataset.manual = 'false';
-            calcSubtotal(row);
-        }
-        function onSubtotalManual(input){
-            const row = input.closest('tr');
-            row.dataset.manual = 'true';
-            updateGrandTotal();
-        }
-        function updateGrandTotal(){
-            let sum = 0;
-            document.querySelectorAll('#partsTable tbody tr').forEach(tr => {
-                const val = tr.querySelector('.subtotal').value;
-                sum += parseFloat(String(val).replace(/,/g,'')) || 0;
-            });
-            document.getElementById('grandTotal').value = sum.toLocaleString();
-        }
-
-        function addPartRow(){
-            const tbody = document.querySelector('#partsTable tbody');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" placeholder="輸入項目" style="text-align:left;"></td>
-                <td><input type="text" placeholder="規格"></td>
-                <td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td>
-                <td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td>
-                <td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td>
-                <td><div class="btn-del" onclick="deleteRow(this)">×</div></td>
-            `;
-            tbody.appendChild(tr);
-            tr.querySelector('input').focus();
-            updateGrandTotal();
-        }
-
-        function deleteRow(btn){
-            const tbody = document.querySelector('#partsTable tbody');
-            if(tbody.rows.length <= 1){
-                const row = btn.closest('tr');
-                row.querySelectorAll('input').forEach(inp => { if(!inp.classList.contains('qty')) inp.value = ''; else inp.value = '1'; });
-                row.querySelector('.subtotal').value = '';
-                row.dataset.manual = 'false';
-                updateGrandTotal();
-            } else {
-                btn.closest('tr').remove();
-                updateGrandTotal();
-            }
-        }
-
-        document.addEventListener('keydown', function(e){
-            if(e.key === 'Enter' && e.target.classList.contains('price')){
-                e.preventDefault();
-                addPartRow();
-            }
-        });
+        function validateFormal(){ const f = document.getElementById('customerName'); if(!f.value.trim()){ alert('請填寫客戶名稱'); f.focus(); return false; } return true; }
+        function exportFormalPDF(){ if(!validateFormal()) return; const html = formalDocumentHtml(); const iframe = document.createElement('iframe'); iframe.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; border:0; z-index:-9999; opacity:0; pointer-events:none;'; document.body.appendChild(iframe); const doc = iframe.contentWindow.document; doc.open(); doc.write(html); doc.close(); doc.title = formalFileName('pdf').replace('.pdf',''); iframe.contentWindow.focus(); setTimeout(()=>{ iframe.contentWindow.print(); setTimeout(()=>iframe.remove(),2000); },500); }
+        function exportFormalWord(){ if(!validateFormal()) return; const blob = new Blob(['\ufeff',formalDocumentHtml()],{type:'application/msword;charset=utf-8'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = formalFileName('doc'); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1500); }
+        function calcSubtotal(row){ const qty = toNum(row.querySelector('.qty').value); const price = toNum(row.querySelector('.price').value); const subtotalEl = row.querySelector('.subtotal'); if(row.dataset.manual === 'true') return; const calc = qty * price; subtotalEl.value = calc > 0 ? calc.toLocaleString() : ''; updateGrandTotal(); }
+        function onQtyPriceChange(input){ const row = input.closest('tr'); row.dataset.manual = 'false'; calcSubtotal(row); }
+        function onSubtotalManual(input){ const row = input.closest('tr'); row.dataset.manual = 'true'; updateGrandTotal(); }
+        function updateGrandTotal(){ let sum = 0; document.querySelectorAll('#partsTable tbody tr').forEach(tr => { const val = tr.querySelector('.subtotal').value; sum += parseFloat(String(val).replace(/,/g,'')) || 0; }); document.getElementById('grandTotal').value = sum.toLocaleString(); }
+        function addPartRow(){ const tbody = document.querySelector('#partsTable tbody'); const tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td>`; tbody.appendChild(tr); tr.querySelector('input').focus(); updateGrandTotal(); }
+        function deleteRow(btn){ const tbody = document.querySelector('#partsTable tbody'); if(tbody.rows.length <= 1){ const row = btn.closest('tr'); row.querySelectorAll('input').forEach(inp => { if(!inp.classList.contains('qty')) inp.value = ''; else inp.value = '1'; }); row.querySelector('.subtotal').value = ''; row.dataset.manual = 'false'; updateGrandTotal(); } else { btn.closest('tr').remove(); updateGrandTotal(); } }
+        document.addEventListener('keydown', function(e){ if(e.key === 'Enter' && e.target.classList.contains('price')){ e.preventDefault(); addPartRow(); } });
     </script>
 </body>
 </html>
