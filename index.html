@@ -1,624 +1,540 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>英泰自動控制行｜數位維修單 Liquid Glass</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  color-scheme:dark;
-  --bg0:#050d16; --ink:#e8f4ff; --ink-dim:#9db8cc; --ink-faint:#5f7a90;
-  --cyan:#4fd8ff; --teal:#2dd4bf; --amber:#ffb454; --green:#5ee08a;
-  --line:rgba(255,255,255,.12);
-  --disp:'Chakra Petch','Noto Sans TC',sans-serif;
-  --body:'Noto Sans TC',sans-serif;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--body); color:var(--ink); overflow-x:hidden; min-height:100vh;
-  background:
-    radial-gradient(1100px 750px at 88% -8%, rgba(38,108,150,.38), transparent 62%),
-    radial-gradient(900px 700px at -8% 42%, rgba(20,70,110,.32), transparent 60%),
-    linear-gradient(180deg,#081524,#050d16 55%,#04101c);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>英泰自動控制行 - 數位維修單 Liquid Glass</title>
+    <style>
+        /* =========================================================
+           英泰自動控制行｜Liquid Service Desk UI
+           重點：保留既有功能，只重構操作介面與版面
+           ========================================================= */
+        :root {
+            --primary-blue: #007AFF;
+            --primary-dark: #0057D9;
+            --primary-grad: linear-gradient(135deg, #007AFF 0%, #0057D9 100%);
+            --accent-cyan: #64D2FF;
+            --accent-mint: #34C7B8;
+            --accent-green: #34C759;
+            --accent-red: #FF3B30;
 
-/* ============ 背景場景：讓玻璃有東西可以折射 ============ */
-.scene{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.grid-layer{position:absolute;inset:0;
-  background:
-    linear-gradient(rgba(120,200,255,.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(120,200,255,.05) 1px,transparent 1px);
-  background-size:44px 44px;
-  -webkit-mask-image:radial-gradient(ellipse 95% 75% at 50% 18%,#000 25%,transparent 78%);
-  mask-image:radial-gradient(ellipse 95% 75% at 50% 18%,#000 25%,transparent 78%);
-}
-.orb{position:absolute;border-radius:50%;filter:blur(70px);mix-blend-mode:screen}
-.orb-a{width:560px;height:560px;background:radial-gradient(circle,#1fb6e8,transparent 65%);top:-160px;left:6%;opacity:.55;animation:driftA 34s ease-in-out infinite alternate}
-.orb-b{width:480px;height:480px;background:radial-gradient(circle,#ff9a3d,transparent 65%);bottom:-150px;right:4%;opacity:.4;animation:driftB 42s ease-in-out infinite alternate}
-.orb-c{width:380px;height:380px;background:radial-gradient(circle,#2dd4bf,transparent 65%);top:44%;left:56%;opacity:.32;animation:driftC 28s ease-in-out infinite alternate}
-@keyframes driftA{to{transform:translate(130px,100px) scale(1.15)}}
-@keyframes driftB{to{transform:translate(-110px,-80px) scale(1.1)}}
-@keyframes driftC{to{transform:translate(-140px,60px) scale(.9)}}
-.gauge{position:absolute;border-radius:50%}
-.gauge-1{width:540px;height:540px;top:-190px;right:-150px;border:1px dashed rgba(140,220,255,.16);animation:spin 90s linear infinite}
-.gauge-2{width:420px;height:420px;bottom:-160px;left:-140px;border:1px dashed rgba(255,190,120,.12);animation:spin 120s linear infinite reverse}
-.gauge::before{content:"";position:absolute;inset:26px;border-radius:50%;border:1px solid rgba(140,220,255,.08)}
-.gauge .ticks{position:absolute;inset:0;border-radius:50%;
-  background:repeating-conic-gradient(rgba(160,225,255,.22) 0 .5deg,transparent .5deg 6deg);
-  -webkit-mask:radial-gradient(circle,transparent 61%,#000 62%,#000 71%,transparent 72%);
-  mask:radial-gradient(circle,transparent 61%,#000 62%,#000 71%,transparent 72%);}
-@keyframes spin{to{transform:rotate(360deg)}}
+            --text-primary: rgba(17, 24, 39, .94);
+            --text-secondary: rgba(31, 41, 55, .68);
+            --text-label: rgba(31, 41, 55, .72);
+            --text-placeholder: rgba(75, 85, 99, .48);
 
-/* ============ 液態玻璃核心配方 ============ */
-.glass{
-  position:relative;
-  background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.05) 38%,rgba(255,255,255,.02) 70%,rgba(255,255,255,.06));
-  -webkit-backdrop-filter:blur(22px) saturate(170%) brightness(1.06);
-  backdrop-filter:blur(22px) saturate(170%) brightness(1.06);
-  border-radius:24px;
-  box-shadow:
-    0 24px 60px -24px rgba(2,10,20,.65),
-    0 2px 8px rgba(2,10,20,.25),
-    inset 0 1px 0 rgba(255,255,255,.5),      /* 上緣受光亮線＝厚度 */
-    inset 0 -1px 0 rgba(255,255,255,.07),    /* 下緣微亮＝玻璃切面 */
-    inset 0 0 24px rgba(255,255,255,.045);
-}
-/* 漸層描邊：左上亮、右下反微光，像光打在玻璃斜邊 */
-.glass::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
-  background:linear-gradient(155deg,rgba(255,255,255,.65),rgba(255,255,255,.12) 28%,rgba(255,255,255,0) 55%,rgba(120,220,255,.18) 80%,rgba(255,255,255,.3));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  mask-composite:exclude;
-}
-/* 動態鏡面高光：跟隨游標的光斑 */
-.glass::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:radial-gradient(520px circle at var(--sx,50%) var(--sy,-30%),rgba(255,255,255,.15),rgba(255,255,255,.04) 38%,transparent 62%);
-  opacity:0;transition:opacity .45s ease;
-}
-.glass:hover::after{opacity:1}
-/* 邊緣折射透鏡：只有玻璃邊緣 18px 環帶發生扭曲（液態的關鍵） */
-.lens{
-  position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  border:18px solid transparent;
-  -webkit-backdrop-filter:url(#liquidLens);
-  backdrop-filter:url(#liquidLens);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  mask-composite:exclude;
-}
+            --glass-clear: rgba(255,255,255,.12);
+            --glass-panel: rgba(255,255,255,.22);
+            --glass-panel-strong: rgba(255,255,255,.38);
+            --glass-field: rgba(255,255,255,.28);
+            --glass-field-focus: rgba(255,255,255,.52);
+            --glass-danger: rgba(255, 245, 246, .26);
+            --glass-readonly: rgba(245, 249, 255, .38);
 
-/* ============ 頂部浮動工具列 ============ */
-.topbar-wrap{position:sticky;top:12px;z-index:60;max-width:1112px;margin:0 auto;padding:12px 16px 0}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 14px;border-radius:20px}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:var(--cyan);
-  background:linear-gradient(160deg,rgba(79,216,255,.22),rgba(79,216,255,.04));
-  border:1px solid rgba(79,216,255,.35);
-  box-shadow:0 0 18px -4px rgba(79,216,255,.5),inset 0 1px 0 rgba(255,255,255,.4)}
-.logo svg{width:23px;height:23px}
-.logo .needle{transform-origin:12px 15px;animation:swing 5s ease-in-out infinite alternate}
-@keyframes swing{from{transform:rotate(-28deg)}to{transform:rotate(24deg)}}
-.brand-text strong{display:block;font:700 13px var(--disp);letter-spacing:.26em;color:#dff2ff}
-.brand-text span{font-size:12px;color:var(--ink-dim);letter-spacing:.32em}
-.top-actions{display:flex;gap:10px}
+            --stroke-glass: rgba(255,255,255,.65);
+            --stroke-strong: rgba(255,255,255,.95);
+            --stroke-field: rgba(255,255,255,.60);
+            --shadow-float: 0 32px 84px rgba(30, 64, 122, .22), 0 8px 22px rgba(30, 64, 122, .12), inset 0 1.5px 0 rgba(255,255,255,.98), inset 0 -1.5px 1px rgba(110,150,215,.20), inset 1px 0 0 rgba(255,255,255,.35), inset -1px 0 0 rgba(110,150,215,.10);
+            --shadow-soft: 0 18px 48px rgba(30, 64, 122, .16), inset 0 1.5px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(110,150,215,.16), inset 1px 0 0 rgba(255,255,255,.22);
+            --shadow-focus: 0 0 0 5px rgba(0,122,255,.16), 0 14px 32px rgba(0,122,255,.18);
 
-/* ============ LED 跑馬燈 ============ */
-.ticker{max-width:1080px;margin:10px auto 0;padding:0 16px;overflow:hidden}
-.ticker-track{display:inline-flex;gap:3em;white-space:nowrap;padding:6px 0;
-  font:600 11px var(--disp);letter-spacing:.4em;color:rgba(255,190,110,.8);
-  animation:tick 30s linear infinite}
-@keyframes tick{to{transform:translateX(-50%)}}
+            /* Liquid Glass 光學：以 SVG feDisplacementMap 折射背景，取代單純毛玻璃模糊 */
+            --liquid-distortion: url(#liquid-distortion);
+            --blur-clear: var(--liquid-distortion) blur(20px) saturate(2.2) brightness(1.08) contrast(1.03);
+            --blur-clear-webkit: blur(24px) saturate(2.2) brightness(1.08) contrast(1.03);
+            --blur-panel: var(--liquid-distortion) blur(15px) saturate(1.9) brightness(1.05);
+            --blur-panel-webkit: blur(18px) saturate(1.9) brightness(1.05);
+            --blur-field: var(--liquid-distortion) blur(10px) saturate(1.6);
+            --blur-field-webkit: blur(13px) saturate(1.6);
 
-/* ============ 主體 ============ */
-.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:20px 16px 10px;display:grid;gap:18px}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+            --radius-sm: 16px;
+            --radius-md: 24px;
+            --radius-lg: 34px;
+            --radius-xl: 44px;
+            --radius-pill: 999px;
 
-/* 單據抬頭 */
-.ticket-head{display:flex;justify-content:space-between;align-items:center;gap:26px;padding:28px 30px;flex-wrap:wrap}
-.doc-tag{font:600 11px var(--disp);letter-spacing:.42em;color:var(--cyan)}
-.doc-title{font-size:clamp(28px,4.5vw,42px);font-weight:900;letter-spacing:.02em;margin:8px 0 6px;line-height:1.15}
-.doc-title em{font-family:var(--disp);font-style:normal;font-weight:700;letter-spacing:.06em;
-  color:rgba(140,230,255,.12);-webkit-text-stroke:1.5px rgba(120,220,255,.75);
-  text-shadow:0 0 30px rgba(79,216,255,.25)}
-.doc-sub{font-size:13.5px;color:var(--ink-dim);letter-spacing:.05em}
-.mini-links{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.mini{font:600 11px var(--disp);letter-spacing:.22em;color:var(--cyan);text-decoration:none;
-  padding:7px 15px;border-radius:999px;border:1px solid rgba(79,216,255,.35);
-  background:rgba(79,216,255,.06);transition:.25s}
-.mini:hover{background:rgba(79,216,255,.16);box-shadow:0 0 18px -4px rgba(79,216,255,.5);transform:translateY(-1px)}
-.th-right{display:flex;flex-direction:column;gap:14px;align-items:flex-end}
-.chip{display:inline-flex;align-items:center;gap:8px;font:600 10px var(--disp);letter-spacing:.28em;
-  color:#bfe9c9;padding:6px 13px;border-radius:999px;border:1px solid rgba(94,224,138,.3);background:rgba(94,224,138,.07)}
-.chip i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.8s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.3}}
-.meta{display:flex;gap:22px}
-.meta-item{text-align:right}
-.meta-item label{display:block;font:600 9.5px var(--disp);letter-spacing:.3em;color:var(--ink-faint);margin-bottom:4px}
-.meta-item output{font:700 17px var(--disp);letter-spacing:.06em;color:#dff2ff}
-.meta-item:first-child output{color:var(--amber);text-shadow:0 0 16px rgba(255,180,84,.4)}
-.barcode{height:32px;width:190px;opacity:.65;border-radius:2px;
-  background:repeating-linear-gradient(90deg,rgba(230,245,255,.85) 0 2px,transparent 2px 5px,rgba(230,245,255,.85) 5px 6px,transparent 6px 11px,rgba(230,245,255,.85) 11px 14px,transparent 14px 17px)}
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial,
+                "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            --transition-fast: 0.2s cubic-bezier(.2,.8,.2,1);
+            --transition-smooth: 0.42s cubic-bezier(.2,.8,.2,1);
+        }
 
-/* 面板 */
-.panel{padding:24px 26px}
-.p-head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;padding-bottom:13px;border-bottom:1px solid var(--line)}
-.p-num{font:700 12px var(--disp);color:var(--cyan);border:1px solid rgba(79,216,255,.4);
-  padding:2px 9px;border-radius:7px;background:rgba(79,216,255,.08);
-  text-shadow:0 0 12px rgba(79,216,255,.8)}
-.p-head h2{font-size:19px;font-weight:900;letter-spacing:.08em}
-.p-en{margin-left:auto;font:600 10px var(--disp);letter-spacing:.32em;color:var(--ink-faint)}
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        body {
+            font-family: var(--font-stack);
+            margin: 0;
+            padding: 28px 20px 150px;
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            background:
+                radial-gradient(circle at 16% 8%, rgba(0,122,255,.20), transparent 34%),
+                radial-gradient(circle at 78% 12%, rgba(116, 88, 255, .16), transparent 31%),
+                radial-gradient(circle at 48% 86%, rgba(52,199,184,.18), transparent 36%),
+                linear-gradient(160deg, #f8fbff 0%, #eef6ff 42%, #f7fbfb 100%);
+            overflow-x: hidden;
+        }
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -22%;
+            pointer-events: none;
+            z-index: -2;
+            filter: blur(38px);
+            opacity: .78;
+        }
+        body::before {
+            background:
+                radial-gradient(circle at 26% 38%, rgba(0,122,255,.24), transparent 28%),
+                radial-gradient(circle at 76% 62%, rgba(0,220,190,.17), transparent 31%);
+            animation: liquidDrift 16s ease-in-out infinite alternate;
+        }
+        body::after {
+            z-index: -1;
+            background:
+                radial-gradient(circle at 64% 22%, rgba(255,255,255,.76), transparent 22%),
+                radial-gradient(circle at 22% 78%, rgba(175,210,255,.20), transparent 26%);
+            animation: liquidDrift2 22s ease-in-out infinite alternate;
+        }
+        @keyframes liquidDrift {
+            from { transform: translate3d(-1.4%, -1%, 0) scale(1); }
+            to   { transform: translate3d(1.6%, 1.1%, 0) scale(1.045); }
+        }
+        @keyframes liquidDrift2 {
+            from { transform: translate3d(1%, -1.2%, 0) scale(1.03); }
+            to   { transform: translate3d(-1.1%, 1.3%, 0) scale(1); }
+        }
 
-/* 表單 */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.span2{grid-column:1/-1}
-label.fl{display:block;font-size:12px;color:var(--ink-dim);letter-spacing:.14em;margin-bottom:6px}
-label.fl b{color:var(--cyan);font:500 9.5px var(--disp);letter-spacing:.26em;margin-left:7px}
-.field{width:100%;background:rgba(4,14,24,.42);border:1px solid rgba(255,255,255,.1);border-radius:12px;
-  padding:11px 14px;color:var(--ink);font:500 15px/1.45 var(--body);
-  box-shadow:inset 0 2px 8px rgba(0,0,0,.4),inset 0 -1px 0 rgba(255,255,255,.05);
-  transition:border-color .25s,box-shadow .25s,background .25s}
-.field::placeholder{color:rgba(150,180,205,.35)}
-.field:hover{border-color:rgba(255,255,255,.22)}
-.field:focus{outline:none;border-color:rgba(79,216,255,.7);background:rgba(6,20,32,.55);
-  box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 0 0 3px rgba(79,216,255,.16),0 4px 22px -6px rgba(79,216,255,.45)}
-textarea.field{resize:vertical;min-height:76px}
+        .form-container {
+            width: min(1180px, calc(100vw - 40px));
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
 
-/* 零件表格 */
-.table-scroll{overflow-x:auto}
-table{width:100%;min-width:620px;border-collapse:separate;border-spacing:0 6px}
-thead th{font:600 10.5px var(--disp);letter-spacing:.24em;color:var(--ink-faint);text-align:left;padding:4px 10px 6px}
-.part-row{transition:opacity .22s,transform .22s}
-.part-row td{background:rgba(255,255,255,.035);padding:7px;transition:background .25s}
-.part-row:hover td{background:rgba(120,215,255,.075)}
-.part-row td:first-child{border-radius:12px 0 0 12px}
-.part-row td:last-child{border-radius:0 12px 12px 0}
-.part-row .field{padding:8px 11px;font-size:14px;background:rgba(4,14,24,.3)}
-.part-row .num{text-align:right;font-family:var(--disp)}
-.subtotal{font:700 15px var(--disp);color:var(--amber);text-align:right;padding-right:14px!important;white-space:nowrap}
-.td-del{text-align:center}
-.del{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,120,120,.35);
-  background:rgba(255,90,90,.08);color:#ff9a9a;font-size:15px;line-height:1;cursor:pointer;transition:.25s}
-.del:hover{background:rgba(255,90,90,.24);transform:rotate(90deg);box-shadow:0 0 14px rgba(255,90,90,.35)}
-.add-row{width:100%;margin-top:8px;padding:12px;border-radius:13px;cursor:pointer;
-  border:1.5px dashed rgba(120,215,255,.35);background:rgba(79,216,255,.05);
-  color:var(--cyan);font:600 14px var(--body);letter-spacing:.2em;transition:.25s}
-.add-row:hover{background:rgba(79,216,255,.13);border-color:rgba(120,215,255,.7);box-shadow:0 0 26px -6px rgba(79,216,255,.45)}
-.total-bar{display:flex;align-items:center;justify-content:flex-end;gap:22px;margin-top:16px;
-  padding:15px 20px;border-radius:16px;
-  background:linear-gradient(120deg,rgba(255,180,84,.12),rgba(255,180,84,.03));
-  border:1px solid rgba(255,180,84,.3)}
-.total-bar>span{font:600 11px var(--disp);letter-spacing:.34em;color:var(--amber)}
-#grandTotal{font:700 clamp(26px,4vw,36px)/1 var(--disp);color:#ffd9a0;text-shadow:0 0 26px rgba(255,180,84,.5)}
-#grandTotal.bump{animation:bump .35s}
-@keyframes bump{40%{transform:scale(1.1)}}
+        .glass-panel,
+        .header,
+        .section-card,
+        .parts-container,
+        .sign-box,
+        .toolbar,
+        .meta-row,
+        .meta-box {
+            position: relative;
+            isolation: isolate;
+            border: 1px solid var(--stroke-glass);
+            border-top-color: var(--stroke-strong);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: var(--blur-panel);
+            -webkit-backdrop-filter: var(--blur-panel-webkit);
+            background: linear-gradient(135deg, rgba(255,255,255,.26), rgba(255,255,255,.07));
+            transition: box-shadow var(--transition-smooth), background var(--transition-smooth), transform var(--transition-fast);
+        }
+        .glass-panel::before,
+        .header::before,
+        .section-card::before,
+        .parts-container::before,
+        .sign-box::before,
+        .toolbar::before,
+        .meta-row::before,
+        .meta-box::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: -1;
+            mix-blend-mode: screen;
+            opacity: .9;
+            background:
+                radial-gradient(circle at var(--mx, 22%) var(--my, 8%), rgba(255,255,255,.70), transparent 40%),
+                linear-gradient(135deg, rgba(255,255,255,.56), transparent 38%),
+                radial-gradient(circle at 90% 100%, rgba(160,200,255,.20), transparent 34%);
+            transition: background .5s cubic-bezier(.2,.8,.2,1);
+        }
+        /* 液態玻璃邊緣的細膩鏡面反光：滑鼠／觸控移動時高光跟隨移動 */
+        .glass-panel:hover, .header:hover, .section-card:hover, .parts-container:hover, .sign-box:hover, .toolbar:hover {
+            box-shadow: var(--shadow-soft), 0 0 0 1px rgba(255,255,255,.10);
+        }
 
-/* 簽署區 */
-.sign-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
-.sig-box{position:relative;border-radius:16px;background:rgba(4,14,24,.42);
-  border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 2px 10px rgba(0,0,0,.4);overflow:hidden}
-#sigPad{width:100%;height:172px;display:block;touch-action:none;cursor:crosshair}
-.sig-box::after{content:"✕";position:absolute;left:20px;bottom:26px;color:rgba(150,200,230,.3);font-size:13px;pointer-events:none}
-.sig-line{position:absolute;left:8%;right:8%;bottom:34px;border-bottom:1px dashed rgba(150,200,230,.28);pointer-events:none}
-.sig-hint{position:absolute;inset:0;display:grid;place-items:center;color:rgba(150,190,215,.25);
-  font-size:14px;letter-spacing:.5em;pointer-events:none;transition:opacity .3s}
-.sig-box.signed .sig-hint{opacity:0}
-.sig-clear{position:absolute;top:9px;right:9px;padding:5px 12px;border-radius:999px;cursor:pointer;
-  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);
-  color:var(--ink-dim);font:500 11px var(--body);letter-spacing:.15em;transition:.2s}
-.sig-clear:hover{background:rgba(255,255,255,.14);color:#fff}
-.tech-box{position:relative;overflow:hidden;border-radius:16px;padding:20px;
-  background:rgba(255,255,255,.04);border:1px solid var(--line);
-  display:flex;flex-direction:column;gap:7px;justify-content:center}
-.tech-label{font:600 10px var(--disp);letter-spacing:.34em;color:var(--ink-faint)}
-.tech-name{font-size:27px;font-weight:900;letter-spacing:.15em}
-.tech-sub{font-size:12px;color:var(--ink-dim);letter-spacing:.1em}
-.stamp{position:absolute;right:14px;bottom:12px;width:88px;height:88px;border-radius:50%;
-  border:2px solid rgba(255,130,95,.55);display:grid;place-items:center;text-align:center;
-  color:rgba(255,150,115,.85);font-size:12px;font-weight:700;line-height:1.35;letter-spacing:.12em;
-  transform:rotate(-12deg);opacity:.85;box-shadow:0 0 18px rgba(255,120,90,.12)}
-.stamp::before{content:"";position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(255,130,95,.4)}
+        .header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+            gap: 22px;
+            align-items: stretch;
+            padding: clamp(26px, 4vw, 46px);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-float);
+            backdrop-filter: var(--blur-clear);
+            -webkit-backdrop-filter: var(--blur-clear-webkit);
+        }
+        .company-block { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 13px;
+            border-radius: var(--radius-pill);
+            color: rgba(0, 91, 190, .88);
+            background: rgba(255,255,255,.34);
+            border: 1px solid rgba(255,255,255,.56);
+            font-size: 12px;
+            font-weight: 850;
+            letter-spacing: 2.8px;
+            text-transform: uppercase;
+        }
+        .company-block h1 {
+            margin: 0;
+            font-size: clamp(34px, 5.2vw, 64px);
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -1.8px;
+            color: var(--text-primary);
+            text-wrap: balance;
+        }
+        .company-block h1 span {
+            background: linear-gradient(135deg, #007AFF 0%, #0057D9 52%, #34C7B8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .en-title {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: clamp(15px, 2vw, 19px);
+            font-weight: 700;
+            letter-spacing: .12em;
+        }
+        .brand-copy {
+            margin: 0;
+            max-width: 620px;
+            color: rgba(31,41,55,.66);
+            font-size: clamp(16px, 2vw, 19px);
+            line-height: 1.65;
+            font-weight: 600;
+        }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+        .start-pill,
+        .ghost-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 0 18px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 850;
+            letter-spacing: .02em;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+        }
+        .start-pill { position: relative; overflow: hidden; color: #fff; background: var(--primary-grad); box-shadow: 0 14px 28px rgba(0,122,255,.28), inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 -10px 16px rgba(0,40,110,.18); }
+        .start-pill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.42) 0%, transparent 46%); mix-blend-mode: screen; pointer-events: none; }
+        .ghost-pill { position: relative; isolation: isolate; color: rgba(0, 91, 190, .90); background: linear-gradient(135deg, rgba(255,255,255,.30), rgba(255,255,255,.10)); border: 1px solid var(--stroke-glass); border-top-color: var(--stroke-strong); backdrop-filter: var(--blur-field); -webkit-backdrop-filter: var(--blur-field-webkit); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.85); }
+        .start-pill:active, .ghost-pill:active { transform: scale(.98); }
 
-/* ============ 按鈕（iOS 液態膠囊） ============ */
-.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;border:none;
-  border-radius:999px;padding:10px 20px;cursor:pointer;color:#eaf7ff;
-  font:700 13.5px var(--body);letter-spacing:.1em;
-  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.06));
-  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -8px 16px rgba(255,255,255,.05),0 12px 28px -12px rgba(0,0,0,.6);
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
-.btn::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.4) 46%,transparent 60%);
-  transform:translateX(-130%);transition:transform .6s}
-.btn:hover::after{transform:translateX(130%)}
-.btn:hover{transform:translateY(-2px)}
-.btn:active{transform:scale(.95)}
-.btn-primary{color:#03222f;background:linear-gradient(180deg,#5fe0ff,#1899d6 55%,#0f7db8);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -10px 18px rgba(0,60,100,.25),0 14px 34px -10px rgba(31,180,235,.55)}
-.btn-primary:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 18px 44px -10px rgba(31,180,235,.75)}
-.btn-word{background:linear-gradient(180deg,rgba(96,165,250,.38),rgba(59,110,200,.16));border:1px solid rgba(140,190,255,.35)}
+        .meta-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            align-content: center;
+            padding: 18px;
+            border-radius: 32px;
+        }
+        .meta-box {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: 23px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 850;
+            white-space: nowrap;
+        }
+        .meta-box input[type="text"],
+        .meta-box input[type="date"] {
+            width: 100%;
+            min-width: 0;
+            text-align: right;
+            font-size: 15px;
+            font-weight: 850;
+            color: #0878F9 !important;
+            -webkit-text-fill-color: #0878F9;
+            caret-color: #0878F9;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            height: auto !important;
+            font-variant-numeric: tabular-nums;
+        }
 
-/* 底部懸浮 Dock */
-.actionbar{position:sticky;bottom:14px;z-index:55;display:flex;justify-content:center;padding:28px 16px 16px;pointer-events:none}
-.dock{pointer-events:auto;display:flex;gap:10px;padding:9px;border-radius:24px}
-.dock .btn{padding:13px 30px;font-size:15px}
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr);
+            gap: 22px;
+            align-items: start;
+        }
+        .work-column,
+        .summary-column { display: grid; gap: 18px; }
+        .summary-column { position: sticky; top: 22px; }
+        .section-card,
+        .parts-container,
+        .sign-box {
+            border-radius: var(--radius-lg);
+            padding: clamp(18px, 2.5vw, 28px);
+        }
+        .section-card.issue-card { background: linear-gradient(135deg, rgba(255,240,242,.14), rgba(255,255,255,.06)); border-color: rgba(255,255,255,.62); }
+        .section-card:focus-within,
+        .parts-container:focus-within,
+        .sign-box:focus-within { border-color: rgba(0,122,255,.46); box-shadow: var(--shadow-focus), inset 0 1px 0 rgba(255,255,255,.82); }
+        .card-title { margin: 0 0 15px; display: flex; align-items: center; gap: 11px; color: var(--text-secondary); font-size: 13px; font-weight: 900; letter-spacing: 1.35px; text-transform: uppercase; }
+        .card-title::before { content: ""; width: 7px; height: 24px; border-radius: 999px; background: linear-gradient(180deg, var(--primary-blue), var(--accent-cyan)); box-shadow: 0 8px 18px rgba(0,122,255,.28); flex-shrink: 0; }
+        .section-card.issue-card .card-title::before { background: linear-gradient(180deg, #ff6b6b, #ff3b30); }
 
-.foot-note{position:relative;z-index:1;text-align:center;padding:6px 16px 100px;
-  font:500 10.5px var(--disp);letter-spacing:.3em;color:var(--ink-faint)}
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], textarea {
+            width: 100%; border: 1px solid var(--stroke-field); border-top-color: rgba(255,255,255,.92);
+            background: linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.15)); padding: 15px 16px; border-radius: 18px; font-size: 17px; font-family: var(--font-stack); color: var(--text-primary);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+            line-height: 1.5; -webkit-appearance: none; appearance: none; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(0,0,0,.035); backdrop-filter: var(--blur-field); -webkit-backdrop-filter: var(--blur-field-webkit);
+        }
+        input::placeholder, textarea::placeholder { color: var(--text-placeholder); font-size: 16px; }
+        input:hover, textarea:hover { border-color: rgba(0,122,255,.35); background: rgba(255,255,255,.50); }
+        input:focus, textarea:focus { outline: none; border-color: rgba(0,122,255,.62); background: var(--glass-field-focus); box-shadow: var(--shadow-focus), inset 0 1px 0 rgba(255,255,255,.82); transform: translateY(-1px); }
+        input[readonly] { background: var(--glass-readonly); border-color: rgba(255,255,255,.62); color: rgba(31,41,55,.74); cursor: default; font-weight: 850; }
+        textarea { min-height: 112px; resize: vertical; line-height: 1.65; }
+        .client-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
+        .input-group { display: flex; flex-direction: column; gap: 7px; }
+        .input-group label { font-size: 13px; color: var(--text-label); font-weight: 850; letter-spacing: .35px; }
+        .desc-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .desc-table td.label { width: 92px; font-weight: 850; color: var(--text-label); vertical-align: top; padding-top: 16px; text-align: right; padding-right: 16px; font-size: 16px; white-space: nowrap; }
 
-/* 進場動畫 */
-.reveal{opacity:0;transform:translateY(26px) scale(.985);
-  transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
-.reveal.in{opacity:1;transform:none}
+        .parts-container { overflow: hidden; padding: 14px; }
+        .parts-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 24px; }
+        .parts-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 620px; table-layout: auto; }
+        .parts-table th { background: rgba(255,255,255,.42); color: rgba(31,41,55,.64); padding: 13px 8px; font-size: 13px; font-weight: 900; text-align: center; letter-spacing: .5px; border-bottom: 1px solid rgba(255,255,255,.58); }
+        .parts-table th:first-child { border-radius: 18px 0 0 18px; } .parts-table th:last-child { border-radius: 0 18px 18px 0; }
+        .parts-table td { padding: 8px 6px; vertical-align: middle; }
+        .parts-table input { text-align: center; background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.56); border-radius: 14px; padding: 13px 8px; font-size: 16px; width: 100%; min-width: 50px; box-shadow: inset 0 1px 0 rgba(255,255,255,.70); }
+        .parts-table td:first-child input { text-align: left; }
+        .parts-table input:focus { border-color: rgba(0,122,255,.60); background: rgba(255,255,255,.62); box-shadow: var(--shadow-focus); }
+        .parts-actions { display: flex; justify-content: flex-start; padding: 12px 4px 4px; }
+        .parts-add-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, rgba(255,255,255,.30), rgba(255,255,255,.10)); color: rgba(0,91,190,.90); border: 1px solid var(--stroke-glass); border-top-color: var(--stroke-strong); backdrop-filter: var(--blur-field); -webkit-backdrop-filter: var(--blur-field-webkit); padding: 13px 18px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 900; cursor: pointer; transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.82), 0 10px 24px rgba(39,69,121,.10); }
+        .parts-add-btn:hover { transform: translateY(-1px); background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.18)); }
+        .btn-del { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: #e33b38; cursor: pointer; font-weight: 900; font-size: 21px; background: rgba(255,255,255,.36); backdrop-filter: var(--blur-field); -webkit-backdrop-filter: var(--blur-field-webkit); border: 1px solid rgba(255,120,120,.36); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast); margin: 0 auto; }
+        .btn-del:hover { background: rgba(255,235,235,.70); border-color: rgba(255,59,48,.52); transform: scale(1.06); }
+        .total-area { margin-top: 14px; padding: 18px; display: grid; grid-template-columns: 1fr minmax(160px, 220px); align-items: center; gap: 14px; border-radius: 28px; background: linear-gradient(135deg, rgba(0,122,255,.15), rgba(255,255,255,.28)); border: 1px solid rgba(255,255,255,.62); box-shadow: inset 0 1px 0 rgba(255,255,255,.80); }
+        .total-area span { color: rgba(31,41,55,.72); font-weight: 900; font-size: 17px; }
+        #grandTotal { font-size: clamp(26px, 4vw, 36px); font-weight: 950; color: var(--primary-blue); text-align: right; background: transparent; border: none; box-shadow: none; padding: 0; min-height: auto; font-variant-numeric: tabular-nums; }
 
-/* RWD */
-@media (max-width:920px){
-  .cols,.sign-grid{grid-template-columns:1fr}
-  .ticket-head{flex-direction:column;align-items:flex-start}
-  .th-right{align-items:flex-start}
-  .meta-item{text-align:left}
-}
-@media (max-width:560px){
-  .form-grid{grid-template-columns:1fr}
-  .brand-text span{display:none}
-  .dock{width:100%}
-  .dock .btn{flex:1;justify-content:center}
-}
+        .signature-area { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .sign-box { min-width: 0; padding: 20px; border-radius: 30px; }
+        .sign-title { margin-bottom: 14px; display: flex; align-items: center; gap: 8px; color: rgba(31,41,55,.72); font-size: 14px; font-weight: 900; letter-spacing: .6px; }
+        .client-sign-name { margin-bottom: 14px; }
+        .sign-line { height: 76px; border-radius: 24px; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06)); border: 1px solid rgba(255,255,255,.48); backdrop-filter: var(--blur-field); -webkit-backdrop-filter: var(--blur-field-webkit); position: relative; overflow: hidden; }
+        .sign-line::after { content: ""; position: absolute; left: 20px; right: 20px; bottom: 20px; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,122,255,.56), transparent); }
+        .engineer-name { position: absolute; right: 24px; bottom: 28px; font-size: 20px; font-weight: 900; color: rgba(17,24,39,.84); }
 
-/* ============ 列印（PDF）：切換成紙本表單 ============ */
-.print-foot{display:none}
-@media print{
-  :root{color-scheme:light;--ink:#111;--ink-dim:#444;--ink-faint:#666;--line:#bbb}
-  .scene,.topbar-wrap,.ticker,.actionbar,.lens,.add-row,.del,.td-del,.sig-clear,.mini-links,.chip,.foot-note{display:none!important}
-  body{background:#fff!important}
-  .glass,.glass::before,.glass::after{box-shadow:none!important}
-  .glass{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
-    border:1.5px solid #555!important;border-radius:10px!important;break-inside:avoid}
-  .glass::before,.glass::after{display:none!important}
-  .reveal{opacity:1!important;transform:none!important}
-  .field{background:#fff!important;border:1px solid #999!important;box-shadow:none!important;color:#111!important}
-  .part-row td{background:#fff!important}
-  .doc-title em{-webkit-text-stroke:0;color:#067}
-  .total-bar{background:#fff8ee!important;border-color:#c90!important}
-  #grandTotal{color:#a55a00!important;text-shadow:none!important}
-  .stamp{color:#c33!important;border-color:#c33!important}
-  .print-foot{display:block;text-align:center;font-size:11px;color:#888;padding:14px 0}
-  @page{size:A4;margin:12mm}
-}
-</style>
+        .toolbar { position: fixed; left: 50%; bottom: max(22px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 9999; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; border-radius: var(--radius-pill); box-shadow: var(--shadow-float); max-width: calc(100vw - 24px); }
+        .toolbar-label { display: inline-flex; align-items: center; gap: 8px; padding: 0 12px; min-height: 48px; color: rgba(31,41,55,.64); font-size: 13px; font-weight: 900; white-space: nowrap; }
+        .btn-float { position: relative; overflow: hidden; isolation: isolate; min-height: 58px; border: none; border-radius: var(--radius-pill); padding: 0 22px; color: #fff; font-size: 17px; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 9px; letter-spacing: .02em; transition: transform var(--transition-fast), filter var(--transition-fast), box-shadow var(--transition-fast); box-shadow: 0 10px 24px rgba(0,122,255,.28), inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 -8px 14px rgba(0,20,60,.16); }
+        .btn-float::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.40) 0%, transparent 50%); mix-blend-mode: screen; pointer-events: none; }
+        .btn-float.btn-green { background: linear-gradient(135deg, #34C759, #24A844); }
+        .btn-float.btn-word { background: linear-gradient(135deg, #6575D4, #394AB5); }
+        .btn-float:hover { transform: translateY(-2px); filter: brightness(1.04); }
+        .btn-float:active { transform: scale(.98); }
+        .output-icon { display: inline-grid; width: 22px; height: 22px; place-items: center; font-size: 18px; line-height: 1; }
+
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .header, .section-card, .parts-container, .sign-box, .toolbar, input, textarea { background: rgba(255,255,255,.86) !important; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; } }
+        @media (max-width: 920px) { body { padding: 18px 14px 150px; } .form-container { width: min(100%, 780px); } .header { grid-template-columns: 1fr; padding: 28px; } .meta-row { grid-template-columns: 1fr 1fr; } .workspace { grid-template-columns: 1fr; } .summary-column { position: static; } }
+        @media (max-width: 640px) { body { padding: 12px 8px 170px; } .form-container { width: 100%; gap: 14px; } .header, .section-card, .parts-container, .sign-box { border-radius: 28px; } .header { padding: 22px; } .company-block h1 { font-size: 38px; letter-spacing: -1px; } .brand-copy { font-size: 15px; } .hero-actions { display: none; } .meta-row, .client-grid, .signature-area { grid-template-columns: 1fr; } .desc-table, .desc-table tbody, .desc-table tr, .desc-table td { display: block; width: 100%; } .desc-table { border-spacing: 0; } .desc-table tr { margin-bottom: 14px; } .desc-table td.label { width: 100%; text-align: left; padding: 0 0 7px; } .parts-table { min-width: 520px; } .total-area { grid-template-columns: 1fr; } #grandTotal { text-align: left; } .toolbar { left: 10px; right: 10px; transform: none; width: auto; justify-content: stretch; gap: 8px; padding: 9px; } .toolbar-label { display: none; } .btn-float { flex: 1 1 0; min-width: 0; min-height: 56px; padding: 0 12px; font-size: 15px; } }
+        @media (max-width: 390px) { .btn-float { font-size: 14px; gap: 6px; } .output-icon { width: 18px; height: 18px; font-size: 15px; } }
+        @media print { body { background: #fff !important; padding: 0 !important; } body::before, body::after, .toolbar, .btn-del, .parts-actions, .parts-add-btn, .hero-actions { display: none !important; } .form-container { width: 100%; max-width: none; gap: 10mm; } .header, .section-card, .parts-container, .sign-box { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #fff !important; box-shadow: none !important; border: 1px solid #ddd !important; } input, textarea { border: 1px solid #ccc !important; background: #fff !important; box-shadow: none !important; } }
+    </style>
 </head>
 <body>
-
-<!-- 液態玻璃折射濾鏡（邊緣透鏡的核心） -->
-<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
-  <defs>
-    <filter id="liquidLens" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="8" result="n">
-        <animate attributeName="baseFrequency" dur="26s" values="0.006 0.011;0.009 0.014;0.006 0.011" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feGaussianBlur in="n" stdDeviation="1.6" result="soft"/>
-      <feDisplacementMap in="SourceGraphic" in2="soft" scale="42" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-  </defs>
-</svg>
-
-<!-- 背景場景 -->
-<div class="scene" aria-hidden="true">
-  <div class="grid-layer"></div>
-  <div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
-  <div class="gauge gauge-1"><div class="ticks"></div></div>
-  <div class="gauge gauge-2"><div class="ticks"></div></div>
-</div>
-
-<!-- 頂部浮動工具列 -->
-<div class="topbar-wrap">
-  <header class="topbar glass">
-    <div class="brand">
-      <span class="logo">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M4 15a8 8 0 1 1 16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          <path d="M4.6 10.8l1.5.7M19.4 10.8l-1.5.7M12 6.4v1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-          <g class="needle"><path d="M12 15l4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></g>
-          <circle cx="12" cy="15" r="1.6" fill="currentColor"/>
-        </svg>
-      </span>
-      <div class="brand-text"><strong>INTAI AUTO CONTROL</strong><span>英泰自動控制行</span></div>
+    <svg width="0" height="0" style="position:absolute; overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="liquid-distortion" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.010 0.014" numOctaves="2" seed="11" stitchTiles="stitch" result="noise"/>
+                <feGaussianBlur in="noise" stdDeviation="2.6" result="softNoise"/>
+                <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="46" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+    <div class="toolbar" role="toolbar" aria-label="輸出控制列">
+        <span class="toolbar-label">INTAI SERVICE</span>
+        <button class="btn-float btn-green" onclick="exportFormalPDF()"><span class="output-icon">📄</span><span>儲存 PDF</span></button>
+        <button class="btn-float btn-word" onclick="exportFormalWord()"><span class="output-icon">📝</span><span>下載 Word</span></button>
     </div>
-    <nav class="top-actions">
-      <button class="btn btn-word" onclick="downloadWord()">📝 下載 Word</button>
-      <button class="btn btn-primary" onclick="window.print()">📄 儲存 PDF</button>
-    </nav>
-  </header>
-</div>
+    <main class="form-container" id="repairForm">
+        <section class="header" aria-label="品牌歡迎區">
+            <div class="company-block">
+                <div class="eyebrow">INTAI AUTO CONTROL</div>
+                <h1><span>英泰</span>自動控制行</h1>
+                <p class="en-title">Liquid Service Desk</p>
+                <p class="brand-copy">精密控制・快速維修・專業留存。填寫完成後可直接列印成 PDF，或下載 Word 留存編輯。</p>
+                <div class="hero-actions">
+                    <a class="start-pill" href="#customerName">開始填寫維修單</a>
+                    <a class="ghost-pill" href="#partsTable">前往零件明細</a>
+                </div>
+            </div>
+            <div class="meta-row">
+                <div class="meta-box"><span>單號</span><input type="text" id="orderNo" placeholder="自動產生"></div>
+                <div class="meta-box"><span>日期</span><input type="date" id="dateField"></div>
+            </div>
+        </section>
+        <section class="workspace" aria-label="維修單工作區">
+            <div class="work-column">
+                <div class="section-card">
+                    <div class="card-title">客戶資料 Client Info</div>
+                    <div class="client-grid">
+                        <div class="input-group"><label>客戶名稱</label><input type="text" id="customerName" placeholder="請輸入客戶名稱" style="font-weight:700;"></div>
+                        <div class="input-group"><label>機器編號</label><input type="text" id="machineNo" placeholder="編號..."></div>
+                        <div class="input-group"><label>維修開始</label><input type="time" id="startTime"></div>
+                        <div class="input-group"><label>維修結束</label><input type="time" id="endTime"></div>
+                    </div>
+                </div>
+                <div class="section-card issue-card">
+                    <div class="card-title">故障與檢測 Diagnostics</div>
+                    <table class="desc-table">
+                        <tr><td class="label">故障情形</td><td><textarea id="issue" placeholder="描述客戶反應、設備異常、現場狀況..."></textarea></td></tr>
+                        <tr><td class="label">故障原因</td><td><textarea id="cause" placeholder="檢測後研判原因..."></textarea></td></tr>
+                        <tr><td class="label">處理對策</td><td><textarea id="solution" placeholder="維修方式、建議事項、後續處理..."></textarea></td></tr>
+                    </table>
+                </div>
+            </div>
+            <aside class="summary-column" aria-label="零件與簽署區">
+                <div class="parts-container">
+                    <div class="card-title">維修項目與零件明細 Parts</div>
+                    <div class="parts-table-wrap">
+                        <table class="parts-table" id="partsTable">
+                            <thead><tr><th style="width:28%; text-align:left; padding-left:14px;">項目 / 零件名稱</th><th style="width:18%;">規格</th><th style="width:10%;">數量</th><th style="width:14%;">單價</th><th style="width:16%;">小計</th><th style="width:10%;"></th></tr></thead>
+                            <tbody><tr><td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="parts-actions"><button class="parts-add-btn" onclick="addPartRow()"><span>＋</span> 新增零件項目</button></div>
+                    <div class="total-area"><span>總計金額</span><input type="text" id="grandTotal" readonly value="0"></div>
+                </div>
+                <div class="signature-area">
+                    <div class="sign-box"><div class="sign-title">✍️ 客戶簽署確認</div><input type="text" class="client-sign-name" placeholder="請輸入客戶姓名" style="width:100%;"><div class="sign-line"></div></div>
+                    <div class="sign-box" style="position:relative;"><div class="sign-title">🔩 維修人員</div><div class="sign-line"></div><span class="engineer-name">朱文言</span></div>
+                </div>
+            </aside>
+        </section>
+    </main>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <span>精密控制 ・ 快速維修 ・ 專業留存 ・ PRECISION CONTROL ・ RAPID SERVICE ・ 液態玻璃數位表單 ・ LIQUID GLASS SERVICE DESK ・</span>
-    <span>精密控制 ・ 快速維修 ・ 專業留存 ・ PRECISION CONTROL ・ RAPID SERVICE ・ 液態玻璃數位表單 ・ LIQUID GLASS SERVICE DESK ・</span>
-  </div>
-</div>
+    <script>
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('dateField').valueAsDate = today;
+        document.getElementById('orderNo').value = `${year}${month}${day}`;
+        const esc = v => String(v??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const nl2br = v => esc(v).replace(/\n/g,'<br>');
+        const toNum = v => Math.max(0, Number(v)||0);
+        const money = v => Math.round(v).toLocaleString('zh-TW');
+        function getFormalData(){
+            const rows = [...document.querySelectorAll('#partsTable tbody tr')].map(tr=>{
+                const qty = tr.querySelector('.qty')?.value || '';
+                const price = tr.querySelector('.price')?.value || '';
+                const subtotalVal = tr.querySelector('.subtotal')?.value || '';
+                const subtotalNum = parseFloat(String(subtotalVal).replace(/,/g,'')) || 0;
+                const autoSubtotal = toNum(qty) * toNum(price);
+                const finalSubtotal = subtotalNum > 0 ? subtotalNum : autoSubtotal;
+                return { item: tr.cells[0]?.querySelector('input')?.value || '', spec: tr.cells[1]?.querySelector('input')?.value || '', qty, price, subtotal: finalSubtotal };
+            }).filter(r=>r.item||r.spec||r.qty!=='1'||toNum(r.price)||r.subtotal>0);
+            const total = rows.reduce((s,r)=>s+r.subtotal,0);
+            const iso = document.getElementById('dateField').value||'';
+            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` : esc(iso);
+            return { orderNo: document.getElementById('orderNo').value, date: displayDate, customer: document.getElementById('customerName').value.trim(), machineNo: document.getElementById('machineNo').value, startTime: document.getElementById('startTime').value, endTime: document.getElementById('endTime').value, issue: document.getElementById('issue').value, cause: document.getElementById('cause').value, solution: document.getElementById('solution').value, rows, total, clientSignName: document.querySelector('.client-sign-name').value.trim() };
+        }
+        function formalFileName(ext){
+            const d = document.getElementById('dateField').value.replaceAll('-','')||`${year}${month}${day}`;
+            const cust = (document.getElementById('customerName').value.trim()||'客戶').replace(/[\\/:*?"<>|]/g,'_');
+            return `${d}_${cust}_正式維修單.${ext}`;
+        }
+        function formalDocumentHtml(){
+            const d = getFormalData();
+            const filledRows = d.rows.map((r,i)=>{
+                const subtotal = r.subtotal || toNum(r.qty)*toNum(r.price);
+                return `<tr><td class="center latin">${i+1}</td><td class="data-value" style="color:#0070C0;">${esc(r.item)}</td><td class="data-value" style="color:#0070C0;">${esc(r.spec)}</td><td class="center latin data-value" style="color:#0070C0;">${esc(r.qty)}</td><td class="right latin data-value" style="color:#0070C0;">${r.price?'$'+money(r.price):''}</td><td class="right latin data-value" style="color:#0070C0;">${subtotal?'$'+money(subtotal):''}</td></tr>`;
+            }).join('');
+            const blankRows = Array.from({length:Math.max(0,3-d.rows.length)},()=>'<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
+            const clientSignDisplay = d.clientSignName ? `客戶簽章：<span class="signature-value" style="color:#0070C0;">${esc(d.clientSignName)}</span>` : '客戶簽章：';
+            return `<!DOCTYPE html>
+<html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><meta name="ProgId" content="Word.Document"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title><style>
+@page { size: A4 portrait; margin: 15mm 20mm; background-color: #ffffff; }
+@page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
+div.WordSection1 { page:WordSection1; } * { box-sizing:border-box; } html,body { margin:0; padding:0; background:#fff; color:#000; }
+body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
+body { font-size:11pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; } .doc { width:100%; }
+.company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
+.english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
+.title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
+.contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
+.address-line { margin-bottom:7pt; } .contact-line { white-space:nowrap; } .contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; } .contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; } td,th { border: 1px solid #555; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
+th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; } .meta td { height:23pt; } .section { margin-top:9pt; page-break-inside:avoid; }
+.section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
+.desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; } .desc .label { width:17%; vertical-align:middle; } .parts th,.parts td { height:23pt; } .center { text-align:center; } .right { text-align:right; }
+.data-value, .data-value span, .money-value, .signature-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
+.date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; } .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
+.total td { height:29pt; border-top: 1.5px solid #333; background:transparent; font-weight:normal; } .total-label { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; } .total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; } .tax-note { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
+.remarks-label { font-weight:bold; } .remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; } .sign { margin-top:9pt; } .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border: 1px solid #555; font-weight:normal; } .sign-label,.engineer { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; } .engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; } .notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8.5pt; font-weight:normal; } .footer { margin-top:6pt; padding-top:4pt; border-top: 1px solid #555; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; } @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style></head><body><div class="WordSection1"><div class="doc"><p class="company">英泰自動控制行</p><p class="english">INTAI AUTO CONTROL</p><p class="title">維 修 單</p><div class="contact"><div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div><div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span> <span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span> <span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span> <span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div></div>
+<table class="meta"><colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup><tr><td class="label">維修單號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.orderNo)}</td><td class="label">填單日期</td><td class="data-value" style="color:#0070C0;">${d.date}</td></tr><tr><td class="label">客戶名稱</td><td class="data-value" style="color:#0070C0;">${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.machineNo)}</td></tr><tr><td class="label">開始時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.endTime)}</td></tr></table>
+<div class="section"><div class="section-title">壹、故障檢測與處理紀錄</div><table class="desc"><tr><td class="label">故障情形</td><td class="data-value" style="color:#0070C0;">${nl2br(d.issue)}</td></tr><tr><td class="label">故障原因</td><td class="data-value" style="color:#0070C0;">${nl2br(d.cause)}</td></tr><tr><td class="label">處理對策</td><td class="data-value" style="color:#0070C0;">${nl2br(d.solution)}</td></tr></table></div>
+<div class="section"><div class="section-title">貳、維修項目及零件明細</div><table class="parts"><colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup><thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead><tbody>${filledRows}${blankRows}</tbody><tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount money-value" style="color:#0070C0;">NT$ ${money(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot></table></div>
+<div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div><table class="sign"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer signature-value" style="color:#0070C0;">朱文言</span></td></tr></table><p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p><div class="footer">英泰自動控制行 維修服務紀錄</div></div></div></body></html>`;
+        }
+        function validateFormal(){ const f = document.getElementById('customerName'); if(!f.value.trim()){ alert('請填寫客戶名稱'); f.focus(); return false; } return true; }
+        function exportFormalPDF(){ if(!validateFormal()) return; const html = formalDocumentHtml(); const iframe = document.createElement('iframe'); iframe.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; border:0; z-index:-9999; opacity:0; pointer-events:none;'; document.body.appendChild(iframe); const doc = iframe.contentWindow.document; doc.open(); doc.write(html); doc.close(); doc.title = formalFileName('pdf').replace('.pdf',''); iframe.contentWindow.focus(); setTimeout(()=>{ iframe.contentWindow.print(); setTimeout(()=>iframe.remove(),2000); },500); }
+        function exportFormalWord(){ if(!validateFormal()) return; const blob = new Blob(['\ufeff',formalDocumentHtml()],{type:'application/msword;charset=utf-8'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = formalFileName('doc'); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1500); }
+        function calcSubtotal(row){ const qty = toNum(row.querySelector('.qty').value); const price = toNum(row.querySelector('.price').value); const subtotalEl = row.querySelector('.subtotal'); if(row.dataset.manual === 'true') return; const calc = qty * price; subtotalEl.value = calc > 0 ? calc.toLocaleString() : ''; updateGrandTotal(); }
+        function onQtyPriceChange(input){ const row = input.closest('tr'); row.dataset.manual = 'false'; calcSubtotal(row); }
+        function onSubtotalManual(input){ const row = input.closest('tr'); row.dataset.manual = 'true'; updateGrandTotal(); }
+        function updateGrandTotal(){ let sum = 0; document.querySelectorAll('#partsTable tbody tr').forEach(tr => { const val = tr.querySelector('.subtotal').value; sum += parseFloat(String(val).replace(/,/g,'')) || 0; }); document.getElementById('grandTotal').value = sum.toLocaleString(); }
+        function addPartRow(){ const tbody = document.querySelector('#partsTable tbody'); const tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td>`; tbody.appendChild(tr); tr.querySelector('input').focus(); updateGrandTotal(); }
+        function deleteRow(btn){ const tbody = document.querySelector('#partsTable tbody'); if(tbody.rows.length <= 1){ const row = btn.closest('tr'); row.querySelectorAll('input').forEach(inp => { if(!inp.classList.contains('qty')) inp.value = ''; else inp.value = '1'; }); row.querySelector('.subtotal').value = ''; row.dataset.manual = 'false'; updateGrandTotal(); } else { btn.closest('tr').remove(); updateGrandTotal(); } }
+        document.addEventListener('keydown', function(e){ if(e.key === 'Enter' && e.target.classList.contains('price')){ e.preventDefault(); addPartRow(); } });
 
-<main class="wrap">
-
-  <!-- 單據抬頭 -->
-  <section class="ticket-head glass reveal">
-    <i class="lens"></i>
-    <div>
-      <span class="doc-tag">SERVICE REPORT ・ 維修單</span>
-      <h1 class="doc-title">數位維修單 <em>LIQUID GLASS</em></h1>
-      <p class="doc-sub">精密控制・快速維修・專業留存。填寫完成後可直接列印成 PDF，或下載 Word 留存編輯。</p>
-      <div class="mini-links">
-        <a class="mini" href="#customerName">▸ 開始填寫維修單</a>
-        <a class="mini" href="#partsTable">▸ 前往零件明細</a>
-      </div>
-    </div>
-    <div class="th-right">
-      <span class="chip"><i></i>系統就緒 READY</span>
-      <div class="meta">
-        <div class="meta-item"><label>單號 NO.</label><output id="ticketNo">—</output></div>
-        <div class="meta-item"><label>日期 DATE</label><output id="ticketDate">—</output></div>
-        <div class="meta-item"><label>時間 TIME</label><output id="ticketTime">—</output></div>
-      </div>
-      <div class="barcode"></div>
-    </div>
-  </section>
-
-  <div class="cols">
-    <!-- 01 客戶資料 -->
-    <section class="glass panel reveal" id="customerName">
-      <i class="lens"></i>
-      <header class="p-head"><span class="p-num">01</span><h2>客戶資料</h2><span class="p-en">CLIENT INFO</span></header>
-      <div class="form-grid">
-        <div class="span2"><label class="fl">客戶名稱<b>CLIENT</b></label>
-          <input class="field" id="fName" placeholder="請輸入客戶或公司名稱"></div>
-        <div><label class="fl">機器編號<b>MACHINE NO.</b></label>
-          <input class="field" id="fMachine" placeholder="如：MC-2026-088"></div>
-        <div><label class="fl">維修開始<b>START</b></label>
-          <input class="field" id="fStart" type="datetime-local"></div>
-        <div class="span2"><label class="fl">維修結束<b>END</b></label>
-          <input class="field" id="fEnd" type="datetime-local"></div>
-      </div>
-    </section>
-
-    <!-- 02 故障與檢測 -->
-    <section class="glass panel reveal">
-      <i class="lens"></i>
-      <header class="p-head"><span class="p-num">02</span><h2>故障與檢測</h2><span class="p-en">DIAGNOSTICS</span></header>
-      <div class="form-grid">
-        <div class="span2"><label class="fl">故障情形<b>SYMPTOM</b></label>
-          <textarea class="field" id="fFault" placeholder="描述設備異常狀況…"></textarea></div>
-        <div class="span2"><label class="fl">故障原因<b>ROOT CAUSE</b></label>
-          <textarea class="field" id="fCause" placeholder="檢測後判定之原因…"></textarea></div>
-        <div class="span2"><label class="fl">處理對策<b>ACTION</b></label>
-          <textarea class="field" id="fFix" placeholder="維修方式與更換項目…"></textarea></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- 03 零件明細 -->
-  <section class="glass panel reveal" id="partsTable">
-    <i class="lens"></i>
-    <header class="p-head"><span class="p-num">03</span><h2>維修項目與零件明細</h2><span class="p-en">PARTS &amp; LABOR</span></header>
-    <div class="table-scroll">
-      <table>
-        <thead><tr>
-          <th style="width:34%">項目 / 零件名稱</th><th style="width:24%">規格</th>
-          <th style="width:12%">數量</th><th style="width:14%">單價</th>
-          <th style="width:12%">小計</th><th style="width:4%"></th>
-        </tr></thead>
-        <tbody id="partsBody"></tbody>
-      </table>
-    </div>
-    <button class="add-row" id="addRow">＋ 新增零件項目</button>
-    <div class="total-bar">
-      <span>總計金額 TOTAL</span>
-      <strong id="grandTotal">NT$ 0</strong>
-    </div>
-  </section>
-
-  <!-- 04 簽署 -->
-  <section class="glass panel reveal">
-    <i class="lens"></i>
-    <header class="p-head"><span class="p-num">04</span><h2>客戶簽署確認</h2><span class="p-en">SIGNATURE</span></header>
-    <div class="sign-grid">
-      <div class="sig-box" id="sigBox">
-        <canvas id="sigPad"></canvas>
-        <div class="sig-line"></div>
-        <div class="sig-hint">請於此簽名</div>
-        <button class="sig-clear" id="sigClear">清除重簽</button>
-      </div>
-      <div class="tech-box">
-        <span class="tech-label">🔩 維修人員 TECHNICIAN</span>
-        <span class="tech-name">朱文言</span>
-        <span class="tech-sub">英泰自動控制行 ・ 精密控制檢修</span>
-        <div class="stamp">英泰自動<br>控制行<br>檢修確認</div>
-      </div>
-    </div>
-  </section>
-
-  <p class="print-foot">本單據由 英泰自動控制行 Liquid Service Desk 系統產生</p>
-</main>
-
-<!-- 底部懸浮 Dock -->
-<footer class="actionbar">
-  <div class="dock glass">
-    <button class="btn btn-word" onclick="downloadWord()">📝 下載 Word</button>
-    <button class="btn btn-primary" onclick="window.print()">📄 儲存 PDF</button>
-  </div>
-</footer>
-
-<p class="foot-note">INTAI AUTO CONTROL © 2026 ・ LIQUID SERVICE DESK</p>
-
-<script>
-/* ===== 玻璃高光追蹤：光斑跟著游標走 ===== */
-let px=0,py=0,raf=null;
-addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;if(!raf)raf=requestAnimationFrame(()=>{
-  raf=null;
-  document.querySelectorAll('.glass').forEach(g=>{
-    const r=g.getBoundingClientRect();
-    if(py<r.top-140||py>r.bottom+140)return;
-    g.style.setProperty('--sx',((px-r.left)/r.width*100).toFixed(1)+'%');
-    g.style.setProperty('--sy',((py-r.top)/r.height*100).toFixed(1)+'%');
-  });
-});});
-
-/* ===== 進場動畫 ===== */
-const io=new IntersectionObserver(es=>es.forEach(x=>{
-  if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}
-}),{threshold:.12});
-document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i*80)+'ms';io.observe(el)});
-
-/* ===== 單號 / 日期 / 時鐘 ===== */
-const now=new Date();
-const ymd=now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0');
-const seqKey='intai_'+ymd;
-let seq=(parseInt(localStorage.getItem(seqKey))||0)+1;
-localStorage.setItem(seqKey,seq);
-ticketNo.textContent='R-'+ymd+'-'+String(seq).padStart(3,'0');
-ticketDate.textContent=now.toLocaleDateString('zh-TW').replaceAll('/','-');
-setInterval(()=>{ticketTime.textContent=new Date().toLocaleTimeString('zh-TW',{hour12:false})},1000);
-
-/* ===== 零件明細 ===== */
-const tbody=document.getElementById('partsBody');
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function addRow(){
-  const tr=document.createElement('tr');
-  tr.className='part-row';
-  tr.innerHTML=`
-    <td><input class="field" data-k="name" placeholder="如：PLC 模組 / 繼電器 / 工資"></td>
-    <td><input class="field" data-k="spec" placeholder="型號・規格"></td>
-    <td><input class="field num" data-k="qty" type="number" min="0" step="1" value="1"></td>
-    <td><input class="field num" data-k="price" type="number" min="0" placeholder="0"></td>
-    <td class="subtotal">0</td>
-    <td class="td-del"><button class="del" title="刪除">×</button></td>`;
-  tbody.appendChild(tr);
-  tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>calcRow(tr)));
-  tr.querySelector('.del').addEventListener('click',()=>{
-    tr.style.opacity='0';tr.style.transform='translateX(26px)';
-    setTimeout(()=>{tr.remove();recalc()},220);
-  });
-  tr.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:300,easing:'ease-out'});
-  calcRow(tr);
-}
-function calcRow(tr){
-  const q=+tr.querySelector('[data-k="qty"]').value||0;
-  const p=+tr.querySelector('[data-k="price"]').value||0;
-  tr.querySelector('.subtotal').textContent=(q*p).toLocaleString();
-  recalc();
-}
-let curTotal=0;
-function recalc(){
-  let t=0;
-  tbody.querySelectorAll('.part-row').forEach(r=>{
-    t+=(+r.querySelector('[data-k="qty"]').value||0)*(+r.querySelector('[data-k="price"]').value||0);
-  });
-  animateTotal(t);
-}
-function animateTotal(target){
-  const el=document.getElementById('grandTotal'),from=curTotal,diff=target-from;
-  if(!diff){el.textContent='NT$ '+target.toLocaleString();return}
-  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');
-  const t0=performance.now(),dur=320;
-  (function step(t){
-    const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
-    curTotal=Math.round(from+diff*e);
-    el.textContent='NT$ '+curTotal.toLocaleString();
-    if(k<1)requestAnimationFrame(step);
-  })(t0);
-}
-document.getElementById('addRow').addEventListener('click',addRow);
-addRow();addRow();addRow();
-
-/* ===== 簽名板 ===== */
-const pad=document.getElementById('sigPad'),ctx=pad.getContext('2d'),sigBox=document.getElementById('sigBox');
-let drawing=false,hasInk=false;
-function sizePad(keep){
-  const url=(keep&&hasInk)?pad.toDataURL():null;
-  const r=pad.getBoundingClientRect();
-  pad.width=Math.max(1,r.width*devicePixelRatio);
-  pad.height=Math.max(1,r.height*devicePixelRatio);
-  ctx.scale(devicePixelRatio,devicePixelRatio);
-  ctx.lineWidth=2.4;ctx.lineCap='round';ctx.lineJoin='round';
-  ctx.strokeStyle='#e6f6ff';ctx.shadowColor='rgba(130,220,255,.55)';ctx.shadowBlur=5;
-  if(url){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,r.width,r.height);img.src=url}
-}
-const pos=e=>{const r=pad.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
-pad.addEventListener('pointerdown',e=>{
-  drawing=true;pad.setPointerCapture(e.pointerId);
-  const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);
-  hasInk=true;sigBox.classList.add('signed');
-});
-pad.addEventListener('pointermove',e=>{if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke()});
-['pointerup','pointercancel'].forEach(ev=>pad.addEventListener(ev,()=>drawing=false));
-document.getElementById('sigClear').addEventListener('click',()=>{
-  ctx.clearRect(0,0,pad.width,pad.height);hasInk=false;sigBox.classList.remove('signed');
-});
-addEventListener('resize',()=>sizePad(true));
-sizePad();
-
-/* ===== 收集資料 ===== */
-function collect(){
-  const parts=[...tbody.querySelectorAll('.part-row')].map(r=>({
-    name:r.querySelector('[data-k="name"]').value.trim(),
-    spec:r.querySelector('[data-k="spec"]').value.trim(),
-    qty:r.querySelector('[data-k="qty"]').value,
-    price:r.querySelector('[data-k="price"]').value,
-    sub:(+r.querySelector('[data-k="qty"]').value||0)*(+r.querySelector('[data-k="price"]').value||0)
-  })).filter(p=>p.name||p.sub);
-  return{
-    no:ticketNo.textContent,date:ticketDate.textContent,
-    name:fName.value.trim(),machine:fMachine.value.trim(),
-    start:fStart.value.replace('T',' '),end:fEnd.value.replace('T',' '),
-    fault:fFault.value.trim(),cause:fCause.value.trim(),fix:fFix.value.trim(),
-    parts,total:curTotal
-  };
-}
-
-/* ===== 下載 Word ===== */
-function downloadWord(){
-  const d=collect();
-  const rows=d.parts.length
-    ? d.parts.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.spec)}</td><td align="center">${esc(p.qty)}</td><td align="right">${esc(p.price)}</td><td align="right">${p.sub.toLocaleString()}</td></tr>`).join('')
-    : '<tr><td colspan="5" align="center">（無零件項目）</td></tr>';
-  const sig=hasInk?`<img src="${pad.toDataURL('image/png')}" width="320" alt="客戶簽名">`:'＿＿＿＿＿＿＿＿＿＿＿＿';
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
-<head><meta charset="utf-8"><title>英泰維修單 ${esc(d.no)}</title></head>
-<body style="font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;color:#111">
-<h2 style="margin:0">英泰自動控制行 INTAI AUTO CONTROL</h2>
-<p style="margin:2px 0 12px;color:#555">精密控制・快速維修・專業留存</p>
-<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;border-color:#999">
-  <tr><td width="18%"><b>單號</b></td><td width="32%">${esc(d.no)}</td><td width="18%"><b>日期</b></td><td>${esc(d.date)}</td></tr>
-  <tr><td><b>客戶名稱</b></td><td>${esc(d.name)}</td><td><b>機器編號</b></td><td>${esc(d.machine)}</td></tr>
-  <tr><td><b>維修開始</b></td><td>${esc(d.start)}</td><td><b>維修結束</b></td><td>${esc(d.end)}</td></tr>
-  <tr><td><b>故障情形</b></td><td colspan="3">${esc(d.fault).replace(/\n/g,'<br>')}</td></tr>
-  <tr><td><b>故障原因</b></td><td colspan="3">${esc(d.cause).replace(/\n/g,'<br>')}</td></tr>
-  <tr><td><b>處理對策</b></td><td colspan="3">${esc(d.fix).replace(/\n/g,'<br>')}</td></tr>
-</table>
-<h3>維修項目與零件明細</h3>
-<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;border-color:#999">
-  <tr style="background:#eee"><th>項目/零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr>
-  ${rows}
-  <tr><td colspan="4" align="right"><b>總計金額</b></td><td align="right"><b>NT$ ${d.total.toLocaleString()}</b></td></tr>
-</table><br>
-<table cellspacing="0" cellpadding="6" style="width:100%"><tr>
-  <td width="55%"><b>客戶簽署確認：</b><br><br>${sig}</td>
-  <td align="right" valign="bottom"><b>維修人員：朱文言</b><br>英泰自動控制行</td>
-</tr></table>
-</body></html>`;
-  const blob=new Blob(['\ufeff',html],{type:'application/msword'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`英泰維修單_${d.no}.doc`;
-  document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-}
-</script>
+        // Liquid Glass 鏡面高光：讓玻璃卡片的反光跟隨游標／觸點移動，模擬真實液態玻璃的光學感
+        (function(){
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const GLASS_SELECTOR = '.header, .section-card, .parts-container, .sign-box, .toolbar, .meta-row, .meta-box';
+            let ticking = false, lastEl = null, lastX = 0, lastY = 0;
+            function applyHighlight(el, clientX, clientY){
+                const r = el.getBoundingClientRect();
+                const x = ((clientX - r.left) / r.width) * 100;
+                const y = ((clientY - r.top) / r.height) * 100;
+                el.style.setProperty('--mx', x.toFixed(1) + '%');
+                el.style.setProperty('--my', y.toFixed(1) + '%');
+            }
+            function onMove(e){
+                const point = e.touches ? e.touches[0] : e;
+                const el = point.target && point.target.closest ? point.target.closest(GLASS_SELECTOR) : document.elementFromPoint(point.clientX, point.clientY)?.closest(GLASS_SELECTOR);
+                if(!el) return;
+                lastEl = el; lastX = point.clientX; lastY = point.clientY;
+                if(!ticking){
+                    ticking = true;
+                    requestAnimationFrame(() => { if(lastEl) applyHighlight(lastEl, lastX, lastY); ticking = false; });
+                }
+            }
+            document.addEventListener('pointermove', onMove, { passive: true });
+        })();
+    </script>
 </body>
 </html>
