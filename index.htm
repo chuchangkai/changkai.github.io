@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050a14">
+<title>英泰自動控制行 - 數位維修單 Liquid Glass</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/outfit/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc/chinese-traditional-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc/chinese-traditional-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc/chinese-traditional-700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc/chinese-traditional-900.css">
+<style>
+/* ============ 基礎 ============ */
+:root{
+  --ink:#f2f7ff;
+  --ink-dim:rgba(226,238,255,.62);
+  --ink-faint:rgba(226,238,255,.42);
+}
+*{ -webkit-tap-highlight-color:transparent; box-sizing:border-box }
+html{ scroll-behavior:smooth; color-scheme:dark }
+body{
+  margin:0; min-height:100vh; background:#050a14; color:var(--ink);
+  overflow-x:hidden; letter-spacing:.01em;
+  font-family:'Outfit Variable','Noto Sans TC',system-ui,sans-serif;
+}
+::selection{ background:rgba(103,232,249,.32); color:#fff }
+::-webkit-scrollbar{ width:10px;height:10px }
+::-webkit-scrollbar-track{ background:transparent }
+::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.14); border-radius:99px; border:2px solid transparent; background-clip:content-box }
+::-webkit-scrollbar-thumb:hover{ background:rgba(255,255,255,.26); background-clip:content-box }
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none;margin:0 }
+input[type=number]{ -moz-appearance:textfield;appearance:textfield }
+input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-calendar-picker-indicator{ filter:invert(.92);opacity:.65;cursor:pointer }
+#customerName,#partsTable{ scroll-margin-top:120px }
+
+/* ============ 流動背景 ============ */
+.scene{
+  position:fixed; inset:0; z-index:0; overflow:hidden;
+  background:
+    radial-gradient(1200px 800px at 85% -10%, rgba(59,130,246,.26), transparent 60%),
+    radial-gradient(1000px 700px at -10% 30%, rgba(139,92,246,.20), transparent 60%),
+    radial-gradient(900px 700px at 60% 110%, rgba(20,184,166,.16), transparent 60%),
+    #050a14;
+}
+.scene::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 8%, transparent 55%, rgba(3,6,15,.6) 100%); }
+.blobs{ position:absolute; inset:-60px; transition:transform 1.4s cubic-bezier(.2,.8,.2,1); will-change:transform }
+.blob{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.55; will-change:transform;
+  animation:drift var(--t,26s) ease-in-out infinite alternate }
+.b1{ width:520px;height:520px; left:-140px; top:-120px; --t:24s; background:radial-gradient(circle at 30% 30%, #2563eb, transparent 70%) }
+.b2{ width:460px;height:460px; right:-120px; top:4%; --t:31s; animation-delay:-9s; background:radial-gradient(circle at 60% 40%, #7c3aed, transparent 70%) }
+.b3{ width:560px;height:560px; left:20%; bottom:-230px; --t:34s; animation-delay:-15s; background:radial-gradient(circle at 50% 50%, #0ea5e9, transparent 70%) }
+.b4{ width:380px;height:380px; right:14%; bottom:-90px; --t:22s; animation-delay:-5s; opacity:.38; background:radial-gradient(circle at 50% 50%, #f472b6, transparent 70%) }
+@keyframes drift{
+  0%{ transform:translate3d(0,0,0) scale(1) }
+  50%{ transform:translate3d(62px,-42px,0) scale(1.13) }
+  100%{ transform:translate3d(-52px,52px,0) scale(.94) }
+}
+.grain{ position:absolute; inset:0; opacity:.06; pointer-events:none; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============ Liquid Glass 架構 ============
+   液態折射：獨立全螢幕層（不含任何子內容 → 不會遮擋內容）
+   玻璃元件：清透疊層＋邊緣高光＋鏡面反光 */
+.liquid-layer{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  -webkit-backdrop-filter:blur(1.5px) saturate(150%);
+  backdrop-filter:blur(1px) saturate(165%) url(#liquid-lens);
+}
+.glass{
+  position:relative;
+  background:linear-gradient(135deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,.035) 45%, rgba(255,255,255,.085) 100%);
+  -webkit-backdrop-filter:blur(10px) saturate(170%);
+  backdrop-filter:blur(3px) saturate(175%);
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:
+    0 26px 64px -20px rgba(2,6,20,.62),
+    inset 0 1px 0 rgba(255,255,255,.32),
+    inset 0 -1px 0 rgba(255,255,255,.06),
+    inset 1px 0 0 rgba(255,255,255,.12),
+    inset -1px 0 0 rgba(255,255,255,.09);
+}
+.sheen{
+  position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:5;
+  background:
+    radial-gradient(480px circle at var(--gx,50%) var(--gy,-20%), rgba(255,255,255,.12), transparent 62%),
+    linear-gradient(115deg, rgba(255,255,255,.08) 0%, transparent 28%, transparent 72%, rgba(255,255,255,.04) 100%);
+}
+
+/* ============ 工具列 ============ */
+.toolbar{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:60;
+  width:min(1080px, calc(100% - 24px));
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 12px 10px 22px; border-radius:22px;
+  animation:dropIn .9s cubic-bezier(.22,1.3,.36,1) .1s both;
+}
+@keyframes dropIn{ from{ opacity:0; transform:translateX(-50%) translateY(-26px) scale(.96) } }
+.toolbar-label{ font-size:12px; font-weight:700; letter-spacing:.34em; color:rgba(224,244,255,.85); position:relative; z-index:6 }
+.toolbar-actions{ display:flex; gap:9px; position:relative; z-index:6 }
+.btn-float{
+  position:relative; display:inline-flex; align-items:center; gap:8px;
+  padding:10px 18px; border-radius:999px; font-size:13.5px; font-weight:600; color:var(--ink);
+  font-family:inherit; cursor:pointer; overflow:hidden; white-space:nowrap;
+  border:1px solid rgba(255,255,255,.22);
+  background:linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
+  -webkit-backdrop-filter:blur(12px) saturate(150%); backdrop-filter:blur(12px) saturate(150%);
+  box-shadow:0 12px 28px -10px rgba(2,8,20,.65), inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .5s cubic-bezier(.22,1.7,.36,1), box-shadow .3s, border-color .3s;
+}
+.btn-float::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(130px circle at var(--gx,50%) var(--gy,-40%), rgba(255,255,255,.32), transparent 62%) }
+.btn-float:hover{ transform:translateY(-2px) scale(1.04) }
+.btn-float:active{ transform:scale(.94) }
+.btn-green{
+  background:linear-gradient(150deg, rgba(52,199,89,.52), rgba(48,164,144,.36) 55%, rgba(16,185,129,.38));
+  border-color:rgba(134,239,172,.45);
+  box-shadow:0 14px 32px -10px rgba(16,185,129,.45), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn-word{
+  background:linear-gradient(150deg, rgba(56,189,248,.56), rgba(59,130,246,.4) 52%, rgba(99,102,241,.44));
+  border-color:rgba(165,243,252,.5);
+  box-shadow:0 14px 32px -10px rgba(37,99,235,.5), inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* ============ 版面 ============ */
+.form-container{ position:relative; z-index:10; max-width:1020px; margin:0 auto;
+  padding:0 16px 80px; display:flex; flex-direction:column; gap:20px }
+
+/* Hero */
+.hero{ position:relative; text-align:center; padding:148px 8px 26px }
+.eyebrow{
+  display:inline-flex; padding:8px 20px; border-radius:999px;
+  font-size:11px; font-weight:700; letter-spacing:.34em; color:rgba(224,244,255,.8);
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+}
+.hero h1{ margin:26px 0 0; font-size:clamp(34px,6vw,60px); font-weight:900; letter-spacing:.06em; line-height:1.2;
+  text-shadow:0 6px 40px rgba(96,165,250,.25) }
+.hero-en{
+  margin-top:8px; font-size:clamp(21px,3.4vw,33px); font-weight:800; letter-spacing:.14em;
+  background:linear-gradient(100deg,#7dd3fc,#60a5fa 32%,#c084fc 64%,#f0abfc 88%,#7dd3fc);
+  background-size:220% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:shine 7s linear infinite;
+}
+@keyframes shine{ to{ background-position:220% 0 } }
+.brand-copy{ max-width:560px; margin:20px auto 0; font-size:15px; line-height:1.9; color:var(--ink-dim) }
+.hero-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-top:32px }
+.start-pill,.ghost-pill{
+  display:inline-flex; align-items:center; text-decoration:none;
+  padding:13px 30px; border-radius:999px; font-size:15px; font-weight:600; color:var(--ink);
+  transition:transform .5s cubic-bezier(.22,1.7,.36,1), box-shadow .3s, border-color .3s;
+}
+.start-pill{
+  background:linear-gradient(150deg, rgba(56,189,248,.6), rgba(59,130,246,.42) 52%, rgba(139,92,246,.46));
+  border:1px solid rgba(165,243,252,.5);
+  box-shadow:0 16px 38px -12px rgba(37,99,235,.55), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.ghost-pill{
+  background:linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  box-shadow:0 12px 30px -12px rgba(2,8,20,.6), inset 0 1px 0 rgba(255,255,255,.3);
+}
+.start-pill:hover,.ghost-pill:hover{ transform:translateY(-2px) scale(1.04) }
+.start-pill:active,.ghost-pill:active{ transform:scale(.95) }
+.meta-row{ display:flex; justify-content:center; gap:14px; margin:42px auto 0; max-width:480px }
+.meta-box{ flex:1; border-radius:18px; padding:13px 18px }
+.meta-box span{ display:block; font-size:11px; font-weight:600; letter-spacing:.24em; color:var(--ink-faint); margin-bottom:6px }
+.meta-box input{
+  width:100%; background:transparent; border:none; outline:none;
+  color:var(--ink); font-size:16.5px; font-weight:600; font-family:inherit; padding:2px 0;
+}
+.lens{
+  position:absolute; border-radius:50%; pointer-events:none;
+  background:linear-gradient(145deg, rgba(255,255,255,.15), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.28);
+  -webkit-backdrop-filter:blur(4px) saturate(170%); backdrop-filter:blur(4px) saturate(170%);
+  box-shadow:inset 0 2px 6px rgba(255,255,255,.35), inset 0 -10px 24px rgba(255,255,255,.06),
+    0 30px 60px -20px rgba(2,8,20,.6);
+  animation:bob 8s ease-in-out infinite;
+}
+.lens-a{ width:110px;height:110px; left:3%; top:10% }
+.lens-b{ width:150px;height:150px; right:3%; top:24%; animation-duration:10s; animation-delay:-3s }
+.lens-c{ width:70px;height:70px; left:11%; bottom:-24px; animation-duration:7s; animation-delay:-2s }
+@keyframes bob{ 50%{ transform:translateY(-18px) rotate(3deg) } }
+@media(max-width:860px){ .lens{ display:none } }
+
+/* 卡片 */
+.card{ border-radius:26px; padding:clamp(20px,3.4vw,30px) }
+.card-title{ display:flex; align-items:center; gap:10px; font-size:16px; font-weight:800; letter-spacing:.03em; margin:0 0 20px }
+.card-title::before{ content:""; width:10px; height:10px; border-radius:4px; flex:none;
+  background:linear-gradient(135deg,#67e8f9,#3b82f6); box-shadow:0 0 14px rgba(103,232,249,.7) }
+.card-title .en{ font-size:11px; font-weight:600; letter-spacing:.22em; color:var(--ink-faint); text-transform:uppercase }
+
+.input-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px }
+@media(max-width:640px){ .input-grid{ grid-template-columns:1fr } }
+.input-group label{ display:block; font-size:12.5px; color:var(--ink-dim); margin-bottom:7px; letter-spacing:.05em }
+.field{
+  width:100%; padding:11px 14px; border-radius:14px; font-size:15px; color:var(--ink);
+  background:rgba(6,12,26,.35); border:1px solid rgba(255,255,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+  transition:border-color .22s, box-shadow .22s, background .22s; font-family:inherit;
+}
+.field::placeholder{ color:rgba(226,236,255,.26) }
+.field:focus{ outline:none; border-color:rgba(103,232,249,.55); background:rgba(6,14,30,.55);
+  box-shadow:0 0 0 4px rgba(56,189,248,.13) }
+
+.diag-row{ display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:start;
+  padding:11px 0; border-bottom:1px dashed rgba(255,255,255,.09) }
+.diag-row:last-child{ border-bottom:none; padding-bottom:2px }
+.diag-label{ font-size:13.5px; font-weight:700; color:rgba(226,238,255,.82); padding-top:11px; letter-spacing:.1em }
+.diag-row textarea{ min-height:78px; resize:vertical; line-height:1.8 }
+@media(max-width:640px){ .diag-row{ grid-template-columns:1fr; gap:7px } .diag-label{ padding-top:0 } }
+
+/* 零件表 */
+.parts-table-wrap{ overflow-x:auto; margin:0 -6px; padding:0 6px }
+.parts-table{ width:100%; min-width:620px; border-collapse:separate; border-spacing:0 8px }
+.parts-table th{ font-size:11px; letter-spacing:.1em; color:var(--ink-faint); font-weight:600;
+  text-align:center; padding:2px 10px 6px }
+.parts-table td{ padding:0 3px }
+.parts-table input{
+  width:100%; padding:10px 12px; border-radius:12px; font-size:14.5px; color:var(--ink);
+  background:rgba(6,12,26,.35); border:1px solid rgba(255,255,255,.11);
+  text-align:center; font-family:inherit; transition:border-color .22s, box-shadow .22s;
+}
+.parts-table td:first-child input{ text-align:left }
+.parts-table input::placeholder{ color:rgba(226,236,255,.25) }
+.parts-table input:focus{ outline:none; border-color:rgba(103,232,249,.55); box-shadow:0 0 0 3px rgba(56,189,248,.13) }
+.parts-table .subtotal{ color:#a5f3fc; font-weight:700; font-variant-numeric:tabular-nums }
+.btn-del{
+  width:30px; height:30px; margin:0 auto; display:grid; place-items:center;
+  border-radius:10px; border:1px solid rgba(248,113,113,.3); background:rgba(248,113,113,.08);
+  color:#fda4af; font-size:14px; cursor:pointer; user-select:none; transition:.3s;
+}
+.btn-del:hover{ background:rgba(248,113,113,.2); transform:scale(1.12) rotate(90deg) }
+.parts-actions{ margin-top:14px }
+.parts-add-btn{
+  width:100%; padding:12px; border-radius:14px; font-size:14px; font-weight:600; font-family:inherit;
+  color:#a5f3fc; cursor:pointer; border:1.5px dashed rgba(165,243,252,.35);
+  background:rgba(103,232,249,.05); transition:.3s;
+}
+.parts-add-btn:hover{ background:rgba(103,232,249,.12); transform:translateY(-1px) }
+.parts-add-btn span{ font-weight:800 }
+.total-area{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  margin-top:16px; padding:16px 22px; border-radius:18px;
+  background:linear-gradient(150deg, rgba(56,189,248,.12), rgba(139,92,246,.10));
+  border:1px solid rgba(125,211,252,.25); box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.total-area>span{ font-size:13.5px; font-weight:700; letter-spacing:.16em; color:rgba(226,238,255,.78); flex:none }
+#grandTotal{
+  background:transparent; border:none; outline:none; width:100%; text-align:right;
+  font-family:'Outfit Variable','Noto Sans TC',sans-serif; font-variant-numeric:tabular-nums;
+  font-size:clamp(24px,3.8vw,34px); font-weight:800; color:#e0f2fe;
+  text-shadow:0 0 26px rgba(103,232,249,.4);
+}
+
+/* 簽署 */
+.signature-area{ display:grid; grid-template-columns:1fr 1fr; gap:20px }
+@media(max-width:700px){ .signature-area{ grid-template-columns:1fr } }
+.sign-box{ border-radius:26px; padding:24px; min-height:158px; display:flex; flex-direction:column }
+.sign-title{ font-size:14.5px; font-weight:700; letter-spacing:.06em; margin-bottom:12px }
+.client-sign-name{
+  width:100%; background:transparent; border:none; outline:none;
+  color:#e0f2fe; font-size:22px; font-weight:700; font-family:inherit;
+  letter-spacing:.06em; padding:6px 2px; margin-top:auto;
+}
+.client-sign-name::placeholder{ color:rgba(226,238,255,.28); font-size:14px; font-weight:400; letter-spacing:.12em }
+.engineer-name{
+  margin-top:auto; align-self:flex-end; padding:2px 10px 8px;
+  font-size:24px; font-weight:800; letter-spacing:.12em; color:#e0f2fe;
+  text-shadow:0 0 22px rgba(103,232,249,.35);
+}
+.sign-line{ border-bottom:1.5px solid rgba(255,255,255,.35) }
+
+/* 頁尾 / 提示 / 進場 */
+.foot{ text-align:center; padding:6px 0 0; font-size:11.5px; letter-spacing:.2em; color:rgba(255,255,255,.3) }
+.toast{
+  position:fixed; top:86px; left:50%; z-index:80;
+  transform:translateX(-50%) translateY(-16px) scale(.9); opacity:0; pointer-events:none;
+  display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:999px;
+  font-size:13px; font-weight:600; letter-spacing:.04em;
+  background:rgba(15,23,42,.72); border:1px solid rgba(255,255,255,.18);
+  -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
+  box-shadow:0 16px 40px -12px rgba(2,8,20,.7), inset 0 1px 0 rgba(255,255,255,.2);
+  transition:.5s cubic-bezier(.22,1.45,.36,1);
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0) scale(1) }
+.dot{ width:7px; height:7px; border-radius:50%; background:#34d399; flex:none;
+  box-shadow:0 0 0 0 rgba(52,211,153,.55); animation:pulse 2.4s ease-out infinite }
+@keyframes pulse{ 70%{ box-shadow:0 0 0 7px rgba(52,211,153,0) } 100%{ box-shadow:0 0 0 0 rgba(52,211,153,0) } }
+.reveal{ opacity:0; transform:translateY(28px) scale(.985);
+  transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1) }
+.reveal.in{ opacity:1; transform:none }
+
+/* 直接列印本頁時的保險樣式（正式輸出仍走 exportFormalPDF） */
+@media print{
+  body{ background:#fff !important; color:#111 !important }
+  .scene,.liquid-layer,.toolbar,.toast,.lens,.hero-actions,.parts-actions,.btn-del{ display:none !important }
+  .hero{ padding-top:16px }
+  .glass,.card,.meta-box,.sign-box,.total-area{
+    background:#fff !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important;
+    border:1px solid #ddd !important; box-shadow:none !important;
+  }
+  .sheen{ display:none !important }
+  .card-title,.diag-label,.total-area>span,.sign-title,.meta-box span,.input-group label,.hero h1,.brand-copy,.foot{ color:#111 !important; text-shadow:none !important }
+  .hero-en{ color:#333 !important; background:none !important; -webkit-background-clip:initial !important; background-clip:initial !important; animation:none !important }
+  .field,.parts-table input,.client-sign-name,#grandTotal,.meta-box input{
+    background:#fff !important; color:#111 !important; border:1px solid #ccc !important; box-shadow:none !important; text-shadow:none !important;
+  }
+  .reveal{ opacity:1 !important; transform:none !important }
+}
+</style>
+</head>
+<body>
+
+<!-- 液態折射濾鏡 -->
+<svg width="0" height="0" style="position:absolute; overflow:hidden;" aria-hidden="true">
+  <defs>
+    <filter id="liquid-lens" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.010" numOctaves="2" seed="11" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2.4" result="softNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="56" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- 流動背景 ＋ 全螢幕液態折射層 -->
+<div class="scene" aria-hidden="true">
+  <div class="blobs" id="blobs">
+    <div class="blob b1"></div><div class="blob b2"></div>
+    <div class="blob b3"></div><div class="blob b4"></div>
+  </div>
+  <div class="grain"></div>
+</div>
+<div class="liquid-layer" aria-hidden="true"></div>
+
+<!-- 輸出控制列 -->
+<header class="toolbar glass" role="toolbar" aria-label="輸出控制列">
+  <div class="sheen"></div>
+  <span class="toolbar-label">INTAI SERVICE</span>
+  <div class="toolbar-actions">
+    <button class="btn-float btn-green" onclick="exportFormalPDF()"><span>📄</span><span>儲存 PDF</span></button>
+    <button class="btn-float btn-word" onclick="exportFormalWord()"><span>📝</span><span>下載 Word</span></button>
+  </div>
+</header>
+
+<main class="form-container" id="repairForm">
+
+  <!-- 品牌歡迎區 -->
+  <section class="hero reveal in" aria-label="品牌歡迎區">
+    <div class="lens lens-a" aria-hidden="true"></div>
+    <div class="lens lens-b" aria-hidden="true"></div>
+    <div class="lens lens-c" aria-hidden="true"></div>
+    <div class="eyebrow">INTAI AUTO CONTROL</div>
+    <h1>英泰自動控制行</h1>
+    <div class="hero-en">Liquid Service Desk</div>
+    <p class="brand-copy">精密控制・快速維修・專業留存。填寫完成後可直接列印成 PDF，或下載 Word 留存編輯。</p>
+    <div class="hero-actions">
+      <a class="start-pill" href="#customerName">開始填寫維修單</a>
+      <a class="ghost-pill" href="#partsTable">前往零件明細</a>
+    </div>
+    <div class="meta-row">
+      <div class="meta-box glass"><div class="sheen"></div><span>單號</span><input type="text" id="orderNo" placeholder="自動產生" autocomplete="off"></div>
+      <div class="meta-box glass"><div class="sheen"></div><span>日期</span><input type="date" id="dateField"></div>
+    </div>
+  </section>
+
+  <!-- 客戶資料 -->
+  <section class="card glass reveal" aria-label="客戶資料">
+    <div class="sheen"></div>
+    <div class="card-title">客戶資料 <span class="en">Client Info</span></div>
+    <div class="input-grid">
+      <div class="input-group"><label>客戶名稱</label><input type="text" id="customerName" class="field" placeholder="請輸入客戶名稱" style="font-weight:700;" autocomplete="off"></div>
+      <div class="input-group"><label>機器編號</label><input type="text" id="machineNo" class="field" placeholder="編號..." autocomplete="off"></div>
+      <div class="input-group"><label>維修開始</label><input type="time" id="startTime" class="field"></div>
+      <div class="input-group"><label>維修結束</label><input type="time" id="endTime" class="field"></div>
+    </div>
+  </section>
+
+  <!-- 故障與檢測 -->
+  <section class="card glass reveal" aria-label="故障與檢測">
+    <div class="sheen"></div>
+    <div class="card-title">故障與檢測 <span class="en">Diagnostics</span></div>
+    <div class="diag-row"><div class="diag-label">故障情形</div><textarea id="issue" class="field" placeholder="描述客戶反應、設備異常、現場狀況..."></textarea></div>
+    <div class="diag-row"><div class="diag-label">故障原因</div><textarea id="cause" class="field" placeholder="檢測後研判原因..."></textarea></div>
+    <div class="diag-row"><div class="diag-label">處理對策</div><textarea id="solution" class="field" placeholder="維修方式、建議事項、後續處理..."></textarea></div>
+  </section>
+
+  <!-- 維修項目與零件明細 -->
+  <section class="card glass reveal" aria-label="零件明細">
+    <div class="sheen"></div>
+    <div class="card-title">維修項目與零件明細 <span class="en">Parts</span></div>
+    <div class="parts-table-wrap">
+      <table class="parts-table" id="partsTable">
+        <thead><tr><th style="width:28%; text-align:left; padding-left:14px;">項目 / 零件名稱</th><th style="width:18%;">規格</th><th style="width:11%;">數量</th><th style="width:14%;">單價</th><th style="width:16%;">小計</th><th style="width:9%;"></th></tr></thead>
+        <tbody><tr><td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td></tr></tbody>
+      </table>
+    </div>
+    <div class="parts-actions"><button class="parts-add-btn" onclick="addPartRow()"><span>＋</span> 新增零件項目</button></div>
+    <div class="total-area"><span>總計金額</span><input type="text" id="grandTotal" readonly value="0"></div>
+  </section>
+
+  <!-- 簽署區 -->
+  <section class="signature-area reveal" aria-label="簽署區">
+    <div class="sign-box glass"><div class="sheen"></div>
+      <div class="sign-title">✍️ 客戶簽署確認</div>
+      <input type="text" class="client-sign-name" placeholder="請輸入客戶姓名" autocomplete="off">
+      <div class="sign-line"></div>
+    </div>
+    <div class="sign-box glass"><div class="sheen"></div>
+      <div class="sign-title">🔩 維修人員</div>
+      <span class="engineer-name">朱文言</span>
+      <div class="sign-line"></div>
+    </div>
+  </section>
+
+  <footer class="foot reveal">© INTAI AUTO CONTROL · 英泰自動控制行 · Liquid Service Desk</footer>
+</main>
+
+<!-- 提示膠囊 -->
+<div id="toast" class="toast"><span class="dot"></span><span id="toastTxt">已自動儲存</span></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ▼▼▼ 報表輸出核心：以下全部邏輯直接取自原始 index.html，未做任何改動 ▼▼▼
+     （欄位 ID / class 與原版完全一致，輸出格式、檔名、驗證皆相同）
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('dateField').valueAsDate = today;
+        document.getElementById('orderNo').value = `${year}${month}${day}`;
+        const esc = v => String(v??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const nl2br = v => esc(v).replace(/\n/g,'<br>');
+        const toNum = v => Math.max(0, Number(v)||0);
+        const money = v => Math.round(v).toLocaleString('zh-TW');
+        function getFormalData(){
+            const rows = [...document.querySelectorAll('#partsTable tbody tr')].map(tr=>{
+                const qty = tr.querySelector('.qty')?.value || '';
+                const price = tr.querySelector('.price')?.value || '';
+                const subtotalVal = tr.querySelector('.subtotal')?.value || '';
+                const subtotalNum = parseFloat(String(subtotalVal).replace(/,/g,'')) || 0;
+                const autoSubtotal = toNum(qty) * toNum(price);
+                const finalSubtotal = subtotalNum > 0 ? subtotalNum : autoSubtotal;
+                return { item: tr.cells[0]?.querySelector('input')?.value || '', spec: tr.cells[1]?.querySelector('input')?.value || '', qty, price, subtotal: finalSubtotal };
+            }).filter(r=>r.item||r.spec||r.qty!=='1'||toNum(r.price)||r.subtotal>0);
+            const total = rows.reduce((s,r)=>s+r.subtotal,0);
+            const iso = document.getElementById('dateField').value||'';
+            const displayDate = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? `<span class="latin">${iso.slice(0,4)}</span><span class="date-kai"> 年 </span><span class="latin">${iso.slice(5,7)}</span><span class="date-kai"> 月 </span><span class="latin">${iso.slice(8,10)}</span><span class="date-kai"> 日</span>` : esc(iso);
+            return { orderNo: document.getElementById('orderNo').value, date: displayDate, customer: document.getElementById('customerName').value.trim(), machineNo: document.getElementById('machineNo').value, startTime: document.getElementById('startTime').value, endTime: document.getElementById('endTime').value, issue: document.getElementById('issue').value, cause: document.getElementById('cause').value, solution: document.getElementById('solution').value, rows, total, clientSignName: document.querySelector('.client-sign-name').value.trim() };
+        }
+        function formalFileName(ext){
+            const d = document.getElementById('dateField').value.replaceAll('-','')||`${year}${month}${day}`;
+            const cust = (document.getElementById('customerName').value.trim()||'客戶').replace(/[\\/:*?"<>|]/g,'_');
+            return `${d}_${cust}_正式維修單.${ext}`;
+        }
+        function formalDocumentHtml(){
+            const d = getFormalData();
+            const filledRows = d.rows.map((r,i)=>{
+                const subtotal = r.subtotal || toNum(r.qty)*toNum(r.price);
+                return `<tr><td class="center latin">${i+1}</td><td class="data-value" style="color:#0070C0;">${esc(r.item)}</td><td class="data-value" style="color:#0070C0;">${esc(r.spec)}</td><td class="center latin data-value" style="color:#0070C0;">${esc(r.qty)}</td><td class="right latin data-value" style="color:#0070C0;">${r.price?'$'+money(r.price):''}</td><td class="right latin data-value" style="color:#0070C0;">${subtotal?'$'+money(subtotal):''}</td></tr>`;
+            }).join('');
+            const blankRows = Array.from({length:Math.max(0,3-d.rows.length)},()=>'<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>').join('');
+            const clientSignDisplay = d.clientSignName ? `客戶簽章：<span class="signature-value" style="color:#0070C0;">${esc(d.clientSignName)}</span>` : '客戶簽章：';
+            return `<!DOCTYPE html>
+<html lang="zh-TW" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><meta name="ProgId" content="Word.Document"><title>${esc(formalFileName('pdf').replace('.pdf',''))}</title><style>
+@page { size: A4 portrait; margin: 15mm 20mm; background-color: #ffffff; }
+@page WordSection1 { size:595.3pt 841.9pt; margin:28pt 35pt; mso-header-margin:14pt; mso-footer-margin:14pt; }
+div.WordSection1 { page:WordSection1; } * { box-sizing:border-box; } html,body { margin:0; padding:0; background:#fff; color:#000; }
+body,table,td,th,p,div,span { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; }
+body { font-size:11pt; line-height:1.28; -webkit-print-color-adjust:exact; print-color-adjust:exact; } .doc { width:100%; }
+.company { margin:0; text-align:center; color:#0070C0; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:1.5pt; }
+.english { margin:2pt 0 0; text-align:center; color:#C00000; font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:10pt; font-weight:bold; letter-spacing:1.2pt; }
+.title { margin:16pt 0 12pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:18pt; font-weight:bold; letter-spacing:6pt; }
+.contact { margin:0 0 6pt; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:normal; line-height:1.35; }
+.address-line { margin-bottom:7pt; } .contact-line { white-space:nowrap; } .contact-label { font-family:"Times New Roman","DFKai-SB","BiauKai","標楷體",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; mso-fareast-font-family:"DFKai-SB"; font-size:12pt; font-weight:bold; } .contact-number { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; font-weight:normal; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; } td,th { border: 1px solid #555; padding:4pt 5pt; vertical-align:middle; word-break:break-word; font-weight:normal; }
+th,.label { text-align:center; background:transparent; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; } .meta td { height:23pt; } .section { margin-top:9pt; page-break-inside:avoid; }
+.section-title { margin:0 0 4pt; padding:0; border:0 !important; outline:0; background:none !important; box-shadow:none; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11.5pt; font-weight:bold; color:#000; }
+.desc td { min-height:39pt; padding-top:6pt; padding-bottom:6pt; vertical-align:top; } .desc .label { width:17%; vertical-align:middle; } .parts th,.parts td { height:23pt; } .center { text-align:center; } .right { text-align:right; }
+.data-value, .data-value span, .money-value, .signature-value { color:#0070C0 !important; mso-style-textfill-fill-color:#0070C0; }
+.date-kai { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; } .latin { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; }
+.total td { height:29pt; border-top: 1.5px solid #333; background:transparent; font-weight:normal; } .total-label { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:11pt; } .total-amount { font-family:"Times New Roman",serif; mso-ascii-font-family:"Times New Roman"; mso-hansi-font-family:"Times New Roman"; font-size:12pt; } .tax-note { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:10.5pt; font-weight:normal; }
+.remarks-label { font-weight:bold; } .remarks { margin-top:5pt; font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-size:9pt; font-weight:normal; line-height:1.4; } .sign { margin-top:9pt; } .sign td { height:62pt; padding:6pt 8pt; vertical-align:top; border: 1px solid #555; font-weight:normal; } .sign-label,.engineer { font-family:"DFKai-SB","BiauKai","標楷體",serif; mso-fareast-font-family:"DFKai-SB"; font-weight:normal; } .engineer { display:block; margin-top:23pt; padding-right:22pt; text-align:right; font-size:13pt; } .notice { margin:6pt 0 0; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8.5pt; font-weight:normal; } .footer { margin-top:6pt; padding-top:4pt; border-top: 1px solid #555; text-align:center; font-family:"DFKai-SB","BiauKai","標楷體",serif; font-size:8pt; font-weight:normal; color:#444; } @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style></head><body><div class="WordSection1"><div class="doc"><p class="company">英泰自動控制行</p><p class="english">INTAI AUTO CONTROL</p><p class="title">維 修 單</p><div class="contact"><div class="address-line">彰化縣員林市員集路<span class="contact-number">2</span>段<span class="contact-number">493</span>巷<span class="contact-number">4</span>弄<span class="contact-number">10</span>號</div><div class="contact-line"><span class="contact-label">Tel：</span><span class="contact-number">04-8356923</span> <span class="contact-label">Mobile：</span><span class="contact-number">0935-435757</span> <span class="contact-label">Fax：</span><span class="contact-number">04-8341151</span> <span class="contact-label">統一編號：</span><span class="contact-number">45229579</span></div></div>
+<table class="meta"><colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup><tr><td class="label">維修單號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.orderNo)}</td><td class="label">填單日期</td><td class="data-value" style="color:#0070C0;">${d.date}</td></tr><tr><td class="label">客戶名稱</td><td class="data-value" style="color:#0070C0;">${esc(d.customer)}</td><td class="label">機器編號</td><td class="latin data-value" style="color:#0070C0;">${esc(d.machineNo)}</td></tr><tr><td class="label">開始時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.startTime)}</td><td class="label">完成時間</td><td class="latin data-value" style="color:#0070C0;">${esc(d.endTime)}</td></tr></table>
+<div class="section"><div class="section-title">壹、故障檢測與處理紀錄</div><table class="desc"><tr><td class="label">故障情形</td><td class="data-value" style="color:#0070C0;">${nl2br(d.issue)}</td></tr><tr><td class="label">故障原因</td><td class="data-value" style="color:#0070C0;">${nl2br(d.cause)}</td></tr><tr><td class="label">處理對策</td><td class="data-value" style="color:#0070C0;">${nl2br(d.solution)}</td></tr></table></div>
+<div class="section"><div class="section-title">貳、維修項目及零件明細</div><table class="parts"><colgroup><col style="width:7%"><col style="width:31%"><col style="width:20%"><col style="width:10%"><col style="width:15%"><col style="width:17%"></colgroup><thead><tr><th>項次</th><th>項目／零件名稱</th><th>規格</th><th>數量</th><th>單價</th><th>小計</th></tr></thead><tbody>${filledRows}${blankRows}</tbody><tfoot><tr class="total"><td colspan="4" class="right total-label">總計金額（新臺幣）</td><td colspan="2" class="right"><span class="total-amount money-value" style="color:#0070C0;">NT$ ${money(d.total)}</span><span class="tax-note">（未稅價）</span></td></tr></tfoot></table></div>
+<div class="remarks"><span class="remarks-label">備註：</span>實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。</div><table class="sign"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><td><span class="sign-label">${clientSignDisplay}</span></td><td><span class="sign-label">維修人員：</span><span class="engineer signature-value" style="color:#0070C0;">朱文言</span></td></tr></table><p class="notice">本維修單供客戶確認維修內容及留存紀錄使用。</p><div class="footer">英泰自動控制行 維修服務紀錄</div></div></div></body></html>`;
+        }
+        function validateFormal(){ const f = document.getElementById('customerName'); if(!f.value.trim()){ alert('請填寫客戶名稱'); f.focus(); return false; } return true; }
+        function exportFormalPDF(){ if(!validateFormal()) return; const html = formalDocumentHtml(); const iframe = document.createElement('iframe'); iframe.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; border:0; z-index:-9999; opacity:0; pointer-events:none;'; document.body.appendChild(iframe); const doc = iframe.contentWindow.document; doc.open(); doc.write(html); doc.close(); doc.title = formalFileName('pdf').replace('.pdf',''); iframe.contentWindow.focus(); setTimeout(()=>{ iframe.contentWindow.print(); setTimeout(()=>iframe.remove(),2000); },500); }
+        function exportFormalWord(){ if(!validateFormal()) return; const blob = new Blob(['\ufeff',formalDocumentHtml()],{type:'application/msword;charset=utf-8'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = formalFileName('doc'); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1500); }
+        function calcSubtotal(row){ const qty = toNum(row.querySelector('.qty').value); const price = toNum(row.querySelector('.price').value); const subtotalEl = row.querySelector('.subtotal'); if(row.dataset.manual === 'true') return; const calc = qty * price; subtotalEl.value = calc > 0 ? calc.toLocaleString() : ''; updateGrandTotal(); }
+        function onQtyPriceChange(input){ const row = input.closest('tr'); row.dataset.manual = 'false'; calcSubtotal(row); }
+        function onSubtotalManual(input){ const row = input.closest('tr'); row.dataset.manual = 'true'; updateGrandTotal(); }
+        function updateGrandTotal(){ let sum = 0; document.querySelectorAll('#partsTable tbody tr').forEach(tr => { const val = tr.querySelector('.subtotal').value; sum += parseFloat(String(val).replace(/,/g,'')) || 0; }); document.getElementById('grandTotal').value = sum.toLocaleString(); }
+        function addPartRow(){ const tbody = document.querySelector('#partsTable tbody'); const tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td>`; tbody.appendChild(tr); tr.querySelector('input').focus(); updateGrandTotal(); }
+        function deleteRow(btn){ const tbody = document.querySelector('#partsTable tbody'); if(tbody.rows.length <= 1){ const row = btn.closest('tr'); row.querySelectorAll('input').forEach(inp => { if(!inp.classList.contains('qty')) inp.value = ''; else inp.value = '1'; }); row.querySelector('.subtotal').value = ''; row.dataset.manual = 'false'; updateGrandTotal(); } else { btn.closest('tr').remove(); updateGrandTotal(); } }
+        document.addEventListener('keydown', function(e){ if(e.key === 'Enter' && e.target.classList.contains('price')){ e.preventDefault(); addPartRow(); } });
+</script>
+<!-- ▲▲▲ 報表輸出核心結束 ▲▲▲ -->
+
+<!-- ═══════════ 介面增強：鏡面高光 / 視差 / 進場 / 自動儲存（不影響報表） ═══════════ -->
+<script>
+(function(){
+"use strict";
+var sel=function(s,c){return (c||document).querySelector(s);};
+var selAll=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));};
+
+/* 保險機制：任何狀況下內容一定顯示 */
+function forceReveal(){ selAll('.reveal').forEach(function(el){ el.classList.add('in'); }); }
+window.addEventListener('error', forceReveal);
+setTimeout(forceReveal, 3000);
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:.12});
+  selAll('.reveal').forEach(function(el){ io.observe(el); });
+}else{ forceReveal(); }
+
+/* 玻璃鏡面高光跟隨游標 */
+var glow=selAll('.glass,.btn-float'), raf=null;
+document.addEventListener('pointermove',function(e){
+  if(raf) return;
+  raf=requestAnimationFrame(function(){
+    raf=null;
+    for(var i=0;i<glow.length;i++){
+      var el=glow[i], r=el.getBoundingClientRect();
+      if(e.clientY<r.top-220||e.clientY>r.bottom+220) continue;
+      el.style.setProperty('--gx',(e.clientX-r.left)+'px');
+      el.style.setProperty('--gy',(e.clientY-r.top)+'px');
+    }
+  });
+},{passive:true});
+
+/* 背景視差 */
+var blobs=sel('#blobs');
+document.addEventListener('pointermove',function(e){
+  var x=e.clientX/innerWidth-.5, y=e.clientY/innerHeight-.5;
+  blobs.style.transform='translate3d('+x*-32+'px,'+y*-24+'px,0)';
+},{passive:true});
+
+/* 提示膠囊 */
+var toastTimer=null;
+function toast(msg){
+  var t=sel('#toast'); sel('#toastTxt').textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove('show'); },2400);
+}
+
+/* 自動儲存草稿（僅介面便利功能，與報表輸出無關） */
+var KEY='intai_liquid_desk_v3', saveTimer=null;
+function collectDraft(){
+  return {
+    orderNo:sel('#orderNo').value, date:sel('#dateField').value,
+    customer:sel('#customerName').value, machineNo:sel('#machineNo').value,
+    start:sel('#startTime').value, end:sel('#endTime').value,
+    issue:sel('#issue').value, cause:sel('#cause').value, solution:sel('#solution').value,
+    sign:sel('.client-sign-name').value,
+    rows:selAll('#partsTable tbody tr').map(function(tr){
+      return {
+        item:tr.cells[0].querySelector('input').value,
+        spec:tr.cells[1].querySelector('input').value,
+        qty:tr.querySelector('.qty').value,
+        price:tr.querySelector('.price').value,
+        subtotal:tr.querySelector('.subtotal').value,
+        manual:tr.dataset.manual==='true'
+      };
+    })
+  };
+}
+function saveDraft(){ try{ localStorage.setItem(KEY,JSON.stringify(collectDraft())); }catch(e){} }
+function saveSoon(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveDraft,700); }
+function rowHtml(){
+  return '<td><input type="text" placeholder="輸入項目" style="text-align:left;"></td><td><input type="text" placeholder="規格"></td><td><input type="number" class="qty" value="1" min="1" oninput="onQtyPriceChange(this)"></td><td><input type="number" class="price" min="0" oninput="onQtyPriceChange(this)" placeholder="0"></td><td><input type="text" class="subtotal" placeholder="0" oninput="onSubtotalManual(this)"></td><td><div class="btn-del" onclick="deleteRow(this)">×</div></td>';
+}
+function loadDraft(){
+  try{
+    var raw=localStorage.getItem(KEY); if(!raw) return false;
+    var d=JSON.parse(raw);
+    if(d.orderNo) sel('#orderNo').value=d.orderNo;
+    if(d.date) sel('#dateField').value=d.date;
+    sel('#customerName').value=d.customer||'';
+    sel('#machineNo').value=d.machineNo||'';
+    sel('#startTime').value=d.start||'';
+    sel('#endTime').value=d.end||'';
+    sel('#issue').value=d.issue||'';
+    sel('#cause').value=d.cause||'';
+    sel('#solution').value=d.solution||'';
+    sel('.client-sign-name').value=d.sign||'';
+    if(Array.isArray(d.rows)&&d.rows.length){
+      var tbody=sel('#partsTable tbody'); tbody.innerHTML='';
+      d.rows.forEach(function(r){
+        var tr=document.createElement('tr'); tr.innerHTML=rowHtml();
+        tr.cells[0].querySelector('input').value=r.item||'';
+        tr.cells[1].querySelector('input').value=r.spec||'';
+        tr.querySelector('.qty').value=(r.qty===''?'':(r.qty==null?'1':r.qty));
+        tr.querySelector('.price').value=r.price||'';
+        tr.querySelector('.subtotal').value=r.subtotal||'';
+        tr.dataset.manual=r.manual?'true':'false';
+        tbody.appendChild(tr);
+      });
+      updateGrandTotal();
+    }
+    return true;
+  }catch(e){ return false; }
+}
+document.addEventListener('input',saveSoon);
+if(loadDraft()) setTimeout(function(){ toast('💧 已還原上次填寫的內容'); },900);
+})();
+</script>
+</body>
+</html>
