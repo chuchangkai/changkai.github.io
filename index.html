@@ -800,7 +800,7 @@ function exportFormalPDF(){
                 const data = getFormalData();
                 const blue = '0070C0', red = 'C00000', black = '000000', gray = '666666';
                 const kai = 'DFKai-SB', times = 'Times New Roman';
-                const border = {style:BorderStyle.SINGLE, size:3, color:'666666'};
+                const border = {style:BorderStyle.SINGLE, size:6, color:'555555'};
                 const borders = {top:border,bottom:border,left:border,right:border,insideHorizontal:border,insideVertical:border};
                 const valueColor = blue;
                 const mm = n => Math.round(n * 56.6929);
@@ -841,37 +841,37 @@ function exportFormalPDF(){
                 ] : [run(dateIso,{font:times,color:valueColor})];
 
                 const children=[];
-                children.push(para(run('英泰自動控制行',{size:36,bold:true,color:blue}),{align:AlignmentType.CENTER,after:20}));
-                children.push(para(run('INTAI AUTO CONTROL',{font:times,size:20,bold:true,color:red}),{align:AlignmentType.CENTER,after:210}));
-                children.push(para(run('維 修 單',{size:36,bold:true}),{align:AlignmentType.CENTER,after:170}));
+                children.push(para(run('英泰自動控制行',{size:36,bold:true,color:blue}),{align:AlignmentType.CENTER,after:20,line:360}));
+                children.push(para(run('INTAI AUTO CONTROL',{font:times,size:20,bold:true,color:red}),{align:AlignmentType.CENTER,after:320,line:240}));
+                children.push(para(run('維 修 單',{size:36,bold:true}),{align:AlignmentType.CENTER,after:240,line:360}));
                 children.push(para([
-                    run('彰化縣員林市員集路'),run('2',{font:times}),run('段'),run('493',{font:times}),run('巷'),run('4',{font:times}),run('弄'),run('10',{font:times}),run('號')
-                ],{align:AlignmentType.CENTER,after:95}));
+                    run('彰化縣員林市員集路',{size:24}),run('2',{font:times,size:24}),run('段',{size:24}),run('493',{font:times,size:24}),run('巷',{size:24}),run('4',{font:times,size:24}),run('弄',{size:24}),run('10',{font:times,size:24}),run('號',{size:24})
+                ],{align:AlignmentType.CENTER,after:140,line:324}));
                 children.push(para([
-                    run('Tel：',{font:times,bold:true}),run('04-8356923',{font:times}),run('　Mobile：',{font:times,bold:true}),run('0935-435757',{font:times}),
-                    run('　Fax：',{font:times,bold:true}),run('04-8341151',{font:times}),run('　統一編號：',{bold:true}),run('45229579',{font:times})
-                ],{align:AlignmentType.CENTER,after:140}));
+                    run('Tel：',{font:times,size:24,bold:true}),run('04-8356923',{font:times,size:24}),run('　Mobile：',{font:times,size:24,bold:true}),run('0935-435757',{font:times,size:24}),
+                    run('　Fax：',{font:times,size:24,bold:true}),run('04-8341151',{font:times,size:24}),run('　統一編號：',{size:24,bold:true}),run('45229579',{font:times,size:24})
+                ],{align:AlignmentType.CENTER,after:120,line:324}));
 
                 children.push(table([
-                    new TableRow({children:[labelCell('維修單號',16),valueCell(run(data.orderNo,{font:times,color:valueColor}),34),labelCell('填單日期',16),valueCell(dateRuns,34)]}),
-                    new TableRow({children:[labelCell('客戶名稱',16),valueCell(run(data.customer,{color:valueColor}),34),labelCell('機器編號',16),valueCell(run(data.machineNo,{font:times,color:valueColor}),34)]}),
-                    new TableRow({children:[labelCell('開始時間',16),valueCell(run(data.startTime,{font:times,color:valueColor}),34),labelCell('完成時間',16),valueCell(run(data.endTime,{font:times,color:valueColor}),34)]})
+                    new TableRow({height:{value:460,rule:HeightRule.ATLEAST},cantSplit:true,children:[labelCell('維修單號',16),valueCell(run(data.orderNo,{font:times,color:valueColor}),34),labelCell('填單日期',16),valueCell(dateRuns,34)]}),
+                    new TableRow({height:{value:460,rule:HeightRule.ATLEAST},cantSplit:true,children:[labelCell('客戶名稱',16),valueCell(run(data.customer,{color:valueColor}),34),labelCell('機器編號',16),valueCell(run(data.machineNo,{font:times,color:valueColor}),34)]}),
+                    new TableRow({height:{value:460,rule:HeightRule.ATLEAST},cantSplit:true,children:[labelCell('開始時間',16),valueCell(run(data.startTime,{font:times,color:valueColor}),34),labelCell('完成時間',16),valueCell(run(data.endTime,{font:times,color:valueColor}),34)]})
                 ]));
 
-                children.push(para(run('壹、故障檢測與處理紀錄',{size:23,bold:true}),{before:170,after:70,keepNext:true}));
+                children.push(para(run('壹、故障檢測與處理紀錄',{size:23,bold:true}),{before:180,after:80,keepNext:true}));
                 children.push(table([
-                    new TableRow({height:{value:mm(12),rule:HeightRule.ATLEAST},children:[labelCell('故障情形',17),valueCell(run(data.issue,{color:valueColor}),83)]}),
-                    new TableRow({height:{value:mm(12),rule:HeightRule.ATLEAST},children:[labelCell('故障原因',17),valueCell(run(data.cause,{color:valueColor}),83)]}),
-                    new TableRow({height:{value:mm(12),rule:HeightRule.ATLEAST},children:[labelCell('處理對策',17),valueCell(run(data.solution,{color:valueColor}),83)]})
+                    new TableRow({height:{value:600,rule:HeightRule.ATLEAST},cantSplit:true,children:[labelCell('故障情形',17),valueCell(run(data.issue,{color:valueColor}),83)]}),
+                    new TableRow({height:{value:600,rule:HeightRule.ATLEAST},cantSplit:true,children:[labelCell('故障原因',17),valueCell(run(data.cause,{color:valueColor}),83)]}),
+                    new TableRow({height:{value:600,rule:HeightRule.ATLEAST},cantSplit:true,children:[labelCell('處理對策',17),valueCell(run(data.solution,{color:valueColor}),83)]})
                 ]));
 
-                children.push(para(run('貳、維修項目及零件明細',{size:23,bold:true}),{before:170,after:70,keepNext:true}));
-                const detailRows=[new TableRow({tableHeader:true,children:[
+                children.push(para(run('貳、維修項目及零件明細',{size:23,bold:true}),{before:180,after:80,keepNext:true}));
+                const detailRows=[new TableRow({tableHeader:true,height:{value:460,rule:HeightRule.ATLEAST},cantSplit:true,children:[
                     labelCell('項次',7),labelCell('項目／零件名稱',31),labelCell('規格',20),labelCell('數量',10),labelCell('單價',15),labelCell('小計',17)
                 ]})];
                 const rows=[...data.rows];
                 while(rows.length<3) rows.push({item:'',spec:'',qty:'',price:'',subtotal:0});
-                rows.forEach((r,i)=>detailRows.push(new TableRow({children:[
+                rows.forEach((r,i)=>detailRows.push(new TableRow({height:{value:460,rule:HeightRule.ATLEAST},cantSplit:true,children:[
                     valueCell(run(String(i+1),{font:times}),7,AlignmentType.CENTER),
                     valueCell(run(r.item,{color:valueColor}),31),
                     valueCell(run(r.spec,{color:valueColor}),20),
@@ -879,30 +879,33 @@ function exportFormalPDF(){
                     valueCell(run(r.price?'$'+money(r.price):'',{font:times,color:valueColor}),15,AlignmentType.RIGHT),
                     valueCell(run(r.subtotal?'$'+money(r.subtotal):'',{font:times,color:valueColor}),17,AlignmentType.RIGHT)
                 ]})));
-                detailRows.push(new TableRow({children:[
+                detailRows.push(new TableRow({height:{value:580,rule:HeightRule.ATLEAST},cantSplit:true,children:[
                     new TableCell({columnSpan:4,width:{size:68,type:WidthType.PERCENTAGE},verticalAlign:VerticalAlign.CENTER,margins:{top:mm(1.5),bottom:mm(1.5),left:mm(1.8),right:mm(1.8)},borders:{top:border,bottom:border,left:border,right:border},children:[para(run('總計金額（新臺幣）',{size:22}),{align:AlignmentType.RIGHT})]}),
                     new TableCell({columnSpan:2,width:{size:32,type:WidthType.PERCENTAGE},verticalAlign:VerticalAlign.CENTER,margins:{top:mm(1.5),bottom:mm(1.5),left:mm(1.8),right:mm(1.8)},borders:{top:border,bottom:border,left:border,right:border},children:[para([run('NT$ '+money(data.total),{font:times,size:24,color:valueColor}),run('（未稅價）',{size:21})],{align:AlignmentType.RIGHT})]})
                 ]}));
                 children.push(table(detailRows));
 
-                children.push(para([run('備註：',{size:18,bold:true}),run('實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。',{size:18})],{before:90,after:100}));
+                children.push(para([run('備註：',{size:18,bold:true}),run('實際維修內容、零件規格及收費金額，以雙方確認結果為準；客戶簽章後，表示已確認本單所載維修內容。',{size:18})],{before:100,after:180}));
                 const clientRuns=[run('客戶簽章：',{size:21})];
                 if(data.clientSignName) clientRuns.push(run(data.clientSignName,{size:21,color:valueColor}));
-                children.push(table([new TableRow({height:{value:mm(18),rule:HeightRule.ATLEAST},children:[
-                    valueCell(clientRuns,50),
-                    valueCell([run('維修人員：',{size:21}),run('　　　　　　　　　朱文言',{size:26,color:valueColor})],50)
+                children.push(table([new TableRow({height:{value:900,rule:HeightRule.ATLEAST},cantSplit:true,children:[
+                    cell([para(clientRuns,{after:0})],50,{vertical:VerticalAlign.TOP}),
+                    cell([
+                        para(run('維修人員：',{size:21}),{after:0}),
+                        para(run('朱文言',{size:26,color:valueColor}),{align:AlignmentType.RIGHT,before:460,after:0})
+                    ],50,{vertical:VerticalAlign.TOP})
                 ]})]));
-                children.push(para(run('本維修單供客戶確認維修內容及留存紀錄使用。',{size:17}),{align:AlignmentType.CENTER,before:100,after:70}));
-                children.push(para(run('英泰自動控制行　維修服務紀錄',{size:16,color:gray}),{align:AlignmentType.CENTER,before:30}));
+                children.push(para(run('本維修單供客戶確認維修內容及留存紀錄使用。',{size:17}),{align:AlignmentType.CENTER,before:120,after:120}));
+                children.push(new Paragraph({children:[run('英泰自動控制行　維修服務紀錄',{size:16,color:gray})],alignment:AlignmentType.CENTER,spacing:{before:80,after:0},border:{top:{style:BorderStyle.SINGLE,size:4,color:'777777',space:4}}}));
 
                 const doc = new Document({
                     creator:'英泰自動控制行',
                     title:'正式維修單',
                     description:'英泰自動控制行維修服務紀錄',
-                    styles:{default:{document:{run:{font:kai,size:21},paragraph:{spacing:{line:276}}}}},
+                    styles:{default:{document:{run:{font:kai,size:22},paragraph:{spacing:{line:282}}}}},
                     sections:[{
                         properties:{
-                            page:{size:{orientation:PageOrientation.PORTRAIT,width:11906,height:16838},margin:{top:mm(10),right:mm(13),bottom:mm(10),left:mm(13)}}
+                            page:{size:{orientation:PageOrientation.PORTRAIT,width:11906,height:16838},margin:{top:560,right:700,bottom:560,left:700,header:280,footer:280}}
                         },
                         children
                     }]
