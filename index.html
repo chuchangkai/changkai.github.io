@@ -1,4116 +1,958 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#F2F2F7">
-<title>創業帳本 · 從小店到商業王國</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>創業帳本｜從小店到商業王國</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   iOS Design System — Full-screen Responsive
-   ============================================================ */
-:root {
-  --ios-blue: #007AFF;
-  --ios-blue-dark: #0055CC;
-  --ios-green: #34C759;
-  --ios-green-dark: #248A3D;
-  --ios-red: #FF3B30;
-  --ios-orange: #FF9500;
-  --ios-yellow: #FFCC00;
-  --ios-purple: #AF52DE;
-  --ios-pink: #FF2D55;
-  --ios-teal: #5AC8FA;
-  --ios-indigo: #5856D6;
-  --ios-gray: #8E8E93;
-  --ios-gray2: #AEAEB2;
-  --ios-gray3: #C7C7CC;
-  --ios-gray4: #D1D1D6;
-  --ios-gray5: #E5E5EA;
-  --ios-gray6: #F2F2F7;
-
-  --bg: #F2F2F7;
-  --bg-elev: #FFFFFF;
-  --card: #FFFFFF;
-  --label: #000000;
-  --label-2: rgba(60, 60, 67, 0.6);
-  --label-3: rgba(60, 60, 67, 0.3);
-  --separator: rgba(60, 60, 67, 0.29);
-  --fill-1: rgba(120, 120, 128, 0.2);
-  --fill-2: rgba(120, 120, 128, 0.16);
-  --fill-3: rgba(120, 120, 128, 0.12);
-  --fill-4: rgba(120, 120, 128, 0.08);
-
-  --radius-s: 10px;
-  --radius-m: 14px;
-  --radius-l: 20px;
-  --radius-xl: 28px;
-
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
-
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
-          "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
-
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
-
-  --content-max: 720px;
-  --content-pad-x: clamp(16px, 3vw, 40px);
-  --content-pad-y: clamp(16px, 2.5vh, 36px);
+:root{
+  --bg:#141009; --card:#241b12; --card2:#2d2214;
+  --line:rgba(230,185,105,.18);
+  --gold:#e3b463; --gold2:#f7dfae; --goldD:#8a6626;
+  --jade:#4ecda4; --rose:#e2768a; --violet:#b48ae2; --orange:#e89a5f;
+  --ink:#f4e9d4; --dim:#b8a486; --red:#d05a4e;
+  --paper:#f6eedb; --paper2:#eee0c2; --inkD:#3a2c1c;
+  --serif:"Noto Serif TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","Microsoft JhengHei",sans-serif;
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-}
-
-html, body {
-  height: 100%;
-  overscroll-behavior: none;
-}
-
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--label);
-  overflow: hidden;
-}
-
-/* ============================================================
-   裝置容器
-   ============================================================ */
-#game-container {
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  background: var(--bg);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* ============================================================
-   iOS 導航列 — 放大版
-   ============================================================ */
-#ios-nav {
-  height: 68px;
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
-  border-bottom: 0.5px solid var(--separator);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 max(14px, var(--content-pad-x));
-  padding-top: env(safe-area-inset-top, 0);
-  z-index: 100;
-  position: relative;
-  gap: 10px;
-}
-
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex: 1;
-}
-
-.nav-store {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 36vw;
-}
-
-.nav-month {
-  font-size: 12.5px;
-  font-weight: 800;
-  color: #fff;
-  background: linear-gradient(135deg, #0A84FF 0%, #0064D2 100%);
-  padding: 6px 14px;
-  border-radius: 20px;
-  white-space: nowrap;
-  letter-spacing: 0.3px;
-  box-shadow: 0 3px 10px rgba(0,122,255,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.nav-month::before {
-  content: "📍";
-  font-size: 11px;
-  line-height: 1;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.nav-stat {
-  font-size: 13px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  padding: 7px 14px;
-  border-radius: 22px;
-  white-space: nowrap;
-  letter-spacing: -0.3px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: transform 0.2s var(--ease-spring);
-}
-
-.nav-stat.cash {
-  color: var(--ios-green-dark);
-  background: linear-gradient(135deg, rgba(52,199,89,0.16), rgba(52,199,89,0.1));
-  box-shadow: inset 0 0 0 1px rgba(52,199,89,0.18);
-}
-
-.nav-stat.rep {
-  color: #B26700;
-  background: linear-gradient(135deg, rgba(255,149,0,0.16), rgba(255,149,0,0.1));
-  box-shadow: inset 0 0 0 1px rgba(255,149,0,0.18);
-}
-
-.nav-icon-btn {
-  width: 42px;
-  height: 42px;
-  border: none;
-  background: var(--fill-3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.15s;
-  color: var(--label);
-}
-.nav-icon-btn:active {
-  background: var(--fill-2);
-  transform: scale(0.92);
-}
-
-/* ============================================================
-   主舞台
-   ============================================================ */
-#main-stage {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.screen-view {
-  position: absolute;
-  inset: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: none;
-  flex-direction: column;
-  background: var(--bg);
-  -webkit-overflow-scrolling: touch;
-}
-
-.screen-view.active {
-  display: flex;
-  animation: screenIn 0.42s var(--ease-smooth);
-}
-
-@keyframes screenIn {
-  from { opacity: 0; transform: translateY(10px) scale(0.99); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* ============================================================
-   通用
-   ============================================================ */
-.large-title {
-  font-size: clamp(26px, 4.5vw, 34px);
-  font-weight: 800;
-  letter-spacing: -0.6px;
-  line-height: 1.15;
-}
-
-.section-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--label-2);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  padding: 0 4px 8px;
-}
-
-.ios-btn {
-  border: none;
-  font-family: var(--font);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-  border-radius: var(--radius-m);
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: transform 0.15s var(--ease-spring), opacity 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  -webkit-user-select: none;
-  user-select: none;
-}
-.ios-btn:active { transform: scale(0.97); opacity: 0.85; }
-.ios-btn.primary {
-  background: var(--ios-blue);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(0,122,255,0.3);
-}
-.ios-btn.secondary { background: var(--fill-3); color: var(--ios-blue); }
-.ios-btn.ghost { background: transparent; color: var(--ios-blue); }
-.ios-btn.success {
-  background: var(--ios-green);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(52,199,89,0.3);
-}
-.ios-btn.danger { background: var(--ios-red); color: #fff; }
-
-/* ============================================================
-   啟動畫面
-   ============================================================ */
-#screen-splash {
-  background: linear-gradient(180deg, #0A84FF 0%, #0064D2 45%, #003D82 100%);
-  align-items: center;
-  justify-content: center;
-  padding: 40px 28px;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-}
-
-#screen-splash::before {
-  content: "";
-  position: absolute;
-  top: -30%; left: -20%;
-  width: 140%; height: 70%;
-  background: radial-gradient(ellipse, rgba(255,255,255,0.22), transparent 65%);
-  pointer-events: none;
-}
-
-#screen-splash::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:var(--sans);color:var(--ink);background:var(--bg);overflow-x:hidden;
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06) 0, transparent 40%);
-  pointer-events: none;
-}
-
-.splash-content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 340px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.splash-icon {
-  width: clamp(84px, 12vw, 108px);
-  height: clamp(84px, 12vw, 108px);
-  border-radius: 26px;
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(40px, 6vw, 52px);
-  margin-bottom: 26px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  animation: splashIcon 1s var(--ease-spring);
-}
-
-@keyframes splashIcon {
-  from { transform: scale(0.6) rotate(-8deg); opacity: 0; }
-  to   { transform: scale(1) rotate(0); opacity: 1; }
-}
-
-.splash-h1 {
-  font-size: clamp(30px, 5.5vw, 40px);
-  font-weight: 800;
-  letter-spacing: -0.8px;
-  margin-bottom: 6px;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.15);
-}
-
-.splash-tag {
-  font-size: clamp(13px, 1.6vw, 15px);
-  opacity: 0.85;
-  letter-spacing: 0.4px;
-  margin-bottom: 40px;
-  font-weight: 500;
-}
-
-.splash-menu {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.splash-btn {
-  border: none;
-  font-family: var(--font);
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 14px;
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: transform 0.15s var(--ease-spring);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-}
-.splash-btn:active { transform: scale(0.96); }
-
-.splash-btn.main {
-  background: #fff;
-  color: var(--ios-blue);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-}
-.splash-btn.glass {
-  background: rgba(255,255,255,0.16);
-  color: #fff;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.22);
-}
-
-.splash-footer {
-  margin-top: 32px;
-  font-size: 11px;
-  opacity: 0.6;
-  letter-spacing: 0.5px;
-}
-
-/* ============================================================
-   說明
-   ============================================================ */
-#screen-guide { background: var(--bg); }
-
-.guide-wrap {
-  padding: var(--content-pad-y) var(--content-pad-x) 40px;
-  width: 100%;
-  max-width: var(--content-max);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.segmented {
-  display: flex;
-  background: var(--fill-3);
-  border-radius: 10px;
-  padding: 3px;
-  gap: 3px;
-  margin-bottom: 18px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.segmented::-webkit-scrollbar { display: none; }
-
-.seg-btn {
-  flex: 1;
-  min-width: 68px;
-  border: none;
-  background: transparent;
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--label);
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.22s var(--ease-smooth);
-  white-space: nowrap;
-}
-.seg-btn.active {
-  background: var(--card);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.04);
-}
-
-.guide-content {
-  background: var(--card);
-  border-radius: var(--radius-l);
-  padding: clamp(22px, 3vw, 32px);
-  box-shadow: var(--shadow-sm);
-  font-size: clamp(14px, 1.5vw, 15.5px);
-  line-height: 1.75;
-  color: var(--label);
-  flex: 1;
-  min-height: 340px;
-}
-.guide-content h3 {
-  font-size: clamp(18px, 2.4vw, 22px);
-  font-weight: 700;
-  letter-spacing: -0.4px;
-  margin-bottom: 14px;
-}
-.guide-content p { margin-bottom: 10px; }
-.guide-content ul, .guide-content ol { margin-left: 20px; margin-bottom: 10px; }
-.guide-content li { margin-bottom: 6px; }
-.guide-content strong { color: var(--ios-blue); font-weight: 600; }
-
-.guide-nav { display: flex; gap: 10px; margin-top: 18px; }
-
-/* ============================================================
-   創角
-   ============================================================ */
-.setup-wrap {
-  padding: var(--content-pad-y) var(--content-pad-x) 60px;
-  max-width: 560px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.form-group {
-  background: var(--card);
-  border-radius: var(--radius-m);
-  margin-bottom: 20px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-.form-row {
-  padding: 15px 18px;
-  border-bottom: 0.5px solid var(--separator);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.form-row:last-child { border-bottom: none; }
-.form-row label {
-  font-size: 15px;
-  font-weight: 500;
-  min-width: 88px;
-}
-
-.form-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-family: var(--font);
-  font-size: 16px;
-  color: var(--label);
-  outline: none;
-  text-align: right;
-  min-width: 0;
-}
-.form-input::placeholder { color: var(--label-3); }
-
-.capital-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.capital-card {
-  border: 1.5px solid var(--separator);
-  background: var(--card);
-  border-radius: var(--radius-m);
-  padding: 18px 16px;
-  cursor: pointer;
-  transition: all 0.25s var(--ease-spring);
-  position: relative;
-}
-.capital-card.selected {
-  border-color: var(--ios-blue);
-  background: rgba(0,122,255,0.05);
-  box-shadow: 0 0 0 3px rgba(0,122,255,0.12);
-  transform: translateY(-2px);
-}
-.capital-card .amount {
-  font-size: clamp(19px, 2.4vw, 22px);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  font-variant-numeric: tabular-nums;
-}
-.capital-card.selected .amount { color: var(--ios-blue); }
-.capital-card .desc {
-  font-size: 12px;
-  color: var(--label-2);
-  margin-top: 6px;
-  line-height: 1.45;
-}
-.capital-card .check {
-  position: absolute;
-  top: 12px; right: 12px;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: var(--ios-blue);
-  color: #fff;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: bold;
-}
-.capital-card.selected .check { display: flex; }
-
-/* ============================================================
-   地圖畫面 — 壯觀化重製
-   ============================================================ */
-#screen-map {
-  background: #F8FAFF;
-  overflow: hidden;
-  position: relative;
-}
-
-.map-top {
-  padding: 18px var(--content-pad-x) 14px;
-  flex-shrink: 0;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-  position: relative;
-  z-index: 5;
-  background: linear-gradient(180deg, rgba(248,250,255,0.98) 0%, rgba(248,250,255,0.85) 70%, rgba(248,250,255,0) 100%);
-}
-
-.map-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 10px;
-}
-
-.map-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--ios-blue);
-  text-transform: uppercase;
-  letter-spacing: 1.4px;
-  margin-bottom: 4px;
-}
-
-.map-eyebrow::before {
-  content: "";
-  width: 18px;
-  height: 2px;
-  background: var(--ios-blue);
-  border-radius: 2px;
-}
-
-.map-top h2 {
-  font-size: clamp(26px, 4vw, 34px);
-  font-weight: 900;
-  letter-spacing: -0.8px;
-  line-height: 1.05;
-  background: linear-gradient(135deg, #0064D2 0%, #AF52DE 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-.map-progress-pct {
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
-  background: linear-gradient(135deg, #0A84FF 0%, #0064D2 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 30px;
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -1px;
-  line-height: 1;
-  filter: drop-shadow(0 3px 8px rgba(0,122,255,0.18));
-}
-.map-progress-pct small {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0;
-}
-
-.map-subtitle {
-  font-size: 13.5px;
-  color: var(--label-2);
-  font-weight: 500;
-  margin-bottom: 14px;
-}
-
-.progress-bar-wrap {
-  height: 10px;
-  background: rgba(0,122,255,0.08);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
-}
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #0A84FF 0%, #5AC8FA 60%, #34C759 100%);
-  border-radius: 6px;
-  transition: width 0.8s var(--ease-smooth);
-  box-shadow: 0 0 14px rgba(10,132,255,0.5);
-  position: relative;
-}
-.progress-bar-fill::after {
-  content: "";
-  position: absolute;
-  top: 0; right: 0; bottom: 0;
-  width: 24px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7));
-  border-radius: 6px;
-}
-
-.map-scroll {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-.map-canvas {
-  position: relative;
-  width: 100%;
-  max-width: 760px;
-  min-height: 1200px;
-  margin: 0 auto;
-  background:
-    radial-gradient(circle at 15% 8%, rgba(0,122,255,0.07) 0, transparent 32%),
-    radial-gradient(circle at 88% 22%, rgba(175,82,222,0.06) 0, transparent 30%),
-    radial-gradient(circle at 22% 48%, rgba(52,199,89,0.06) 0, transparent 32%),
-    radial-gradient(circle at 82% 72%, rgba(255,149,0,0.06) 0, transparent 30%),
-    radial-gradient(circle at 30% 92%, rgba(90,200,250,0.06) 0, transparent 30%),
-    linear-gradient(180deg, #F8FAFF 0%, #F4F7FE 50%, #FAFBFF 100%);
-}
-
-/* ====== 月份區域卡片 ====== */
-.map-zone {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  border-radius: 36px;
-  pointer-events: none;
-  z-index: 1;
-  border: 2px solid rgba(255,255,255,0.9);
-  box-shadow:
-    0 12px 40px -12px rgba(0,0,0,0.08),
-    0 4px 12px -4px rgba(0,0,0,0.04),
-    inset 0 3px 20px rgba(255,255,255,0.7);
-  transition: box-shadow 0.4s;
-  overflow: hidden;
-}
-
-.map-zone::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.6) 0, transparent 25%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.5) 0, transparent 25%);
-  pointer-events: none;
-}
-
-.map-zone.active {
-  box-shadow:
-    0 16px 50px -12px rgba(0,122,255,0.22),
-    0 6px 16px -4px rgba(0,0,0,0.06),
-    inset 0 3px 20px rgba(255,255,255,0.8);
-}
-
-.zone-deco {
-  position: absolute;
-  right: -10px;
-  bottom: -20px;
-  font-size: 200px;
-  line-height: 1;
-  opacity: 0.1;
-  filter: blur(1px);
-  pointer-events: none;
-  user-select: none;
-}
-
-.zone-label {
-  position: absolute;
-  top: 20px;
-  left: 24px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding: 8px 16px 8px 14px;
-  border-radius: 24px;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.08),
-    0 0 0 0.5px rgba(0,0,0,0.03),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-}
-
-.zone-label .zone-emoji {
-  font-size: 16px;
-  line-height: 1;
-}
-
-.zone-label .zone-badge {
-  font-size: 10px;
-  font-weight: 900;
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: 10px;
-  letter-spacing: 0.5px;
-  display: none;
-  background: currentColor;
-}
-
-.map-zone.active .zone-label .zone-badge { display: inline-flex; }
-.map-zone.active .zone-label .zone-badge span { color: #fff; }
-
-/* ====== SVG 圖層 ====== */
-#map-svg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* ====== 節點 ====== */
-.map-node {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: default;
-  z-index: 5;
-  transition: transform 0.3s var(--ease-spring);
-}
-
-.map-node.current {
-  z-index: 10;
-  cursor: pointer;
-}
-
-.map-node.current:active {
-  transform: translate(-50%, -50%) scale(0.97);
-}
-
-.node-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-}
-
-.node-halo {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,122,255,0.32) 0%, rgba(0,122,255,0.12) 35%, transparent 70%);
-  transform: translate(-50%, -50%);
-  display: none;
-  pointer-events: none;
-  z-index: 0;
-}
-.map-node.current .node-halo {
-  display: block;
-  animation: haloPulse 2.6s ease-in-out infinite;
-}
-
-@keyframes haloPulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
-  50%      { transform: translate(-50%, -50%) scale(1.4); opacity: 0.3; }
-}
-
-/* 「你在這裡」浮動標籤 */
-.node-float-tag {
-  position: absolute;
-  top: -78px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, #0A84FF 0%, #0064D2 100%);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 14px;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  box-shadow: 0 6px 18px rgba(0,122,255,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
-  animation: tagBob 2.4s ease-in-out infinite;
-  z-index: 15;
-}
-
-.node-float-tag::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 10px;
-  height: 10px;
-  background: #0064D2;
-  border-radius: 2px;
-}
-
-@keyframes tagBob {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(-5px); }
-}
-
-.node-avatar {
-  position: absolute;
-  top: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 34px;
-  line-height: 1;
-  z-index: 3;
-  animation: bob 2s ease-in-out infinite;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.22));
-  pointer-events: none;
-  display: none;
-}
-
-@keyframes bob {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(-6px); }
-}
-
-.node-dot {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background: #fff;
-  border: 4px solid #C7C7CC;
-  box-shadow:
-    0 10px 26px rgba(0,0,0,0.14),
-    0 4px 8px rgba(0,0,0,0.06),
-    inset 0 -3px 8px rgba(0,0,0,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-  transition: all 0.35s var(--ease-spring);
-}
-
-.node-icon {
-  font-size: 34px;
-  line-height: 1;
-  transition: opacity 0.25s;
-}
-
-.node-check {
-  position: absolute;
-  font-size: 34px;
-  font-weight: 900;
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.25s;
-  line-height: 1;
-}
-
-/* 完成 */
-.map-node.done .node-dot {
-  background: linear-gradient(180deg, #34C759 0%, #2AA84A 100%);
-  border-color: #fff;
-  box-shadow:
-    0 10px 26px rgba(52,199,89,0.4),
-    0 4px 8px rgba(0,0,0,0.08),
-    inset 0 -3px 8px rgba(0,0,0,0.08);
-}
-.map-node.done .node-icon { opacity: 0; }
-.map-node.done .node-check { opacity: 1; }
-
-/* 當前 */
-.map-node.current .node-dot {
-  background: linear-gradient(180deg, #0A84FF 0%, #0064D2 100%);
-  border-color: #fff;
-  transform: scale(1.12);
-  box-shadow:
-    0 12px 32px rgba(0,122,255,0.5),
-    0 0 0 6px rgba(0,122,255,0.18),
-    inset 0 -4px 10px rgba(0,0,0,0.18);
-}
-.map-node.current .node-icon {
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-}
-.map-node.current .node-avatar {
-  display: block;
-}
-
-/* 鎖定 */
-.map-node.locked .node-dot {
-  background: #F5F6FA;
-  border-color: #E1E3EA;
-  box-shadow:
-    0 4px 10px rgba(0,0,0,0.05),
-    inset 0 -2px 4px rgba(0,0,0,0.02);
-}
-.map-node.locked .node-icon {
-  opacity: 0.4;
-  filter: grayscale(0.7);
-}
-.map-node.locked { opacity: 0.9; }
-
-/* 標籤 */
-.node-caption {
-  background: rgba(255,255,255,0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 16px;
-  padding: 8px 14px 9px;
-  box-shadow:
-    0 6px 20px rgba(0,0,0,0.1),
-    0 0 0 0.5px rgba(0,0,0,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-  text-align: center;
-  max-width: 180px;
-  min-width: 96px;
-  transition: all 0.3s var(--ease-spring);
-  position: relative;
-  z-index: 3;
-}
-
-.node-caption::before {
-  content: "";
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 10px;
-  height: 10px;
-  background: inherit;
-  border-radius: 2px;
-  box-shadow: -1px -1px 2px rgba(0,0,0,0.04);
-}
-
-.node-title {
-  display: block;
-  font-size: 12.5px;
-  font-weight: 800;
-  color: var(--label);
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.2px;
-}
-
-.node-meta {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--label-3);
-  margin-top: 2px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-}
-
-.map-node.current .node-caption {
-  background: linear-gradient(135deg, #0A84FF 0%, #0064D2 100%);
-  box-shadow:
-    0 12px 28px rgba(0,122,255,0.42),
-    0 0 0 0.5px rgba(0,122,255,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.3);
-  transform: scale(1.06);
-}
-.map-node.current .node-caption::before {
-  background: #0A84FF;
-  box-shadow: none;
-}
-.map-node.current .node-title { color: #fff; }
-.map-node.current .node-meta { color: rgba(255,255,255,0.9); }
-
-.map-node.done .node-caption {
-  background: rgba(255,255,255,0.92);
-}
-.map-node.done .node-title { color: var(--label-2); }
-.map-node.done .node-caption::before { background: rgba(255,255,255,0.92); }
-
-/* ============================================================
-   事件
-   ============================================================ */
-#screen-event { background: var(--bg); }
-
-.event-scene {
-  height: clamp(180px, 26vh, 300px);
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(160deg, #1C3A5E 0%, #0F2440 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.event-scene::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(90,200,250,0.18) 0, transparent 50%),
-    radial-gradient(circle at 70% 60%, rgba(0,122,255,0.12) 0, transparent 50%);
-  pointer-events: none;
-}
-
-.event-scene .scene-emoji-bg {
-  position: absolute;
-  font-size: clamp(180px, 24vw, 280px);
-  opacity: 0.06;
-  right: -20px;
-  bottom: -40px;
-  filter: blur(3px);
-}
-
-.scene-tag {
-  position: absolute;
-  top: 18px;
-  left: var(--content-pad-x);
-  background: rgba(255,255,255,0.16);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.22);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 20px;
-  letter-spacing: 0.2px;
-  z-index: 3;
-}
-
-.scene-char {
-  position: absolute;
-  right: clamp(24px, 6vw, 80px);
-  bottom: -6px;
-  font-size: clamp(82px, 12vw, 120px);
-  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
-  animation: charIn 0.5s var(--ease-spring);
-  z-index: 3;
-}
-
-@keyframes charIn {
-  from { transform: translateY(20px) scale(0.85); opacity: 0; }
-  to   { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.event-body {
-  flex: 1;
-  padding: 0 var(--content-pad-x) 32px;
-  margin-top: -20px;
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.dialogue-card {
-  background: var(--card);
-  border-radius: var(--radius-l);
-  padding: clamp(18px, 2.4vw, 24px);
-  box-shadow: var(--shadow-md);
-  margin-bottom: 20px;
-}
-
-.speaker-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.speaker-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--ios-blue);
-  box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
-}
-
-.speaker-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ios-blue);
-  letter-spacing: -0.1px;
-}
-
-.speaker-role {
-  font-size: 11.5px;
-  color: var(--label-3);
-  font-weight: 500;
-}
-
-.dialogue-text {
-  font-size: clamp(14.5px, 1.6vw, 16px);
-  line-height: 1.72;
-  color: var(--label);
-  letter-spacing: -0.1px;
-}
-
-.choices-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--label-2);
-  padding: 0 4px 10px;
-  letter-spacing: 0.3px;
-}
-
-.choices-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-@media (min-width: 900px) {
-  .choices-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 12px;
-  }
-  .choices-list > .choice-item:only-child { grid-column: 1 / -1; }
-}
-
-.choice-item {
-  background: var(--card);
-  border-radius: var(--radius-m);
-  padding: clamp(15px, 1.8vw, 18px);
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-.choice-item:active {
-  transform: scale(0.975);
-  box-shadow: var(--shadow-md);
-}
-.choice-item::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px;
-  background: var(--ios-blue);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.choice-item:active::before { opacity: 1; }
-
-.choice-head {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.choice-letter {
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  background: var(--ios-blue);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.choice-title {
-  font-size: clamp(14.5px, 1.6vw, 16px);
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--label);
-  letter-spacing: -0.2px;
-  flex: 1;
-}
-
-.choice-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding-left: 36px;
-}
-
-.tag {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  letter-spacing: -0.1px;
-  white-space: nowrap;
-}
-.tag.money-pos { background: rgba(52,199,89,0.14); color: #1F8A3D; }
-.tag.money-neg { background: rgba(255,59,48,0.12); color: #C4281E; }
-.tag.risk      { background: rgba(255,149,0,0.14); color: #B26700; }
-.tag.growth    { background: rgba(0,122,255,0.12); color: #0055CC; }
-.tag.neutral   { background: var(--fill-3); color: var(--label-2); }
-
-/* ============================================================
-   結果
-   ============================================================ */
-.result-wrap {
-  padding: var(--content-pad-y) var(--content-pad-x) 60px;
-  max-width: 640px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.result-hero {
-  text-align: center;
-  padding: 10px 0 24px;
-}
-
-.result-hero .hero-icon {
-  width: clamp(64px, 8vw, 78px);
-  height: clamp(64px, 8vw, 78px);
-  border-radius: 24px;
-  background: linear-gradient(135deg, var(--ios-green), #2AA84A);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(30px, 4vw, 38px);
-  margin: 0 auto 16px;
-  box-shadow: 0 8px 24px rgba(52,199,89,0.35);
-  animation: heroPop 0.5s var(--ease-spring);
-}
-
-@keyframes heroPop {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-
-.result-hero h2 {
-  font-size: clamp(20px, 2.6vw, 24px);
-  font-weight: 800;
-  letter-spacing: -0.4px;
-  line-height: 1.35;
-  margin-bottom: 8px;
-}
-
-.result-hero .sub {
-  font-size: 13.5px;
-  color: var(--label-2);
-  font-weight: 500;
-}
-
-.result-desc {
-  background: var(--card);
-  border-radius: var(--radius-l);
-  padding: clamp(18px, 2.2vw, 22px);
-  font-size: clamp(14px, 1.5vw, 15.5px);
-  line-height: 1.75;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 20px;
-}
-
-.impact-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  background: var(--card);
-  border-radius: var(--radius-m);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 20px;
-}
-
-.impact-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  border-bottom: 0.5px solid var(--separator);
-  font-size: 14.5px;
-  gap: 12px;
-}
-.impact-row:last-child { border-bottom: none; }
-.impact-row .k { color: var(--label-2); font-weight: 500; }
-.impact-row .v { font-weight: 700; font-variant-numeric: tabular-nums; }
-.impact-row .v.pos { color: var(--ios-green-dark); }
-.impact-row .v.neg { color: var(--ios-red); }
-
-.foreshadow {
-  background: rgba(255,149,0,0.1);
-  border-radius: var(--radius-m);
-  padding: 15px 18px;
-  font-size: 13.5px;
-  line-height: 1.62;
-  color: #8A5200;
-  margin-bottom: 26px;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.foreshadow .ico { font-size: 17px; flex-shrink: 0; line-height: 1.4; }
-
-/* ============================================================
-   會計
-   ============================================================ */
-.acct-wrap {
-  padding: var(--content-pad-y) var(--content-pad-x) 60px;
-  max-width: 720px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.task-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding: 0 4px;
-  gap: 12px;
-}
-
-.task-header h2 {
-  font-size: clamp(19px, 2.4vw, 22px);
-  font-weight: 800;
-  letter-spacing: -0.4px;
-  line-height: 1.3;
-}
-
-.task-counter {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--ios-blue);
-  background: rgba(0,122,255,0.1);
-  padding: 5px 11px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-
-.task-prompt {
-  background: linear-gradient(135deg, #EAF3FF, #F5F9FF);
-  border-radius: var(--radius-l);
-  padding: clamp(16px, 2vw, 20px);
-  font-size: clamp(14px, 1.5vw, 15.5px);
-  line-height: 1.7;
-  color: #0A3A6B;
-  margin-bottom: 20px;
-  border-left: 4px solid var(--ios-blue);
-}
-
-.journal-card {
-  background: var(--card);
-  border-radius: var(--radius-l);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  margin-bottom: 22px;
-}
-
-.journal-header {
-  padding: 14px 20px;
-  background: var(--fill-4);
-  border-bottom: 0.5px solid var(--separator);
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--label-2);
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.journal-amount-badge {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--ios-green-dark);
-  background: rgba(52,199,89,0.12);
-  padding: 4px 11px;
-  border-radius: 20px;
-  font-variant-numeric: tabular-nums;
-}
-
-.journal-line {
-  display: flex;
-  align-items: stretch;
-  border-bottom: 0.5px solid var(--separator);
-  min-height: 66px;
-}
-.journal-line:last-child { border-bottom: none; }
-
-.journal-side {
-  width: 60px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-}
-.journal-side.debit  { color: var(--ios-blue); background: rgba(0,122,255,0.06); }
-.journal-side.credit { color: var(--ios-red);  background: rgba(255,59,48,0.06); }
-
-.journal-slot {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 14px 18px;
-  gap: 10px;
-  cursor: pointer;
-  transition: background 0.2s;
-  min-width: 0;
-}
-.journal-slot:active { background: var(--fill-4); }
-.journal-slot.filled { cursor: pointer; }
-
-.slot-placeholder {
-  font-size: 14px;
-  color: var(--label-3);
-  font-weight: 500;
-}
-
-.slot-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--fill-3);
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 14.5px;
-  font-weight: 600;
-  animation: chipIn 0.3s var(--ease-spring);
-}
-
-@keyframes chipIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-
-.slot-chip .x {
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--fill-1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: var(--label-2);
-  font-weight: 700;
-}
-
-.slot-amount {
-  margin-left: auto;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--label-2);
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-}
-
-.pool-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--label-2);
-  padding: 0 4px 10px;
-  letter-spacing: 0.3px;
-}
-
-.account-pool {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.account-chip {
-  background: var(--card);
-  border: 1.5px solid var(--separator);
-  border-radius: 20px;
-  padding: 10px 16px;
-  font-size: 14.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.22s var(--ease-spring);
-  font-family: var(--font);
-  letter-spacing: -0.1px;
-  -webkit-user-select: none;
-  user-select: none;
-}
-.account-chip:active { transform: scale(0.94); }
-.account-chip.used {
-  opacity: 0.28;
-  pointer-events: none;
-  transform: scale(0.92);
-}
-
-.acct-actions { display: flex; gap: 10px; }
-.acct-actions .ios-btn { flex: 1; }
-
-.hint-btn {
-  flex: 0 0 auto !important;
-  width: 56px;
-  background: var(--fill-3);
-  color: var(--ios-orange);
-  font-size: 21px;
-  padding: 15px 0;
-}
-
-.feedback-card {
-  border-radius: var(--radius-l);
-  padding: clamp(20px, 2.4vw, 26px);
-  margin-top: 22px;
-  animation: screenIn 0.4s var(--ease-spring);
-}
-.feedback-card.correct {
-  background: linear-gradient(135deg, #E8F9ED, #F0FBF3);
-  border: 1.5px solid rgba(52,199,89,0.4);
-}
-.feedback-card.wrong {
-  background: linear-gradient(135deg, #FFF0EF, #FFF6F5);
-  border: 1.5px solid rgba(255,59,48,0.35);
-}
-
-.feedback-title {
-  font-size: 16.5px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.feedback-card.correct .feedback-title { color: var(--ios-green-dark); }
-.feedback-card.wrong .feedback-title   { color: var(--ios-red); }
-
-.feedback-badge {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  color: #fff;
-  font-weight: 900;
-  flex-shrink: 0;
-}
-.feedback-card.correct .feedback-badge { background: var(--ios-green); }
-.feedback-card.wrong .feedback-badge   { background: var(--ios-red); }
-
-.advisor-box { display: flex; gap: 14px; margin-bottom: 16px; }
-
-.advisor-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #5AC8FA, #007AFF);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0,122,255,0.3);
-}
-
-.advisor-text { flex: 1; font-size: 14px; line-height: 1.68; color: #2C2C2E; min-width: 0; }
-
-.advisor-name {
-  font-weight: 700;
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-
-.std-entry {
-  background: rgba(0,0,0,0.045);
-  border-radius: 10px;
-  padding: 13px 15px;
-  font-family: var(--mono);
-  font-size: 13px;
-  line-height: 1.9;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-.std-entry .dr { color: var(--ios-blue); font-weight: 700; }
-.std-entry .cr { color: var(--ios-red);  font-weight: 700; }
-
-/* ============================================================
-   結算
-   ============================================================ */
-.settle-wrap {
-  padding: var(--content-pad-y) var(--content-pad-x) 60px;
-  max-width: 720px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.settle-hero { text-align: center; margin-bottom: 24px; }
-.settle-hero .emoji {
-  font-size: clamp(40px, 6vw, 54px);
-  margin-bottom: 10px;
-  display: block;
-}
-.settle-hero h2 {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 6px;
-}
-.settle-hero p {
-  font-size: 13.5px;
-  color: var(--label-2);
-  font-weight: 500;
-}
-
-.sheet-section {
-  background: var(--card);
-  border-radius: var(--radius-l);
-  padding: clamp(18px, 2.2vw, 24px);
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
-}
-
-.sheet-section h4 {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--label-2);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin-bottom: 14px;
-}
-
-.sheet-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  font-size: 14.5px;
-  border-bottom: 0.5px solid var(--separator);
-  gap: 12px;
-}
-.sheet-row:last-child { border-bottom: none; }
-.sheet-row .label { color: var(--label-2); font-weight: 500; }
-.sheet-row .value { font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.2px; }
-.sheet-row.total {
-  border-top: 1.5px solid var(--label);
-  border-bottom: none;
-  padding-top: 14px;
-  margin-top: 4px;
-  font-size: 15.5px;
-}
-.sheet-row.total .label { color: var(--label); font-weight: 700; }
-
-.balance-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-.balance-col { padding: 0 10px; }
-.balance-col:first-child { padding-left: 0; border-right: 0.5px solid var(--separator); }
-.balance-col:last-child { padding-right: 0; padding-left: 18px; }
-.balance-col h5 {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
-  padding-bottom: 7px;
-  border-bottom: 1px solid var(--separator);
-}
-.balance-col.assets h5 { color: var(--ios-blue); }
-.balance-col.liab h5   { color: var(--ios-red); }
-.balance-col .sheet-row { font-size: 13px; padding: 7px 0; border-bottom: none; }
-.balance-col .sheet-row.total {
-  border-top: 1px solid var(--separator);
-  margin-top: 8px;
-  padding-top: 10px;
-  font-size: 13.5px;
-}
-
-.check-badge {
-  background: linear-gradient(135deg, #E8F9ED, #F0FBF3);
-  border: 1.5px solid rgba(52,199,89,0.4);
-  border-radius: var(--radius-m);
-  padding: 14px 18px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ios-green-dark);
-  text-align: center;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-.eval-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 26px;
-}
-@media (max-width: 520px) {
-  .eval-grid { grid-template-columns: 1fr; }
-}
-
-.eval-card {
-  background: var(--card);
-  border-radius: var(--radius-m);
-  padding: 16px;
-  box-shadow: var(--shadow-sm);
-}
-.eval-card .eval-label {
-  font-size: 11.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  margin-bottom: 9px;
-}
-.eval-card.biz .eval-label { color: var(--ios-blue); }
-.eval-card.acc .eval-label { color: var(--ios-orange); }
-.eval-card .eval-text {
-  font-size: 13px;
-  line-height: 1.62;
-  color: var(--label-2);
-  font-weight: 500;
-}
-
-/* ============================================================
-   結局
-   ============================================================ */
-#screen-ending {
-  background: linear-gradient(180deg, #0A84FF 0%, #0064D2 40%, #00307A 100%);
-}
-
-.ending-wrap {
-  padding: clamp(36px, 6vh, 64px) var(--content-pad-x) 60px;
-  max-width: 640px;
-  margin: 0 auto;
-  width: 100%;
-  text-align: center;
-  color: #fff;
-}
-
-.ending-trophy {
-  font-size: clamp(54px, 9vw, 76px);
-  margin-bottom: 18px;
-  display: block;
-  animation: trophyIn 0.8s var(--ease-spring);
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
-}
-
-@keyframes trophyIn {
-  0%   { transform: scale(0.3) rotate(-20deg); opacity: 0; }
-  60%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0); }
-}
-
-.ending-title {
-  font-size: clamp(24px, 3.6vw, 32px);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 12px;
-  line-height: 1.25;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.2);
-}
-
-.ending-stamp {
-  display: inline-block;
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1.5px solid rgba(255,255,255,0.35);
-  font-size: clamp(13px, 1.6vw, 15px);
-  font-weight: 700;
-  padding: 9px 22px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
-  margin-bottom: 26px;
-}
-
-.ending-story {
-  font-size: clamp(14px, 1.6vw, 15.5px);
-  line-height: 1.85;
-  opacity: 0.95;
-  margin-bottom: 28px;
-  text-align: left;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: var(--radius-l);
-  padding: clamp(18px, 2.4vw, 24px);
-}
-
-.grade-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 22px;
-}
-
-.grade-card {
-  background: rgba(255,255,255,0.14);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-l);
-  padding: clamp(18px, 2.2vw, 24px) 16px;
-  text-align: center;
-}
-
-.grade-card .g-label {
-  font-size: 11.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  opacity: 0.75;
-  margin-bottom: 10px;
-}
-.grade-card .g-value {
-  font-size: clamp(38px, 6vw, 52px);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -1px;
-  margin-bottom: 10px;
-  text-shadow: 0 4px 16px rgba(0,0,0,0.25);
-}
-.grade-card .g-meta {
-  font-size: 11px;
-  opacity: 0.78;
-  line-height: 1.55;
-  font-weight: 500;
-}
-
-.ending-advice {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: var(--radius-l);
-  padding: clamp(16px, 2vw, 20px);
-  font-size: 13.5px;
-  line-height: 1.7;
-  text-align: left;
-  margin-bottom: 26px;
-}
-.ending-advice .a-title {
-  font-weight: 700;
-  margin-bottom: 7px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.ending-actions { display: flex; gap: 10px; }
-.ending-actions .splash-btn { flex: 1; font-size: 15px; padding: 15px; }
-
-/* ============================================================
-   Sheet
-   ============================================================ */
-.sheet-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.42);
-  z-index: 200;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-.sheet-overlay.show {
-  display: flex;
-  animation: overlayIn 0.28s ease;
-}
-
-@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
-
-.sheet-panel {
-  background: var(--bg);
-  width: 100%;
-  max-width: 640px;
-  max-height: 86vh;
-  max-height: 86dvh;
-  border-radius: 22px 22px 0 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  animation: sheetUp 0.4s var(--ease-spring);
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.25);
-}
-
-@keyframes sheetUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-
-.sheet-grabber {
-  width: 36px;
-  height: 5px;
-  background: var(--ios-gray4);
-  border-radius: 3px;
-  margin: 10px auto 4px;
-  flex-shrink: 0;
-}
-
-.sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 22px 16px;
-  border-bottom: 0.5px solid var(--separator);
-  flex-shrink: 0;
-}
-
-.sheet-head h3 {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.4px;
-}
-
-.sheet-close {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--fill-3);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  color: var(--label-2);
-  cursor: pointer;
-  font-weight: 600;
-}
-.sheet-close:active { background: var(--fill-2); }
-
-.sheet-body {
-  padding: 18px 22px 32px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  flex: 1;
-}
-
-.ledger-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 12.5px;
-  background: var(--card);
-  border-radius: var(--radius-m);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.ledger-table th {
-  background: var(--fill-4);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--label-2);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  padding: 11px 10px;
-  text-align: left;
-  border-bottom: 0.5px solid var(--separator);
-  white-space: nowrap;
-}
-.ledger-table td {
-  padding: 12px 10px;
-  border-bottom: 0.5px solid var(--separator);
-  vertical-align: top;
-  font-size: 12.5px;
-  line-height: 1.5;
-}
-.ledger-table tr:last-child td { border-bottom: none; }
-.ledger-table .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-.ledger-table .dr { color: var(--ios-blue); font-weight: 600; }
-.ledger-table .cr { color: var(--ios-red);  font-weight: 600; }
-
-.ledger-empty {
-  text-align: center;
-  padding: 50px 20px;
-  color: var(--label-3);
-  font-size: 14.5px;
-}
-
-.settings-list {
-  background: var(--card);
-  border-radius: var(--radius-m);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 20px;
-}
-.settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px;
-  border-bottom: 0.5px solid var(--separator);
-  font-size: 15px;
-  gap: 12px;
-}
-.settings-row:last-child { border-bottom: none; }
-
-.ios-switch {
-  width: 51px;
-  height: 31px;
-  border-radius: 16px;
-  background: var(--ios-gray4);
-  border: none;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.28s var(--ease-smooth);
-  flex-shrink: 0;
-  padding: 0;
-}
-.ios-switch::after {
-  content: "";
-  position: absolute;
-  top: 2px; left: 2px;
-  width: 27px; height: 27px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-  transition: transform 0.28s var(--ease-smooth);
-}
-.ios-switch.on { background: var(--ios-green); }
-.ios-switch.on::after { transform: translateX(20px); }
-
-/* ============================================================
-   浮動提示
-   ============================================================ */
-.floating-delta {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 26px;
-  font-weight: 800;
-  pointer-events: none;
-  z-index: 999;
-  animation: floatUpFade 1.4s var(--ease-smooth) forwards;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  letter-spacing: -0.5px;
-}
-
-@keyframes floatUpFade {
-  0%   { opacity: 0; transform: translate(-50%, 0) scale(0.7); }
-  15%  { opacity: 1; transform: translate(-50%, -18px) scale(1.1); }
-  30%  { transform: translate(-50%, -24px) scale(1); }
-  80%  { opacity: 1; transform: translate(-50%, -46px); }
-  100% { opacity: 0; transform: translate(-50%, -62px); }
-}
-
-::-webkit-scrollbar { width: 0; height: 0; }
-
-/* ============================================================
-   桌面
-   ============================================================ */
-@media (min-width: 1024px) {
-  :root { --content-max: 800px; }
-  .guide-wrap { max-width: 800px; }
-  .setup-wrap { max-width: 640px; }
-  .result-wrap { max-width: 720px; }
-  .acct-wrap { max-width: 780px; }
-  .settle-wrap { max-width: 820px; }
-  .ending-wrap { max-width: 720px; }
-  .map-canvas { max-width: 800px; }
-  .sheet-panel { max-width: 720px; }
-  .event-scene { height: clamp(240px, 30vh, 360px); }
-  .dialogue-card { padding: 26px 30px; }
-}
-
-@media (min-width: 1440px) {
-  :root { --content-max: 960px; }
-  .acct-wrap { max-width: 880px; }
-  .settle-wrap { max-width: 960px; }
-  .map-canvas { max-width: 900px; }
-}
-
-@media (max-width: 360px) {
-  .nav-stat.rep { display: none; }
-  .nav-store { font-size: 15px; max-width: 34vw; }
-  .nav-month { font-size: 11px; padding: 5px 10px; }
-  .nav-icon-btn { width: 38px; height: 38px; font-size: 17px; }
-  .seg-btn { min-width: 58px; font-size: 12px; padding: 7px 8px; }
-  .node-caption { max-width: 140px; min-width: 86px; padding: 6px 11px 7px; }
-  .node-title { font-size: 11.5px; }
-  .node-dot { width: 66px; height: 66px; }
-  .node-icon { font-size: 30px; }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-  .event-scene { height: 140px; }
-  .splash-icon { width: 64px; height: 64px; font-size: 32px; margin-bottom: 16px; }
-  .splash-h1 { font-size: 26px; }
-  .splash-tag { margin-bottom: 22px; }
+    radial-gradient(1200px 600px at 70% -10%, rgba(226,180,95,.10), transparent 60%),
+    radial-gradient(900px 500px at 10% 110%, rgba(78,205,164,.06), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+}
+#app{max-width:780px;margin:0 auto;padding:0 16px 90px;position:relative;z-index:2}
+.hide{display:none!important}
+h1,h2,h3,.serif{font-family:var(--serif)}
+
+/* ---------- 通用元件 ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--serif);font-weight:900;font-size:17px;letter-spacing:2px;
+  color:#2a1d0a;background:linear-gradient(160deg,#f7dfae,#e3b463 55%,#c8963f);
+  border:none;border-radius:14px;padding:14px 26px;cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 6px 18px rgba(226,180,95,.25), inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform .15s, box-shadow .15s, filter .2s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(226,180,95,.35)}
+.btn:active{transform:translateY(1px)}
+.btn::after{content:"";position:absolute;top:0;left:-80%;width:40%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .5s}
+.btn:hover::after{left:130%}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--gold)}
+.btn:disabled{filter:grayscale(.8) brightness(.7);cursor:not-allowed;transform:none}
+.btn.big{width:100%;padding:16px}
+
+.card{background:linear-gradient(170deg,var(--card2),var(--card));border:1px solid var(--line);
+  border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.gold{color:var(--gold)} .jade{color:var(--jade)} .rose{color:var(--rose)}
+.dim{color:var(--dim)} .small{font-size:13px} .tiny{font-size:11px;letter-spacing:1px}
+
+/* ---------- 畫面切換 ---------- */
+.screen{display:none;padding-top:18px}
+.screen.on{display:block;animation:fadeUp .45s cubic-bezier(.2,.7,.3,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(226,180,95,.5)}50%{box-shadow:0 0 0 12px rgba(226,180,95,0)}}
+@keyframes stampIn{0%{transform:scale(3) rotate(-25deg);opacity:0;filter:blur(4px)}60%{transform:scale(.92) rotate(-11deg);opacity:1;filter:none}100%{transform:scale(1) rotate(-12deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes steamUp{0%{transform:translateY(0) scaleX(1);opacity:0}30%{opacity:.7}100%{transform:translateY(-46px) scaleX(1.6);opacity:0}}
+@keyframes leafFall{0%{transform:translateY(-6vh) rotate(0)}100%{transform:translateY(106vh) rotate(340deg)}}
+@keyframes rowIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(226,180,95,0)}50%{box-shadow:0 0 26px rgba(226,180,95,.35)}}
+
+/* ---------- 飄落茶葉 ---------- */
+#bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.leaf{position:absolute;top:-5vh;font-size:18px;opacity:.35;animation:leafFall linear infinite}
+
+/* ---------- HUD ---------- */
+#hud{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 14px;margin:10px -4px;border:1px solid var(--line);border-radius:16px;
+  background:rgba(24,18,10,.92);backdrop-filter:blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+#hud .brand{font-family:var(--serif);font-weight:900;color:var(--gold2);font-size:15px;letter-spacing:1px}
+#hud .pill{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:99px;color:var(--dim);white-space:nowrap}
+#hudCash{color:var(--gold);font-weight:900}
+#hud .spacer{flex:1}
+.icobtn{background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:10px;
+  width:36px;height:36px;font-size:16px;cursor:pointer;transition:.15s}
+.icobtn:hover{border-color:var(--gold);transform:translateY(-1px)}
+.flashUp{animation:flashG .6s} .flashDown{animation:flashR .6s}
+@keyframes flashG{30%{color:#7ef0c0}} @keyframes flashR{30%{color:#ff8d7a}}
+
+/* ---------- 標題畫面 ---------- */
+#sc-title{text-align:center;padding-top:6vh}
+.t-cup{font-size:74px;position:relative;display:inline-block;animation:floaty 3.4s ease-in-out infinite}
+.t-steam{position:absolute;left:50%;top:-14px;width:8px;height:22px;border-radius:8px;background:rgba(244,233,212,.5);filter:blur(4px)}
+.t-steam.s1{margin-left:-16px;animation:steamUp 2.6s ease-out infinite}
+.t-steam.s2{animation:steamUp 2.6s .9s ease-out infinite}
+.t-steam.s3{margin-left:14px;animation:steamUp 2.6s 1.7s ease-out infinite}
+.t-title{font-size:clamp(40px,9vw,64px);font-weight:900;letter-spacing:10px;margin-top:10px;
+  background:linear-gradient(180deg,#fbeec9,#e3b463 60%,#a97e35);-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 40px rgba(226,180,95,.2)}
+.t-sub{letter-spacing:6px;color:var(--dim);margin:8px 0 34px;font-size:14px}
+.t-btns{display:flex;flex-direction:column;gap:12px;max-width:340px;margin:0 auto}
+.t-tag{margin-top:36px;color:#7d6c50;font-size:11px;letter-spacing:2px}
+
+/* ---------- 創立 ---------- */
+.f-label{font-size:13px;color:var(--dim);letter-spacing:2px;margin:20px 0 8px}
+.f-input{width:100%;background:#1a130b;border:1px solid var(--line);border-radius:12px;color:var(--ink);
+  padding:13px 14px;font-size:16px;font-family:var(--sans);outline:none;transition:.2s}
+.f-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,180,95,.15)}
+.capgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.capcard{border:1.5px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.2s;background:var(--card)}
+.capcard:hover{transform:translateY(-2px)}
+.capcard.sel{border-color:var(--gold);background:linear-gradient(170deg,#33270f,#241b12);box-shadow:0 0 20px rgba(226,180,95,.15)}
+.capcard .amt{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--gold2)}
+
+/* ---------- 地圖 ---------- */
+.m-month{margin-bottom:26px}
+.m-banner{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:900;letter-spacing:3px;color:var(--gold2);margin-bottom:14px}
+.m-banner::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.m-nodes{position:relative;padding-left:8px}
+.m-nodes::before{content:"";position:absolute;left:29px;top:14px;bottom:14px;width:0;
+  border-left:2px dashed rgba(226,180,95,.28)}
+.node{display:flex;align-items:center;gap:14px;padding:9px 0;position:relative}
+.node .dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:20px;background:var(--card2);border:1.5px solid var(--line);flex:none;transition:.2s;z-index:1}
+.node.done .dot{background:linear-gradient(160deg,#4a3a17,#33270f);border-color:var(--gold)}
+.node.done .dot::after{content:"✓";position:absolute;margin-left:52px;margin-top:-30px;font-size:11px;color:var(--jade);font-weight:900}
+.node.cur{cursor:pointer}
+.node.cur .dot{border-color:var(--gold);animation:pulse 1.8s infinite;background:linear-gradient(160deg,#5a4419,#3a2c10)}
+.node.lock{opacity:.38;filter:grayscale(.6)}
+.node .lbl{font-weight:700;letter-spacing:1px}
+.node .sub{font-size:12px;color:var(--dim)}
+.node.cur .lbl{color:var(--gold2)}
+.shopscene{margin-top:8px;text-align:center;padding:18px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(180deg,#2b2010,#1c150c)}
+.shopscene .sign{font-family:var(--serif);font-weight:900;font-size:22px;letter-spacing:6px;color:var(--gold2);
+  display:inline-block;padding:6px 22px;border:2px solid var(--goldD);border-radius:8px;background:#3a2c10;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.lanterns{font-size:22px;letter-spacing:8px;margin-top:10px;min-height:28px}
+
+/* ---------- 決策 ---------- */
+.ev-head{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+.ev-head .ic{font-size:38px;animation:floaty 3s ease-in-out infinite}
+.ev-head h2{font-size:26px;letter-spacing:3px}
+.quote{border-left:3px solid var(--gold);padding:10px 14px;margin:14px 0 20px;color:var(--dim);
+  background:rgba(226,180,95,.05);border-radius:0 12px 12px 0;font-size:14px;line-height:1.7}
+.choice{display:block;width:100%;text-align:left;margin-bottom:12px;cursor:pointer;
+  background:linear-gradient(170deg,var(--card2),var(--card));border:1.5px solid var(--line);border-radius:16px;
+  padding:16px;color:var(--ink);font-family:var(--sans);transition:.18s;position:relative}
+.choice:hover:not(:disabled){border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.choice:disabled{opacity:.45;cursor:not-allowed}
+.choice .ct{font-family:var(--serif);font-weight:900;font-size:17px;letter-spacing:1px;display:flex;justify-content:space-between;gap:8px}
+.choice .cs{font-size:13px;color:var(--dim);margin-top:5px;line-height:1.6}
+.choice .tags{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--dim)}
+.tag.good{color:var(--jade);border-color:rgba(78,205,164,.4)}
+.tag.bad{color:var(--rose);border-color:rgba(226,118,138,.4)}
+.tag.gold{color:var(--gold);border-color:rgba(226,180,95,.45)}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;
+  background:rgba(10,7,3,.72);backdrop-filter:blur(4px)}
+.modal .box{width:100%;max-width:520px;max-height:86vh;overflow:auto;animation:pop .35s cubic-bezier(.2,.9,.3,1.2);
+  background:linear-gradient(170deg,#2c2114,#1f1710);border:1px solid var(--line);border-radius:20px;padding:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.modal h3{letter-spacing:3px;color:var(--gold2);font-size:20px;margin-bottom:14px}
+.imp-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed rgba(226,180,95,.12);
+  font-size:14px;animation:rowIn .4s both}
+.imp-item:last-child{border:none}
+
+/* ---------- 傳票（記帳） ---------- */
+.j-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.j-streak{font-weight:900;color:var(--orange)}
+.voucher{background:linear-gradient(170deg,var(--paper),var(--paper2));color:var(--inkD);border-radius:12px;
+  padding:16px 16px 18px;position:relative;box-shadow:0 12px 30px rgba(0,0,0,.45);
+  background-image:repeating-linear-gradient(180deg,transparent 0 30px, rgba(160,120,60,.10) 30px 31px)}
+.voucher .vh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #b8552f;padding-bottom:8px;margin-bottom:10px}
+.voucher .vh b{font-family:var(--serif);letter-spacing:4px;color:#8a3c22;font-size:17px}
+.voucher .vd{font-size:14px;font-weight:700;line-height:1.6;margin-bottom:12px}
+.j-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.j-col h4{font-size:13px;letter-spacing:3px;text-align:center;padding:6px;border-radius:8px;margin-bottom:8px;font-family:var(--serif)}
+.j-col.deb h4{background:rgba(227,180,99,.25);color:#7a4d12}
+.j-col.cre h4{background:rgba(78,140,205,.16);color:#28527a}
+.j-col.active h4{outline:2px solid #b8552f;outline-offset:1px}
+.slot{border:1.5px dashed #b39b6d;border-radius:9px;padding:7px 8px;margin-bottom:7px;min-height:52px;
+  display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer;transition:.15s;background:rgba(255,255,255,.35)}
+.slot:hover{border-color:#8a3c22}
+.slot .amt{font-weight:900;font-size:13px;color:#5c4322;white-space:nowrap}
+.slot .ph{font-size:12px;color:#a08c62}
+.slot.filled{border-style:solid;background:#fff;border-color:#c9b183}
+.slot .acct{font-weight:900;font-size:13px}
+.slot.wrong{border-color:#c0392b;background:#fdecea;animation:shake .45s}
+.slot.hinted{border-color:#2e9e6b;background:#e9f7ef}
+.j-total{display:flex;justify-content:space-between;margin-top:8px;font-size:13px;font-weight:900;color:#5c4322;
+  border-top:2px solid #b8552f;padding-top:8px}
+.stamp{position:absolute;right:14px;top:38%;width:86px;height:86px;border:4px solid #b83226;border-radius:50%;
+  display:none;align-items:center;justify-content:center;font-family:var(--serif);font-weight:900;font-size:22px;
+  color:#b83226;letter-spacing:2px;transform:rotate(-12deg);background:rgba(255,255,255,.25);text-align:center;line-height:1.2}
+.stamp.show{display:flex;animation:stampIn .5s cubic-bezier(.2,.9,.3,1) both}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;justify-content:center}
+.chip{border:1.5px solid var(--line);background:var(--card2);color:var(--ink);border-radius:99px;
+  padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s}
+.chip:hover{transform:translateY(-2px);border-color:var(--gold)}
+.chip:active{transform:scale(.94)}
+.chip .dotc{width:8px;height:8px;border-radius:50%}
+.lin{display:flex;gap:12px;margin-top:16px;background:rgba(78,205,164,.07);border:1px solid rgba(78,205,164,.25);
+  border-radius:14px;padding:12px 14px;font-size:13.5px;line-height:1.7;align-items:flex-start}
+.lin .ava{font-size:28px;flex:none}
+.j-actions{display:flex;gap:10px;margin-top:16px}
+
+/* ---------- 結算 ---------- */
+.st-wrap{max-width:640px;margin:0 auto}
+.st-title{text-align:center;margin-bottom:18px}
+.st-title h2{font-size:26px;letter-spacing:5px;color:var(--gold2)}
+.st-card{margin-bottom:16px;padding:18px 20px}
+.st-row{display:flex;justify-content:space-between;padding:7px 2px;font-size:14.5px;animation:rowIn .5s both;border-bottom:1px dashed rgba(226,180,95,.1)}
+.st-row.indent{padding-left:22px;color:var(--dim)}
+.st-row.strong{font-weight:900;font-size:16px;border-bottom:none;border-top:1.5px solid var(--line);margin-top:4px;padding-top:10px}
+.st-row.final{font-family:var(--serif);font-size:19px;font-weight:900;border:none;padding:12px 2px 4px}
+.pos{color:var(--jade)} .neg{color:var(--rose)}
+.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.balance-eq{text-align:center;margin:16px 0;padding:14px;border-radius:14px;border:1.5px solid var(--gold);
+  font-family:var(--serif);font-weight:900;letter-spacing:2px;font-size:16px;animation:glowPulse 2s infinite}
+.rate-row{display:flex;gap:12px;justify-content:center;margin:18px 0}
+.seal{width:104px;height:104px;border-radius:50%;border:3.5px solid var(--red);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-family:var(--serif);color:var(--red);background:rgba(208,90,78,.06)}
+.seal .g{font-size:38px;font-weight:900;line-height:1}
+.seal .l{font-size:11px;letter-spacing:2px;margin-top:4px}
+.seal.S{border-color:#e3b463;color:#e3b463;background:rgba(227,180,99,.08);box-shadow:0 0 26px rgba(227,180,99,.25)}
+.seal.A{border-color:var(--jade);color:var(--jade)}
+.seal.B{border-color:#9db4c0;color:#9db4c0}
+.seal.C{border-color:#8d7f6b;color:#8d7f6b}
+
+/* ---------- 結局 ---------- */
+.rs-title{font-size:clamp(24px,6vw,34px);letter-spacing:5px;text-align:center;margin:14px 0 4px;
+  background:linear-gradient(180deg,#fbeec9,#e3b463);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bars{display:flex;gap:14px;align-items:flex-end;justify-content:center;height:150px;margin:18px 0 6px}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:6px;width:72px}
+.bar{width:100%;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#f7dfae,#c8963f);min-height:6px;
+  animation:grow .9s cubic-bezier(.2,.8,.3,1) both;transform-origin:bottom}
+.bar.p{background:linear-gradient(180deg,#7ef0c0,#2e9e6b)}
+@keyframes grow{from{transform:scaleY(0)}}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
+.ach{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;font-size:12px;color:var(--dim);background:var(--card)}
+.ach.on{border-color:var(--gold);color:var(--ink);background:linear-gradient(170deg,#33270f,#241b12)}
+.ach .ai{font-size:24px;display:block;margin-bottom:5px}
+
+/* ---------- 總帳 ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{color:var(--gold);letter-spacing:1px;padding:8px 6px;border-bottom:1.5px solid var(--line);text-align:left;font-weight:700}
+.tbl td{padding:7px 6px;border-bottom:1px dashed rgba(226,180,95,.12)}
+.tbl .num{text-align:right;font-weight:700;white-space:nowrap}
+
+/* ---------- Toast / FX ---------- */
+#toasts{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:linear-gradient(170deg,#3a2c10,#241b12);border:1px solid var(--gold);color:var(--gold2);
+  padding:10px 20px;border-radius:99px;font-size:13.5px;font-weight:700;letter-spacing:1px;
+  box-shadow:0 12px 30px rgba(0,0,0,.5);animation:pop .35s both;max-width:88vw;text-align:center}
+.toast.achv{border-color:var(--gold);background:linear-gradient(170deg,#4a3a10,#2a1f0c)}
+#fx{position:fixed;inset:0;z-index:250;pointer-events:none;overflow:hidden}
+.coin{position:absolute;font-size:18px;animation:coinF linear both}
+@keyframes coinF{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(46vh) rotate(300deg);opacity:0}}
+.conf{position:absolute;width:9px;height:14px;top:-20px;animation:confF linear both}
+@keyframes confF{to{transform:translateY(105vh) rotate(720deg)}}
+
+@media(max-width:520px){
+  .capgrid{grid-template-columns:1fr}
+  .bs-grid{grid-template-columns:1fr}
+  .slot .amt{font-size:11.5px}
+  .chip{font-size:12px;padding:7px 11px}
 }
 </style>
 </head>
 <body>
+<div id="bgfx"></div>
+<div id="toasts"></div>
+<div id="fx"></div>
 
-<div id="game-container">
-
-  <header id="ios-nav">
-    <div class="nav-left">
-      <span class="nav-store" id="hud-shop-name">禾香茗茶</span>
-      <span class="nav-month" id="hud-month-tag">籌備期</span>
-    </div>
-    <div class="nav-right">
-      <span class="nav-stat cash" id="hud-cash">$100,000</span>
-      <span class="nav-stat rep">⭐<span id="hud-reputation">50</span></span>
-      <button class="nav-icon-btn" id="btn-toggle-ledger" title="帳本">📖</button>
-      <button class="nav-icon-btn" id="btn-toggle-settings" title="設定">⚙️</button>
-    </div>
+<div id="app">
+  <header id="hud" class="hide">
+    <span class="brand">🏮 <span id="hudShop"></span></span>
+    <span class="pill" id="hudMonth"></span>
+    <span class="pill">💰 <span id="hudCash">$0</span></span>
+    <span class="pill">⭐ <span id="hudStar">0</span></span>
+    <span class="pill" id="hudLv"></span>
+    <span class="spacer"></span>
+    <button class="icobtn" id="btnLedger" title="總分類帳">📒</button>
+    <button class="icobtn" id="btnSet" title="設定">⚙️</button>
   </header>
 
-  <main id="main-stage">
-
-    <section class="screen-view active" id="screen-splash">
-      <div class="splash-content">
-        <div class="splash-icon">🏪</div>
-        <h1 class="splash-h1">創業帳本</h1>
-        <p class="splash-tag">從小店到商業王國</p>
-        <div class="splash-menu">
-          <button class="splash-btn main" id="btn-splash-start">開始創業</button>
-          <button class="splash-btn glass" id="btn-splash-continue" style="display:none;">接續前次進度</button>
-          <button class="splash-btn glass" id="btn-splash-guide">遊戲說明</button>
-        </div>
-        <div class="splash-footer">每一筆交易，都是你做過的選擇</div>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-guide">
-      <div class="guide-wrap">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 4px 16px;">
-          <h1 class="large-title">遊戲說明</h1>
-          <button class="ios-btn ghost" id="btn-close-guide" style="width:auto;padding:8px 14px;font-size:15px;">完成</button>
-        </div>
-
-        <div class="segmented">
-          <button class="seg-btn active" data-tab="0">目標</button>
-          <button class="seg-btn" data-tab="1">流程</button>
-          <button class="seg-btn" data-tab="2">評分</button>
-          <button class="seg-btn" data-tab="3">選擇與會計</button>
-          <button class="seg-btn" data-tab="4">晉級</button>
-        </div>
-
-        <div class="guide-content" id="guide-body-content"></div>
-
-        <div class="guide-nav">
-          <button class="ios-btn secondary" id="btn-guide-prev" style="flex:1;">上一步</button>
-          <button class="ios-btn primary" id="btn-guide-next" style="flex:1;">下一步</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-setup">
-      <div class="setup-wrap">
-        <div style="padding:12px 4px 22px;">
-          <h1 class="large-title">創立事業</h1>
-          <p style="font-size:14px;color:var(--label-2);margin-top:8px;font-weight:500;">設定經營者與店名，確立第一筆業主資本。</p>
-        </div>
-
-        <div class="section-title">基本資料</div>
-        <div class="form-group">
-          <div class="form-row">
-            <label for="input-owner-name">經營者</label>
-            <input type="text" id="input-owner-name" class="form-input" value="林掌櫃" maxlength="10" placeholder="請輸入姓名">
-          </div>
-          <div class="form-row">
-            <label for="input-store-name">店名</label>
-            <input type="text" id="input-store-name" class="form-input" value="禾香茗茶" maxlength="12" placeholder="請輸入店名">
-          </div>
-        </div>
-
-        <div class="section-title">初期投入資本</div>
-        <div class="capital-options">
-          <div class="capital-card selected" data-amount="100000">
-            <div class="check">✓</div>
-            <div class="amount">$100,000</div>
-            <div class="desc">標準創業資金<br>穩健起步</div>
-          </div>
-          <div class="capital-card" data-amount="80000">
-            <div class="check">✓</div>
-            <div class="amount">$80,000</div>
-            <div class="desc">緊湊微型創業<br>挑戰現金流控管</div>
-          </div>
-        </div>
-
-        <button class="ios-btn primary" id="btn-confirm-setup" style="margin-top:16px;">
-          完成設立，開始創業 →
-        </button>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-map">
-      <div class="map-top">
-        <div class="map-header">
-          <div>
-            <div class="map-eyebrow">創業旅程</div>
-            <h2>商業地圖</h2>
-          </div>
-          <div class="map-progress-pct">
-            <span id="map-pct-num">0</span><small>%</small>
-          </div>
-        </div>
-        <p class="map-subtitle" id="map-subtitle">點擊藍色節點，開始你的第一個決策</p>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="map-progress" style="width:0%"></div>
-        </div>
-      </div>
-      <div class="map-scroll" id="map-scroll">
-        <div class="map-canvas" id="map-canvas">
-          <svg id="map-svg"></svg>
-        </div>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-event">
-      <div class="event-scene">
-        <div class="scene-emoji-bg" id="scene-emoji-bg">🏪</div>
-        <div class="scene-tag" id="event-location-text">店面現場</div>
-        <div class="scene-char" id="scene-char">🧑‍💼</div>
-      </div>
-
-      <div class="event-body">
-        <div class="dialogue-card">
-          <div class="speaker-row">
-            <div class="speaker-dot"></div>
-            <span class="speaker-name" id="speaker-title">蘇先生</span>
-            <span class="speaker-role" id="speaker-role">資深創業顧問</span>
-          </div>
-          <div class="dialogue-text" id="speaker-content"></div>
-        </div>
-
-        <div class="choices-label">請做出你的商業決策</div>
-        <div class="choices-list" id="choices-container"></div>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-result">
-      <div class="result-wrap">
-        <div class="result-hero">
-          <div class="hero-icon">✅</div>
-          <h2 id="result-choice-title">決策落定</h2>
-          <p class="sub">你的選擇將帶來以下連鎖影響</p>
-        </div>
-
-        <div class="result-desc" id="result-desc"></div>
-
-        <div class="section-title">影響清單</div>
-        <ul class="impact-list" id="result-impact-list"></ul>
-
-        <div class="foreshadow" id="result-foreshadowing" style="display:none;">
-          <span class="ico">🔮</span>
-          <span id="foreshadow-text"></span>
-        </div>
-
-        <button class="ios-btn primary" id="btn-proceed-accounting">
-          進行會計處理 →
-        </button>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-accounting">
-      <div class="acct-wrap">
-        <div class="task-header">
-          <h2 id="acct-task-title">任務</h2>
-          <span class="task-counter" id="acct-task-num">任務 0</span>
-        </div>
-
-        <div class="task-prompt" id="acct-task-prompt"></div>
-
-        <div class="journal-card">
-          <div class="journal-header">
-            <span>分錄表</span>
-            <span class="journal-amount-badge" id="journal-amount-badge">$0</span>
-          </div>
-          <div class="journal-line">
-            <div class="journal-side debit">借方</div>
-            <div class="journal-slot" id="debit-slot" data-side="debit">
-              <span class="slot-placeholder">點擊下方科目放入</span>
-            </div>
-          </div>
-          <div class="journal-line">
-            <div class="journal-side credit">貸方</div>
-            <div class="journal-slot" id="credit-slot" data-side="credit">
-              <span class="slot-placeholder">點擊下方科目放入</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="pool-label">可選會計科目</div>
-        <div class="account-pool" id="account-pool"></div>
-
-        <div class="acct-actions">
-          <button class="ios-btn hint-btn" id="btn-show-hint" title="顧問提示">💡</button>
-          <button class="ios-btn primary" id="btn-submit-accounting" style="flex:1;">確認登記入帳</button>
-        </div>
-
-        <div class="feedback-card" id="acct-feedback-box" style="display:none;">
-          <div class="feedback-title">
-            <span class="feedback-badge" id="feedback-badge">✓</span>
-            <span id="feedback-status-title"></span>
-          </div>
-          <div class="advisor-box">
-            <div class="advisor-avatar">👩‍💼</div>
-            <div class="advisor-text">
-              <div class="advisor-name">林會計師解析</div>
-              <div id="feedback-explanation-text"></div>
-              <div class="std-entry" id="feedback-standard-entry"></div>
-            </div>
-          </div>
-          <button class="ios-btn success" id="btn-continue-next-event" style="margin-top:8px;">
-            繼續推進 →
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-settlement">
-      <div class="settle-wrap">
-        <div class="settle-hero">
-          <span class="emoji">📊</span>
-          <h2 id="settlement-title">本月營運結算</h2>
-          <p>櫃檯燈下，算盤與帳本正無聲述說這個月的成果</p>
-        </div>
-
-        <div class="sheet-section">
-          <h4>一、損益表 Income Statement</h4>
-          <div id="sheet-income-statement"></div>
-        </div>
-
-        <div class="sheet-section">
-          <h4>二、資產負債表 Balance Sheet</h4>
-          <div class="balance-cols" id="sheet-balance-statement"></div>
-        </div>
-
-        <div class="check-badge" id="balance-check-badge"></div>
-
-        <div class="eval-grid">
-          <div class="eval-card biz">
-            <div class="eval-label">商業經營評定</div>
-            <div class="eval-text" id="eval-business-text"></div>
-          </div>
-          <div class="eval-card acc">
-            <div class="eval-label">會計準確評定</div>
-            <div class="eval-text" id="eval-accounting-text"></div>
-          </div>
-        </div>
-
-        <button class="ios-btn primary" id="btn-next-month-flow">
-          展開下個月挑戰 →
-        </button>
-      </div>
-    </section>
-
-    <section class="screen-view" id="screen-ending">
-      <div class="ending-wrap">
-        <span class="ending-trophy" id="ending-emoji">🏆</span>
-        <div class="ending-title" id="ending-title-text">創業初級篇</div>
-        <div class="ending-stamp" id="ending-player-title">【 穩健精算的模範店長 】</div>
-
-        <div class="ending-story" id="ending-story-summary"></div>
-
-        <div class="grade-grid">
-          <div class="grade-card">
-            <div class="g-label">經營評價</div>
-            <div class="g-value" id="ending-business-grade">S</div>
-            <div class="g-meta" id="ending-business-metrics"></div>
-          </div>
-          <div class="grade-card">
-            <div class="g-label">會計評價</div>
-            <div class="g-value" id="ending-acct-grade">A</div>
-            <div class="g-meta" id="ending-acct-metrics"></div>
-          </div>
-        </div>
-
-        <div class="ending-advice">
-          <div class="a-title">💬 顧問複習叮嚀</div>
-          <div id="ending-advice-text"></div>
-        </div>
-
-        <div class="ending-actions">
-          <button class="splash-btn glass" id="btn-ending-menu">返回主選單</button>
-          <button class="splash-btn main" id="btn-ending-restart">重啟新局</button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <div class="sheet-overlay" id="ledger-sheet">
-    <div class="sheet-panel">
-      <div class="sheet-grabber"></div>
-      <div class="sheet-head">
-        <h3>商店總分類帳</h3>
-        <button class="sheet-close" data-close="ledger-sheet">✕</button>
-      </div>
-      <div class="sheet-body">
-        <div id="ledger-rows-container"></div>
-      </div>
+  <!-- 標題 -->
+  <section class="screen on" id="sc-title">
+    <div class="t-cup">🍵
+      <span class="t-steam s1"></span><span class="t-steam s2"></span><span class="t-steam s3"></span>
     </div>
-  </div>
-
-  <div class="sheet-overlay" id="settings-sheet">
-    <div class="sheet-panel">
-      <div class="sheet-grabber"></div>
-      <div class="sheet-head">
-        <h3>設定</h3>
-        <button class="sheet-close" data-close="settings-sheet">✕</button>
-      </div>
-      <div class="sheet-body">
-        <div class="settings-list">
-          <div class="settings-row">
-            <span>🔊 音效</span>
-            <button class="ios-switch on" id="btn-toggle-sound"></button>
-          </div>
-        </div>
-
-        <div class="section-title">進度管理</div>
-        <div class="settings-list">
-          <div class="settings-row" style="cursor:pointer;" id="btn-manual-save">
-            <span>💾 手動儲存進度</span>
-            <span style="color:var(--label-3);font-size:13px;">›</span>
-          </div>
-          <div class="settings-row" style="cursor:pointer;" id="btn-clear-save">
-            <span style="color:var(--ios-red);">🗑️ 重設所有存檔</span>
-            <span style="color:var(--label-3);font-size:13px;">›</span>
-          </div>
-        </div>
-      </div>
+    <h1 class="t-title">創業帳本</h1>
+    <div class="t-sub">從 小 店 到 商 業 王 國</div>
+    <div class="t-btns">
+      <button class="btn big" id="btnStart">🌱 開始創業</button>
+      <button class="btn big ghost hide" id="btnContinue">📖 接續前次進度</button>
+      <button class="btn big ghost" id="btnHelp1">📜 遊戲說明</button>
     </div>
-  </div>
+    <div class="t-tag">每一筆交易，都是你做過的選擇・會計教育遊戲</div>
+  </section>
 
+  <!-- 創立 -->
+  <section class="screen" id="sc-found">
+    <div class="card">
+      <h2 class="serif gold" style="letter-spacing:4px;font-size:24px">創立事業</h2>
+      <p class="dim small" style="margin-top:6px;line-height:1.7">設定經營者與店名，確立第一筆業主資本 —— 這將成為你帳本上的第一筆分錄。</p>
+      <div class="f-label">經營者</div>
+      <input class="f-input" id="inOwner" maxlength="10" value="蘇小弟">
+      <div class="f-label">店名</div>
+      <input class="f-input" id="inShop" maxlength="10" value="禾香茗茶">
+      <div class="f-label">初期投入資本</div>
+      <div class="capgrid" id="capCards">
+        <div class="capcard sel" data-cap="100000"><div class="amt">$100,000</div><div class="small dim" style="margin-top:6px">標準創業資金・穩健起步</div></div>
+        <div class="capcard" data-cap="80000"><div class="amt">$80,000</div><div class="small dim" style="margin-top:6px">緊湊微型創業・挑戰現金流控管</div></div>
+      </div>
+      <div style="margin-top:24px"><button class="btn big" id="btnFound">完成設立，開始創業 →</button></div>
+    </div>
+  </section>
+
+  <!-- 地圖 -->
+  <section class="screen" id="sc-map"><div id="mapWrap"></div></section>
+  <!-- 決策 -->
+  <section class="screen" id="sc-event"><div id="evBody"></div></section>
+  <!-- 記帳 -->
+  <section class="screen" id="sc-journal"><div id="jBody"></div></section>
+  <!-- 結算 -->
+  <section class="screen" id="sc-settle"><div class="st-wrap" id="stBody"></div></section>
+  <!-- 結局 -->
+  <section class="screen" id="sc-result"><div class="st-wrap" id="rsBody"></div></section>
 </div>
 
+<!-- 影響清單 -->
+<div class="modal hide" id="mImpact"><div class="box">
+  <h3>✅ 決策落定</h3>
+  <p class="dim small" id="miQuote" style="margin-bottom:12px;line-height:1.7"></p>
+  <div class="f-label" style="margin-top:0">連鎖影響</div>
+  <div id="miList"></div>
+  <div style="margin-top:20px"><button class="btn big" id="miGo">🖋️ 進行會計處理 →</button></div>
+</div></div>
+
+<!-- 總分類帳 -->
+<div class="modal hide" id="mLedger"><div class="box">
+  <h3>📒 商店總分類帳</h3>
+  <div id="mlBody" style="overflow:auto"></div>
+  <div style="margin-top:16px"><button class="btn ghost big" data-close>關閉</button></div>
+</div></div>
+
+<!-- 設定 -->
+<div class="modal hide" id="mSet"><div class="box">
+  <h3>⚙️ 設定</h3>
+  <button class="btn ghost big" id="setSnd" style="margin-bottom:10px">🔊 音效：開</button>
+  <button class="btn ghost big" id="setSave" style="margin-bottom:10px">💾 手動儲存進度</button>
+  <button class="btn ghost big" id="setHelp" style="margin-bottom:10px">📜 遊戲說明</button>
+  <button class="btn ghost big" id="setReset" style="margin-bottom:10px;border-color:rgba(226,118,138,.5);color:var(--rose)">🗑️ 重設所有存檔</button>
+  <button class="btn big" data-close>返回遊戲</button>
+</div></div>
+
+<!-- 說明 -->
+<div class="modal hide" id="mHelp"><div class="box">
+  <h3>📜 遊戲說明</h3>
+  <div class="small" style="line-height:2;color:var(--ink)">
+    <p>🏮 你將經營一間茶館三個月：<b class="gold">做決策 → 記帳 → 月末結算</b>。</p>
+    <p>📌 每個決策會產生「傳票」，你要幫每張傳票選對會計科目。</p>
+    <p>📌 口訣：<b class="jade">借方記「資金的運用」</b>（買了什麼、錢花去哪）、<b class="gold">貸方記「資金的來源」</b>（錢從哪來：現金、賒帳、借款、資本）。</p>
+    <p>📌 每筆分錄首次答對得滿分 100，失誤會扣分；連對有 🔥 連擊加成。</p>
+    <p>📌 月末結算看損益表與資產負債表，三個月後結算總評：</p>
+    <p>　🏆 經營評價＝資產淨值與獲利　🧮 會計評價＝記帳準確率</p>
+    <p>📌 提示：庫存不夠就沒東西可賣；好店面月底才看得出價值；現金見肘時，業主增資是你的後盾。</p>
+  </div>
+  <div style="margin-top:16px"><button class="btn big" data-close>明白了</button></div>
+</div></div>
+
+<!-- 新手教學 -->
+<div class="modal hide" id="mTut"><div class="box">
+  <h3>👩‍💼 林會計師的記帳教室</h3>
+  <div class="small" style="line-height:2">
+    <p>① 傳票上的 <b>金額已經填好</b>，你要幫每個欄位選對「會計科目」。</p>
+    <p>② 先點 <b>借方／貸方</b> 欄位決定要填哪邊，再點下方的科目圓牌放入。</p>
+    <p>③ 點已放入的科目可以退回。兩邊合計必須相等 —— <b class="gold">有借必有貸，借貸必相等</b>！</p>
+    <p class="dim">第一張傳票：你把資本投入店裡 → 店的「現金」增加（借方），來源是「業主資本」（貸方）。</p>
+  </div>
+  <div style="margin-top:16px"><button class="btn big" id="tutGo">開始記帳 🖋️</button></div>
+</div></div>
+
 <script>
-/* ============================================================
-   遊戲資料（老師可編輯區）
-   ============================================================ */
-const CHARACTERS = {
-  player:          { id: "player",          name: "掌櫃",   role: "店主",             emoji: "🧑‍🍳", color: "#007AFF" },
-  businessAdvisor: { id: "businessAdvisor", name: "蘇先生", role: "資深創業顧問",     emoji: "🧑‍💼", color: "#34C759" },
-  acctAdvisor:     { id: "acctAdvisor",     name: "林會計師", role: "財務會計顧問",   emoji: "👩‍💼", color: "#5AC8FA" },
-  landlord:        { id: "landlord",        name: "陳伯伯", role: "店面房東",         emoji: "👴",   color: "#8E8E93" },
-  supplier:        { id: "supplier",        name: "張老闆", role: "茶葉批發商",       emoji: "🧔",   color: "#FF9500" },
-  employee:        { id: "employee",        name: "小萱",   role: "正職員工",         emoji: "👩",   color: "#FF2D55" },
-  customer:        { id: "customer",        name: "林組長", role: "科技園區福委",     emoji: "👨‍💼", color: "#5AC8FA" },
-  bankOfficer:     { id: "bankOfficer",     name: "王副理", role: "誠信商銀專員",     emoji: "🧑‍💼", color: "#AF52DE" }
-};
+/* ================= 工具 ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const fmt=n=>'$'+Math.round(n).toLocaleString('en-US');
+function show(id){$$('.screen').forEach(s=>s.classList.remove('on'));$('#'+id).classList.add('on');window.scrollTo({top:0});}
+function openM(id){$('#'+id).classList.remove('hide');}
+function closeM(id){$('#'+id).classList.add('hide');}
+$$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal').classList.add('hide'));
+function toast(t,cls){const d=document.createElement('div');d.className='toast '+(cls||'');d.textContent=t;
+  $('#toasts').appendChild(d);setTimeout(()=>{d.style.transition='.4s';d.style.opacity=0;d.style.transform='translateY(-8px)';setTimeout(()=>d.remove(),400)},2400);}
+function tween(el,from,to,dur){const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/dur);
+  el.textContent=fmt(from+(to-from)*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0);}
 
-const ACCOUNT_CATALOG = [
-  { code: "1101", name: "現金",         category: "資產" },
-  { code: "1103", name: "應收帳款",     category: "資產" },
-  { code: "1105", name: "原料與存貨",   category: "資產" },
-  { code: "1109", name: "存出保證金",   category: "資產" },
-  { code: "1201", name: "生財設備",     category: "資產" },
-  { code: "2101", name: "應付帳款",     category: "負債" },
-  { code: "2103", name: "短期銀行借款", category: "負債" },
-  { code: "3101", name: "業主資本",     category: "權益" },
-  { code: "4101", name: "銷貨收入",     category: "收入" },
-  { code: "5101", name: "租金費用",     category: "費用" },
-  { code: "5102", name: "薪資費用",     category: "費用" },
-  { code: "5103", name: "水電瓦斯費",   category: "費用" },
-  { code: "5104", name: "廣告宣傳費",   category: "費用" },
-  { code: "5105", name: "維修費用",     category: "費用" }
+/* ================= 音效（WebAudio 合成） ================= */
+let actx=null,sndOn=true;
+function ac(){if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}return actx;}
+function beep(f,d=.08,type='sine',g=.14,dl=0){if(!sndOn)return;const c=ac();if(!c)return;
+  const o=c.createOscillator(),v=c.createGain();o.type=type;o.frequency.value=f;
+  v.gain.setValueAtTime(0,c.currentTime+dl);v.gain.linearRampToValueAtTime(g,c.currentTime+dl+.01);
+  v.gain.exponentialRampToValueAtTime(.001,c.currentTime+dl+d);o.connect(v).connect(c.destination);
+  o.start(c.currentTime+dl);o.stop(c.currentTime+dl+d+.05);}
+const SFX={
+  click:()=>beep(520,.05,'triangle',.1),
+  chip:()=>beep(760,.06,'triangle',.1),
+  place:()=>{beep(660,.06,'sine',.13);beep(880,.09,'sine',.09,.05)},
+  error:()=>{beep(185,.18,'sawtooth',.1);beep(140,.22,'sawtooth',.08,.09)},
+  ok:()=>[660,830,990].forEach((f,i)=>beep(f,.13,'triangle',.13,i*.07)),
+  coin:()=>{beep(1320,.09,'sine',.11);beep(1760,.13,'sine',.09,.06)},
+  stamp:()=>{beep(120,.12,'square',.16);beep(85,.2,'sine',.2,.02)},
+  fanfare:()=>[523,659,784,1047,1319].forEach((f,i)=>beep(f,.2,'triangle',.15,i*.13)),
+};
+document.addEventListener('click',e=>{if(e.target.closest('button,.choice,.chip,.slot,.node.cur,.capcard'))SFX.click();});
+
+/* ================= 特效 ================= */
+function coinBurst(x,y,n=10){for(let i=0;i<n;i++){const s=document.createElement('span');s.className='coin';s.textContent='🪙';
+  s.style.left=(x+rnd(-30,30))+'px';s.style.top=(y+rnd(-10,10))+'px';s.style.animationDuration=rnd(.7,1.3)+'s';
+  $('#fx').appendChild(s);setTimeout(()=>s.remove(),1400);}}
+function confetti(){const cols=['#e3b463','#4ecda4','#e2768a','#b48ae2','#f4e9d4'];
+  for(let i=0;i<70;i++){const s=document.createElement('span');s.className='conf';
+  s.style.left=rnd(0,100)+'vw';s.style.background=cols[i%cols.length];s.style.animationDuration=rnd(2,4)+'s';
+  s.style.animationDelay=rnd(0,1.2)+'s';$('#fx').appendChild(s);setTimeout(()=>s.remove(),5500);}}
+(function leaves(){for(let i=0;i<7;i++){const s=document.createElement('span');s.className='leaf';s.textContent='🍃';
+  s.style.left=rnd(0,100)+'vw';s.style.animationDuration=rnd(11,22)+'s';s.style.animationDelay=rnd(0,15)+'s';
+  s.style.fontSize=rnd(12,20)+'px';$('#bgfx').appendChild(s);}})();
+
+/* ================= 會計科目 ================= */
+const ACCTS={
+  '現金':{t:'資產'},'存出保證金':{t:'資產'},'原料庫存':{t:'資產'},'設備':{t:'資產'},
+  '應付帳款':{t:'負債'},'銀行借款':{t:'負債'},'業主資本':{t:'權益'},'銷貨收入':{t:'收入'},
+  '銷貨成本':{t:'費用'},'租金費用':{t:'費用'},'薪資費用':{t:'費用'},'水電費用':{t:'費用'},
+  '行銷費用':{t:'費用'},'維修費用':{t:'費用'},'利息費用':{t:'費用'},
+};
+const TCOL={'資產':'#e3b463','負債':'#e2768a','權益':'#b48ae2','收入':'#4ecda4','費用':'#e89a5f'};
+const D=(a,amt)=>({s:'借',a,amt}), C=(a,amt)=>({s:'貸',a,amt});
+
+/* ================= 狀態 ================= */
+let S;
+function fresh(){const bal={};Object.keys(ACCTS).forEach(k=>bal[k]=0);
+  return {owner:'蘇小弟',shop:'禾香茗茶',capital:100000,diff:'std',
+    mi:0,ni:0,bal,cur:{rev:0,cogs:0,exp:{}},cumProfit:0,months:[],ledger:[],
+    rent:0,wages:6000,util:1500,traffic:1,quality:1,mkt:1,cogsRate:.35,
+    flags:{},stars:0,streak:0,accSum:0,accN:0,ach:{},tut:false};}
+function save(){try{localStorage.setItem('cyb_save',JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem('cyb_save');if(d){S=Object.assign(fresh(),JSON.parse(d));return true}}catch(e){}return false;}
+function resetCur(){S.cur={rev:0,cogs:0,exp:{}};S.mkt=1;}
+
+/* ================= HUD ================= */
+let dispCash=0;
+function levelName(){const s=S.stars;return s>=34?'財務軍師':s>=22?'總帳掌櫃':s>=10?'帳房先生':'見習帳房';}
+function updateHUD(){if(!S)return;$('#hudShop').textContent=S.shop;
+  $('#hudMonth').textContent=MONTHS[Math.min(S.mi,2)].name;
+  const c=S.bal['現金'];const el=$('#hudCash');
+  if(Math.abs(c-dispCash)>0){el.classList.remove('flashUp','flashDown');void el.offsetWidth;
+    el.classList.add(c>dispCash?'flashUp':'flashDown');tween(el,dispCash,c,600);}else el.textContent=fmt(c);
+  dispCash=c;
+  $('#hudStar').textContent=S.stars;$('#hudLv').textContent='🎓 '+levelName();
+  if(c>80000)unlock('rich');}
+
+/* ================= 成就 ================= */
+const ACH={first:{n:'初執筆硯',d:'完成第一筆分錄',i:'✍️'},streak5:{n:'帳平如山',d:'連續 5 筆分錄零失誤',i:'🏔️'},
+  soldout:{n:'完售奇蹟',d:'單月茶葉銷售一空',i:'🔥'},profit8:{n:'月進斗金',d:'單月淨利突破 $8,000',i:'💰'},
+  accS:{n:'精打細算',d:'會計評價獲得 S',i:'🧮'},bizS:{n:'商業新星',d:'經營評價獲得 S',i:'🌟'},
+  rich:{n:'小金庫',d:'手上現金超過 $80,000',i:'🪙'}};
+function unlock(id){if(S.ach[id])return;S.ach[id]=1;S.stars+=5;
+  toast('🏅 成就解鎖｜'+ACH[id].i+' '+ACH[id].n+'（+5⭐）','achv');SFX.fanfare();save();}
+
+/* ================= 事件內容 ================= */
+let PEND=[],NOTES=[];
+const addJR=(d,ls)=>PEND.push([d,ls]);
+const note=t=>NOTES.push(t);
+
+const EV={
+shop:{ic:'🏪',title:'第一步：店面的抉擇',
+  quote:'蘇先生瞇起眼：「店面是夢想的地基。租金、押金、人潮 —— 你要拿什麼換什麼？」',
+  choices:()=>[
+   {t:'巷口小巧店面',s:'月租 $7,000・押金 $14,000。客流平穩，負擔最輕。',cost:14000,
+    tags:['現金 −$14,000','客流 ◦◦','低租金'],
+    apply(){S.rent=7000;S.traffic=.92;addJR('支付店面押金',[D('存出保證金',14000),C('現金',14000)]);
+      note('🏠 每月租金定為 $7,000');note('🚶 客流平穩（×0.92）');},
+    res:'小而美，活下去最重要。蘇先生點頭：「留得青山在。」'},
+   {t:'轉角黃金店面',s:'月租 $12,000・押金 $24,000。人潮就是錢潮，但每月都在跟時間賽跑。',cost:24000,
+    tags:['現金 −$24,000','客流 ◦◦◦◦','高租金'],
+    apply(){S.rent=12000;S.traffic=1.25;addJR('支付店面押金',[D('存出保證金',24000),C('現金',24000)]);
+      note('🏠 每月租金定為 $12,000');note('🚶 客流旺盛（×1.25）');},
+    res:'貴，但值得投資。蘇先生笑：「店面看的是未來三個月的人潮。」'},
+   {t:'親戚的優惠騎樓',s:'月租 $5,000・押金 $10,000。人情便宜，位置偏，得靠口碑帶客流。',cost:10000,
+    tags:['現金 −$10,000','客流 ◦','人情價'],
+    apply(){S.rent=5000;S.traffic=.8;addJR('支付店面押金',[D('存出保證金',10000),C('現金',10000)]);
+      note('🏠 每月租金僅 $5,000');note('🚶 位置偏僻（×0.8）');},
+    res:'省下的每一塊錢都是氧氣。只是客人得特別找上門。'}]},
+
+equip:{ic:'⚙️',title:'設備採購',
+  quote:'蘇先生翻著型錄：「茶湯的靈魂在手法，但穩定的出杯靠設備。新、舊、分期，各有盤算。」',
+  choices:()=>[
+   {t:'二手設備',s:'$18,000 一次付清。省錢，但有點年紀，難保不鬧脾氣。',cost:18000,
+    tags:['現金 −$18,000','品質 ◦◦','⚠️ 故障風險'],
+    apply(){S.quality=.9;S.flags.equipUsed=1;addJR('購入二手設備',[D('設備',18000),C('現金',18000)]);
+      note('🫖 品質普通（×0.9）');note('⚠️ 設備有故障風險');},
+    res:'能省則省 —— 但林會計師提醒：修設備也是要錢的。'},
+   {t:'全新設備',s:'$32,000 一次付清。穩如老狗，湯溫滴水不漏。',cost:32000,
+    tags:['現金 −$32,000','品質 ◦◦◦◦'],
+    apply(){S.quality=1.15;addJR('購入全新設備',[D('設備',32000),C('現金',32000)]);
+      note('🫖 品質出眾（×1.15）');},
+    res:'好設備自己會說話。出杯的穩定，就是口碑。'},
+   {t:'分期高規設備',s:'總價 $30,000：頭期 $10,000，餘款 $20,000 下月付。',cost:10000,
+    tags:['現金 −$10,000','欠款 +$20,000','品質 ◦◦◦'],
+    apply(){S.quality=1.05;S.flags.installDue=1;
+      addJR('分期購入設備',[D('設備',30000),C('現金',10000),C('應付帳款',20000)]);
+      note('🫖 品質優良（×1.05）');note('🧾 產生應付帳款 $20,000（下月結算償還）');},
+    res:'用未來的錢買現在的戰力 —— 但下個月記著還。'}]},
+
+stock:{ic:'🍃',title:'首批茶葉進貨',
+  quote:'蘇先生捻起一撮茶：「進多少貨，決定你這個月能賣多少。錢壓在庫存裡，可不會自己生利息。」',
+  choices:()=>[
+   {t:'小批現購',s:'$8,000 現金進貨。保守試水溫。',cost:8000,tags:['現金 −$8,000','庫存 +$8,000'],
+    apply(){addJR('現金購入茶葉',[D('原料庫存',8000),C('現金',8000)]);note('🍃 原料庫存 +$8,000');},
+    res:'輕裝上路。只是生意一好，可能就賣到見底。'},
+   {t:'大批現購',s:'$14,000 現金進貨。備足彈藥迎戰開張。',cost:14000,tags:['現金 −$14,000','庫存 +$14,000'],
+    apply(){addJR('現金購入茶葉',[D('原料庫存',14000),C('現金',14000)]);note('🍃 原料庫存 +$14,000');},
+    res:'倉庫滿，心裡踏實。'},
+   {t:'向茶農賒購',s:'先拿 $12,000 的茶葉，貨款月底再說。',cost:0,tags:['欠款 +$12,000','庫存 +$12,000'],
+    apply(){addJR('賒購茶葉',[D('原料庫存',12000),C('應付帳款',12000)]);
+      note('🍃 原料庫存 +$12,000');note('🧾 產生應付帳款 $12,000');},
+    res:'信用，是創業者的第二桶金。'}]},
+
+market:{ic:'📣',title:'行銷的抉擇',
+  quote:'蘇先生指著街口：「茶再香，巷子太深也沒人聞得到。這個月，要不要大聲一點？」',
+  choices:()=>[
+   {t:'傳單與試飲',s:'$3,000。街坊鄰居一杯一杯喝出口碑。',cost:3000,tags:['現金 −$3,000','買氣 +10%'],
+    apply(){S.mkt=1.1;addJR('支付宣傳費用',[D('行銷費用',3000),C('現金',3000)]);note('📣 本月買氣 ×1.10');},
+    res:'銅板級的廣告，人情味的回報。'},
+   {t:'社群廣告投放',s:'$6,000。讓手機螢幕也聞到茶香。',cost:6000,tags:['現金 −$6,000','買氣 +25%'],
+    apply(){S.mkt=1.25;addJR('投放社群廣告',[D('行銷費用',6000),C('現金',6000)]);note('📣 本月買氣 ×1.25');},
+    res('');return;},
+   {t:'佛系經營',s:'$0。好茶自己會說話……吧？',cost:0,tags:['買氣 ±0%'],
+    apply(){S.mkt=1;note('📣 本月不投放行銷');},
+    res:'省下的廣告費，是賭在品質上的籌碼。'}]},
+
+supplier:{ic:'🤝',title:'供應商來訪',
+  quote:'茶農老陳笑咪咪地坐下：「頭路好沒？跟我簽长约，成本算你便宜一點。」',
+  choices:()=>{const old=S.bal['應付帳款'];const arr=[];
+   arr.push({t:'清償舊帳，簽長期契約',s:(old>0?'先還 $'+old.toLocaleString()+' 欠款，':'')+'再賒購 $18,000 茶葉，單位成本下降。',
+    cost:old,tags:[(old>0?'現金 −'+fmt(old):'無舊帳'),'欠款 +$18,000','毛利率 ↑'],
+    apply(){if(old>0)addJR('清償積欠貨款',[D('應付帳款',old),C('現金',old)]);
+      addJR('賒購新批次茶葉',[D('原料庫存',18000),C('應付帳款',18000)]);S.cogsRate=.30;
+      note('🍃 原料庫存 +$18,000');note('📉 銷貨成本率降至 30%');},
+    res:'舊帳新約一筆勾。老陳拍胸脯：「以後好茶先留給你。」'});
+   arr.push({t:'現金大批採購',s:'$16,000 現金一手交貨，同样談到好價格。',cost:16000,
+    tags:['現金 −$16,000','毛利率 ↑'],
+    apply(){addJR('現金購入大批茶葉',[D('原料庫存',16000),C('現金',16000)]);S.cogsRate=.31;
+      note('🍃 原料庫存 +$16,000');note('📉 銷貨成本率降至 31%');},
+    res:'現金交易的聲音，最清脆。'});
+   arr.push({t:'小量現購即可',s:'$8,000，夠賣就好。',cost:8000,tags:['現金 −$8,000'],
+    apply(){addJR('現金購入茶葉',[D('原料庫存',8000),C('現金',8000)]);
+      note('🍃 原料庫存 +$8,000');},
+    res:'保守，但小心月底無茶可賣。'});
+   return arr;}},
+
+surprise:{ic:'🎲',title:'突發事件',
+  quote:'生意正忙，意外總愛挑這時候敲門……',
+  choices:()=>S.flags.equipUsed?[
+   {t:'叫師傅來修',s:'$2,500 修好繼續拚。',cost:2500,tags:['現金 −$2,500'],
+    apply(){addJR('支付設備維修費',[D('維修費用',2500),C('現金',2500)]);note('🔧 設備恢復運作');},
+    res:'二手設備果然鬧了脾氣。還好修好了。'},
+   {t:'乾脆換新機',s:'$22,000 直上新設備，一勞永逸。',cost:22000,tags:['現金 −$22,000','品質 ↑↑'],
+    apply(){addJR('報舊購新設備',[D('設備',22000),C('現金',22000)]);S.quality=1.1;delete S.flags.equipUsed;
+      note('🫖 品質提升至 ×1.10');},
+    res:'舊的不去新的不來，出杯聲都清脆了。'}]:[
+   {t:'熱情招待，送上好茶',s:'$500 茶葉伴手禮，換一篇真實開箱文。',cost:500,tags:['現金 −$500','下月買氣 ↑↑'],
+    apply(){addJR('贈送部落客茶禮',[D('行銷費用',500),C('現金',500)]);S.flags.blogger=1;
+      note('📣 下月買氣額外 ×1.15');},
+    res:'部落客相機一舉，閃光燈比店裡的燈還亮。'},
+   {t:'低調婉拒',s:'專心顧好每一杯。',cost:0,tags:['無'],
+    apply(){note('🍵 維持現狀');},
+    res:'茶館安靜如常，只有壺嘴冒著白煙。'}]},
+
+growth:{ic:'🚀',title:'大提案：成長的十字路口',
+  quote:'蘇先生攤開一張企劃書，眼神發亮：「三個月了，店活了。現在問題是 —— 要不要讓它長大？」',
+  choices:()=>[
+   {t:'銀行貸款，升級旗艦店',s:'借 $50,000：添購設備 $25,000＋旗艦行銷 $8,000。',cost:-17000,
+    tags:['借款 +$50,000','客流 ↑↑','品質 ↑','買氣 ↑↑'],
+    apply(){addJR('向銀行借款',[D('現金',50000),C('銀行借款',50000)]);
+      addJR('添購旗艦設備',[D('設備',25000),C('現金',25000)]);
+      addJR('旗艦開幕行銷',[D('行銷費用',8000),C('現金',8000)]);
+      S.traffic+=.45;S.quality+=.1;S.mkt=1.3;
+      note('🏦 銀行借款 +$50,000（每月利息 $600）');note('🚶 客流 ×+'  .45);note('🫖 品質提升');note('📣 本月買氣 ×1.30');},
+    res:'.signature 時刻。蘇先生說：「膽子要大，帳要細。」'},
+   {t:'研發季節新品',s:'$7,000 推出「桂雨烏龍」，話題與品質雙收。',cost:7000,
+    tags:['現金 −$7,000','品質 ↑','買氣 +12%'],
+    apply(){addJR('新品研發推廣費',[D('行銷費用',7000),C('現金',7000)]);
+      S.quality+=.12;S.mkt=1.12;note('🫖 品質提升');note('📣 本月買氣 ×1.12');},
+    res:'新品上市那天，排隊的人龍轉過了街角。'},
+   {t:'穩守本店',s:'不擴張、不借款，把每一步走穩。',cost:0,tags:['無動作'],
+    apply(){note('🍵 穩守現狀');},
+    res:'不是不前進，是把根紮得更深。'}]},
+
+stock3:{ic:'📦',title:'備貨大作戰',
+  quote:'林會計師推了推眼鏡：「照這個買氣，月底會缺貨。现金、賒帳、還是請老闆加碼？」',
+  choices:()=>[
+   {t:'現金大批備貨',s:'$20,000 現購，彈藥一次補滿。',cost:20000,tags:['現金 −$20,000','庫存 +$20,000'],
+    apply(){addJR('現金購入大批茶葉',[D('原料庫存',20000),C('現金',20000)]);note('🍃 原料庫存 +$20,000');},
+    res:'倉庫再次滿載。'},
+   {t:'賒購大批備貨',s:'$22,000 貨先入庫，貨款之後再付。',cost:0,tags:['欠款 +$22,000','庫存 +$22,000'],
+    apply(){addJR('賒購大批茶葉',[D('原料庫存',22000),C('應付帳款',22000)]);
+      note('🍃 原料庫存 +$22,000');note('🧾 應付帳款 +$22,000');},
+    res:'老陳二話不說就發了貨 —— 信用養出來了。'},
+   {t:'業主增資後備貨',s:'老闆再投入 $20,000 資本，全數買成茶葉。',cost:0,
+    tags:['資本 +$20,000','現金 +$20,000','庫存 +$20,000'],
+    apply(){addJR('業主追加投資',[D('現金',20000),C('業主資本',20000)]);
+      addJR('現金購入大批茶葉',[D('原料庫存',20000),C('現金',20000)]);
+      note('👑 業主資本 +$20,000');note('🍃 原料庫存 +$20,000');},
+    res:'自己的店，自己加碼。這筆錢在帳上叫「業主資本」。'}]},
+};
+/* 修正上面筆誤用的安全包裝 */
+EV.market.choices=()=>[
+   {t:'傳單與試飲',s:'$3,000。街坊鄰居一杯一杯喝出口碑。',cost:3000,tags:['現金 −$3,000','買氣 +10%'],
+    apply(){S.mkt=1.1;addJR('支付宣傳費用',[D('行銷費用',3000),C('現金',3000)]);note('📣 本月買氣 ×1.10');},
+    res:'銅板級的廣告，人情味的回報。'},
+   {t:'社群廣告投放',s:'$6,000。讓手機螢幕也聞到茶香。',cost:6000,tags:['現金 −$6,000','買氣 +25%'],
+    apply(){S.mkt=1.25;addJR('投放社群廣告',[D('行銷費用',6000),C('現金',6000)]);note('📣 本月買氣 ×1.25');},
+    res:'按鍵一下，方圓三公里的手機都聞到了茶香。'},
+   {t:'佛系經營',s:'$0。好茶自己會說話……吧？',cost:0,tags:['買氣 ±0%'],
+    apply(){S.mkt=1;note('📣 本月不投放行銷');},
+    res:'省下的廣告費，是賭在品質上的籌碼。'}];
+EV.growth.choices=()=>[
+   {t:'銀行貸款，升級旗艦店',s:'借 $50,000：添購設備 $25,000＋旗艦行銷 $8,000。',cost:-17000,
+    tags:['借款 +$50,000','客流 ↑↑','品質 ↑','買氣 ↑↑'],
+    apply(){addJR('向銀行借款',[D('現金',50000),C('銀行借款',50000)]);
+      addJR('添購旗艦設備',[D('設備',25000),C('現金',25000)]);
+      addJR('旗艦開幕行銷',[D('行銷費用',8000),C('現金',8000)]);
+      S.traffic+=.45;S.quality+=.1;S.mkt=1.3;
+      note('🏦 銀行借款 +$50,000（月息 $600）');note('🚶 客流大幅提升');note('🫖 品質提升');note('📣 本月買氣 ×1.30');},
+    res:'關鍵時刻。蘇先生說：「膽子要大，帳要細。」'},
+   {t:'研發季節新品',s:'$7,000 推出「桂雨烏龍」，話題與品質雙收。',cost:7000,
+    tags:['現金 −$7,000','品質 ↑','買氣 +12%'],
+    apply(){addJR('新品研發推廣費',[D('行銷費用',7000),C('現金',7000)]);
+      S.quality+=.12;S.mkt=1.12;note('🫖 品質提升');note('📣 本月買氣 ×1.12');},
+    res:'新品上市那天，排隊的人龍轉過了街角。'},
+   {t:'穩守本店',s:'不擴張、不借款，把每一步走穩。',cost:0,tags:['無動作'],
+    apply(){note('🍵 穩守現狀');},
+    res:'不是不前進，是把根紮得更深。'}];
+
+const MONTHS=[
+ {name:'一月・開張大吉',nodes:[['ev','shop','店面抉擇','🏪'],['ev','equip','設備採購','⚙️'],['ev','stock','首批進貨','🍃'],['settle','月末結算','🌙']]},
+ {name:'二月・站穩腳步',nodes:[['ev','market','行銷抉擇','📣'],['ev','supplier','供應商來訪','🤝'],['ev','surprise','突發事件','🎲'],['settle','月末結算','🌙']]},
+ {name:'三月・關鍵抉擇',nodes:[['ev','growth','成長提案','🚀'],['ev','stock3','備貨大作戰','📦'],['settle','月末結算','🌙']]},
 ];
 
-const ACCOUNTING_TASKS = {
-  task_capital: {
-    id: "task_capital", title: "創始資本投入",
-    prompt: "你將個人積蓄投入茶飲店，作為經營實體的首筆營運現金。",
-    debitAccount: "現金", creditAccount: "業主資本",
-    amountFormula: (s) => s.fin.ownerCapital,
-    shortExplanation: "現金（資產增加）記借方；業主資本（權益增加）記貸方。",
-    detailedExplanation: "會計上的「實體慣例」將商店與店主個人區分開來。店主注資使商店的「現金資產」增加（借方），同時業主對企業淨資產的索償權「業主資本」也增加（貸方）。"
-  },
-  task_rent_prime: {
-    id: "task_rent_prime", title: "黃金商圈租金與保證金",
-    prompt: "承租精華三角窗店面，以現金支付首期租金及保證金共計 $45,000 元。",
-    debitAccount: "存出保證金", creditAccount: "現金",
-    amountFormula: () => 45000,
-    shortExplanation: "存出保證金（資產增加）記借方；現金流出記貸方。",
-    detailedExplanation: "租賃押金未來期滿可退還，屬於「資產」而非費用。現金資產減少則記入貸方。"
-  },
-  task_rent_quiet: {
-    id: "task_rent_quiet", title: "文青巷弄租賃",
-    prompt: "承租文青巷弄店面，以現金支付首期租金及押金共 $24,000 元。",
-    debitAccount: "存出保證金", creditAccount: "現金",
-    amountFormula: () => 24000,
-    shortExplanation: "押金屬於資產性質之存出保證金（借方），現金流出記入貸方。",
-    detailedExplanation: "文青巷租金低廉，保留了大量手頭現金，降低了創業初期的流動性斷裂風險。"
-  },
-  task_equip_cash: {
-    id: "task_equip_cash", title: "現金購入全新設備",
-    prompt: "以現金 $30,000 元全款購入商業封口機與萃茶機。",
-    debitAccount: "生財設備", creditAccount: "現金",
-    amountFormula: () => 30000,
-    shortExplanation: "生財設備增加記入借方；現金減少記入貸方。",
-    detailedExplanation: "設備耐用年限超過一年，未來能持續創造收益，因此資本化為「生財設備」資產，而非當期費用。"
-  },
-  task_equip_credit: {
-    id: "task_equip_credit", title: "賒購設備",
-    prompt: "向設備商以賒購方式購入 $32,000 元設備，約定下個月付款。",
-    debitAccount: "生財設備", creditAccount: "應付帳款",
-    amountFormula: () => 32000,
-    shortExplanation: "設備資產增加記入借方；應付帳款（負債）增加記入貸方。",
-    detailedExplanation: "賒購保留了目前最寶貴的現金流。注意負債會在下月產生清償壓力。"
-  },
-  task_equip_second: {
-    id: "task_equip_second", title: "現金購入二手設備",
-    prompt: "以現金 $18,000 元承接同業二手設備。",
-    debitAccount: "生財設備", creditAccount: "現金",
-    amountFormula: () => 18000,
-    shortExplanation: "生財設備增加記入借方；現金減少記入貸方。",
-    detailedExplanation: "二手設備購入成本較低，但未來維修故障的機率顯著增加。"
-  },
-  task_material_organic: {
-    id: "task_material_organic", title: "有機茶葉採購",
-    prompt: "以現金 $15,000 元購入優質高山茶葉批次。",
-    debitAccount: "原料與存貨", creditAccount: "現金",
-    amountFormula: () => 15000,
-    shortExplanation: "存貨資產增加記入借方；現金資產減少記入貸方。",
-    detailedExplanation: "購入的茶葉原料尚未煮泡售出前，皆屬於店內的流動資產（存貨）。"
-  },
-  task_material_standard: {
-    id: "task_material_standard", title: "標準茶葉採購",
-    prompt: "以現金 $10,000 元購入標準商業用茶葉批次。",
-    debitAccount: "原料與存貨", creditAccount: "現金",
-    amountFormula: () => 10000,
-    shortExplanation: "原料與存貨增加（借方），現金減少（貸方）。",
-    detailedExplanation: "標準原料符合大眾市場期望，兼顧口感與性價比。"
-  },
-  task_m1_sales: {
-    id: "task_m1_sales", title: "本月門市現銷營收",
-    prompt: "本月日常門市現銷手作茶飲，收訖現金。",
-    debitAccount: "現金", creditAccount: "銷貨收入",
-    amountFormula: (s) => s.transTempAmount || 42000,
-    shortExplanation: "現金（資產增加）記借方；銷貨收入（收入增加）記貸方。",
-    detailedExplanation: "銷貨收入屬於收入類要素，正常餘額在貸方，期末將結轉至本期淨利，使業主權益增加。"
-  },
-  task_m1_utilities: {
-    id: "task_m1_utilities", title: "支付水電瓦斯費",
-    prompt: "收到製冰機與冷氣之水電帳單 $5,000 元，立即以現金繳清。",
-    debitAccount: "水電瓦斯費", creditAccount: "現金",
-    amountFormula: () => 5000,
-    shortExplanation: "費用增加記入借方；現金資產流出記貸方。",
-    detailedExplanation: "水電為當期營運所耗用之勞務，無法保留至未來，因此列為當期營業費用（借方）。"
-  },
-  task_m1_marketing: {
-    id: "task_m1_marketing", title: "社群行銷宣傳",
-    prompt: "支付現金 $6,000 元委託在地 IG 部落客報導與發放傳單。",
-    debitAccount: "廣告宣傳費", creditAccount: "現金",
-    amountFormula: () => 6000,
-    shortExplanation: "廣告宣傳費（費用增加）記借方；現金（資產減少）記貸方。",
-    detailedExplanation: "行銷廣告費能拉抬下個月的知名度，但對當月是實質的現金支出。"
-  },
-  task_m2_repay_ap: {
-    id: "task_m2_repay_ap", title: "清償上月賒購設備款",
-    prompt: "上個月賒購設備之帳款到期，開出現金 $32,000 元付清廠商欠款。",
-    debitAccount: "應付帳款", creditAccount: "現金",
-    amountFormula: () => 32000,
-    shortExplanation: "應付帳款（負債減少）記借方；現金（資產減少）記貸方。",
-    detailedExplanation: "清償債務使負債歸零，同時資產等額減少。這筆交易並不產生當期費用，只是資產與負債的消長。"
-  },
-  task_m2_repair: {
-    id: "task_m2_repair", title: "二手設備維修",
-    prompt: "中古封口機零件磨損漏電，緊急支付現金 $4,000 元維修更換零件。",
-    debitAccount: "維修費用", creditAccount: "現金",
-    amountFormula: () => 4000,
-    shortExplanation: "維修費用增加記借方；現金減少記貸方。",
-    detailedExplanation: "日常修繕僅能維持設備原有狀態，屬於收益支出，應列為維修費用。"
-  },
-  task_m2_corp_ar: {
-    id: "task_m2_corp_ar", title: "科技公司賒銷訂單",
-    prompt: "園區科技公司訂購 500 杯茶飲 $25,000 元，約定下個月底付款（賒銷）。",
-    debitAccount: "應收帳款", creditAccount: "銷貨收入",
-    amountFormula: () => 25000,
-    shortExplanation: "應收帳款（資產增加）記借方；銷貨收入（收入增加）記貸方。",
-    detailedExplanation: "依「權責發生制」，商品已交付且交易完成，即使尚未收到現金，也必須立即認列銷貨收入與應收帳款！"
-  },
-  task_m2_salary: {
-    id: "task_m2_salary", title: "員工薪資發放",
-    prompt: "以現金發放門市夥伴小萱的本月薪資 $20,000 元。",
-    debitAccount: "薪資費用", creditAccount: "現金",
-    amountFormula: () => 20000,
-    shortExplanation: "薪資費用增加記借方；現金資產流出記貸方。",
-    detailedExplanation: "員工薪資為維持服務品質最重要的營運支出，費用增加借記薪資費用。"
-  },
-  task_m3_collect_ar: {
-    id: "task_m3_collect_ar", title: "收回科技公司貨款",
-    prompt: "上個月園區科技公司訂購之 $25,000 元款項已如約匯入收訖。",
-    debitAccount: "現金", creditAccount: "應收帳款",
-    amountFormula: () => 25000,
-    shortExplanation: "現金增加記借方；應收帳款權利消除記貸方。",
-    detailedExplanation: "收回客戶欠款使現金入袋，同時銷除應收帳款債權。此時不再重複認列收入。"
-  },
-  task_m3_loan: {
-    id: "task_m3_loan", title: "銀行短期融資",
-    prompt: "為進行店面升級與抵禦競爭，向銀行申請短期借款 $40,000 元入帳。",
-    debitAccount: "現金", creditAccount: "短期銀行借款",
-    amountFormula: () => 40000,
-    shortExplanation: "現金增加記借方；短期銀行借款（負債增加）記貸方。",
-    detailedExplanation: "融資槓桿讓手頭周轉更靈活，但未來將產生還款責任與利息支出。"
-  },
-  task_m3_grand_sales: {
-    id: "task_m3_grand_sales", title: "第三個月旺季營收",
-    prompt: "第三個月口碑盛傳，門市湧入大量顧客，現銷營收達 $60,000 元。",
-    debitAccount: "現金", creditAccount: "銷貨收入",
-    amountFormula: (s) => s.transTempAmount || 60000,
-    shortExplanation: "現金（資產增加）記借方；銷貨收入（收入增加）記貸方。",
-    detailedExplanation: "充沛的營業收入是店面長青與晉級商業王國的最扎實基石！"
-  }
-};
-
-const BUSINESS_EVENTS = [
-  {
-    id: "evt_start_capital", chapter: 1, month: 0,
-    location: "創業起點", character: "businessAdvisor", title: "注入創業資本",
-    description: "你決定從個人儲蓄中撥出資金，作為手作茶飲店的專屬創業基金。在會計實體慣例中，商店與老闆是分開的獨立個體，這筆錢將同時建立商店的「資產」與你對商店的「權益」。",
-    options: [{
-      id: "capital_inject", text: "投入創業基金，正式成立商號",
-      badges: [{ text: "現金增加", type: "growth" }, { text: "業主資本增加", type: "growth" }],
-      effects: {},
-      resultDesc: "你在商業登記簿上落下第一筆資本紀錄。這間手作茶飲店，從此有了屬於自己的財務生命。",
-      accountingTaskId: "task_capital",
-      foreshadowing: "所有權益結構就此確立，往後每一筆交易都必須與個人資產嚴格分離。"
-    }]
-  },
-  {
-    id: "evt_prep_location", chapter: 1, month: 0,
-    location: "城市街道走訪", character: "landlord", title: "店面選址與租賃協議",
-    description: "你穿梭在市區大街小巷。兩位房東同時向你招手，截然不同的地段將決定未來的客群與固定成本壓力。",
-    options: [
-      {
-        id: "loc_prime", text: "精華商圈三角窗（租金與押金共 $45,000 現金）",
-        badges: [{ text: "-$45,000", type: "money-neg" }, { text: "客流高", type: "growth" }, { text: "資金吃緊", type: "risk" }],
-        effects: { cash: -45000, reputation: 15, locationType: "prime" },
-        resultDesc: "你簽約租下了黃金地段！來往人潮絡繹不絕，雖然一口氣花掉大半積蓄，但打響名號的機會極高。",
-        accountingTaskId: "task_rent_prime",
-        foreshadowing: "高人潮使營收基準提升，但流動資金必須嚴格控管。"
-      },
-      {
-        id: "loc_quiet", text: "文青社區小巷弄（租金與押金共 $24,000 現金）",
-        badges: [{ text: "-$24,000", type: "money-neg" }, { text: "租金低廉", type: "growth" }, { text: "依賴口碑", type: "risk" }],
-        effects: { cash: -24000, reputation: 5, locationType: "quiet" },
-        resultDesc: "你選擇了優雅文青巷弄。租金壓力大幅減輕，手頭保留了充沛的現金安全緩衝。",
-        accountingTaskId: "task_rent_quiet",
-        foreshadowing: "需要花更多心思在口碑與社群宣傳上吸引過路客。"
-      }
-    ]
-  },
-  {
-    id: "evt_prep_equipment", chapter: 1, month: 0,
-    location: "設備展示中心", character: "businessAdvisor", title: "生財器具採購抉擇",
-    description: "封口機、萃茶機與冷藏設備是手搖飲店的心臟。廠商提供了現購折扣、賒購延期付款，以及二手整新品等方案。",
-    options: [
-      {
-        id: "eq_cash", text: "全額現金購買全新旗艦機 ($30,000 現金)",
-        badges: [{ text: "-$30,000", type: "money-neg" }, { text: "設備 +30,000", type: "growth" }, { text: "保固無憂", type: "growth" }],
-        effects: { cash: -30000, equipment: 30000, eqType: "brand_new" },
-        resultDesc: "你以現金買下全新原廠設備。機器安靜高效，員工操作順手，完全沒有後續維修故障的隱憂。",
-        accountingTaskId: "task_equip_cash",
-        foreshadowing: "品質卓越，未來不會觸發突發故障事件。"
-      },
-      {
-        id: "eq_credit", text: "賒購分期支付 ($32,000，下個月付款)",
-        badges: [{ text: "暫不扣現", type: "growth" }, { text: "負債 +32,000", type: "risk" }],
-        effects: { equipment: 32000, accountsPayable: 32000, eqType: "credit" },
-        resultDesc: "你選擇了賒購方案，目前現金額度完全保留！但設備商在契約上載明下個月初必須全額清償。",
-        accountingTaskId: "task_equip_credit",
-        foreshadowing: "第二個月將必定觸發「應付帳款清償」任務！"
-      },
-      {
-        id: "eq_second", text: "收購頂讓二手整新設備 ($18,000 現金)",
-        badges: [{ text: "-$18,000", type: "money-neg" }, { text: "省 40%", type: "growth" }, { text: "維修風險", type: "risk" }],
-        effects: { cash: -18000, equipment: 18000, eqType: "second_hand" },
-        resultDesc: "你節省了大量創業資金購入二手設備。外表雖稍顯斑駁，但功能尚可運作。",
-        accountingTaskId: "task_equip_second",
-        foreshadowing: "二手設備極可能在第二個月發生機械故障與維修事件！"
-      }
-    ]
-  },
-  {
-    id: "evt_prep_materials", chapter: 1, month: 0,
-    location: "茗香茶行倉庫", character: "supplier", title: "首批基底茶葉採購",
-    description: "張老闆端出兩款茶葉：「做手搖飲，茶底是靈魂。想要走頂級回甘路線，還是主流親民風味？」",
-    options: [
-      {
-        id: "mat_organic", text: "採購優質莊園高山茶葉 ($15,000 現金)",
-        badges: [{ text: "-$15,000", type: "money-neg" }, { text: "存貨 +15,000", type: "growth" }, { text: "滿意度 +15", type: "growth" }],
-        effects: { cash: -15000, inventory: 15000, customerSatisfaction: 15, matType: "premium" },
-        resultDesc: "高品質茶湯香氣撲鼻，試喝過的鄰居無不讚賞。這將建立良好的第一印象。",
-        accountingTaskId: "task_material_organic",
-        foreshadowing: "優質風味將提升回購率，但每杯成本稍高。"
-      },
-      {
-        id: "mat_standard", text: "採購標準商業調配茶葉 ($10,000 現金)",
-        badges: [{ text: "-$10,000", type: "money-neg" }, { text: "存貨 +10,000", type: "growth" }, { text: "成本均衡", type: "growth" }],
-        effects: { cash: -10000, inventory: 10000, customerSatisfaction: 5, matType: "standard" },
-        resultDesc: "中規中矩的調配茶，風味符合普羅大眾口味，採購成本合理可控。",
-        accountingTaskId: "task_material_standard",
-        foreshadowing: "利潤空間均衡，適合主打性價比。"
-      }
-    ]
-  },
-  {
-    id: "evt_m1_opening_sales", chapter: 1, month: 1,
-    location: "門市櫃檯", character: "customer", title: "正式開張與首月現銷",
-    description: "鞭炮聲響起，手作茶飲店正式開張！鄰近上班族與學生紛紛前來嚐鮮，排隊隊伍排到了街口。",
-    options: [
-      {
-        id: "sales_steady", text: "堅持工序品質，穩健供應客群",
-        badges: [{ text: "現銷 $42,000", type: "money-pos" }, { text: "聲望 +10", type: "growth" }],
-        effects: { cash: 42000, revenue: 42000, reputation: 10, transTempAmount: 42000 },
-        resultDesc: "每一杯茶都精準計時萃取，顧客稱讚口感細膩，營業額穩穩落袋！",
-        accountingTaskId: "task_m1_sales",
-        foreshadowing: "扎實的口碑為下個月的訂單打下根基。"
-      },
-      {
-        id: "sales_rush", text: "全體加班趕單，推出第二杯半價衝量",
-        badges: [{ text: "現銷 $52,000", type: "money-pos" }, { text: "士氣 -10", type: "risk" }],
-        effects: { cash: 52000, revenue: 52000, morale: -10, transTempAmount: 52000 },
-        resultDesc: "單量激增！櫃檯與後台忙得不可開交，手頭進帳豐碩，但夥伴小萱露出了疲憊神色。",
-        accountingTaskId: "task_m1_sales",
-        foreshadowing: "需要適時鼓舞員工，避免日後離職或出錯。"
-      }
-    ]
-  },
-  {
-    id: "evt_m1_utilities", chapter: 1, month: 1,
-    location: "辦公桌", character: "acctAdvisor", title: "首月水電瓦斯費用結算",
-    description: "門市為了維持珍珠Q度與冰塊充足，製冰機與茶桶持續運轉，台電帳單送達門市。",
-    options: [{
-      id: "util_pay", text: "如期以現金繳清營業水電費 ($5,000)",
-      badges: [{ text: "-$5,000", type: "money-neg" }, { text: "水電費 +5,000", type: "risk" }],
-      effects: { cash: -5000, expenses: 5000 },
-      resultDesc: "準時繳納水電帳單，維持店面電力充沛運作。",
-      accountingTaskId: "task_m1_utilities",
-      foreshadowing: "水電屬於當期營業費用，會直接扣減當月淨利。"
-    }]
-  },
-  {
-    id: "evt_m1_marketing", chapter: 1, month: 1,
-    location: "在地街坊", character: "businessAdvisor", title: "社群行銷宣傳抉擇",
-    description: "蘇顧問提醒：「新店在剛開幕的一個月是建立印象的黃金期。若適當投放廣告，能在第二個月發酵。」",
-    options: [
-      {
-        id: "mkt_invest", text: "投資在地美食部落客與派發傳單 ($6,000 現金)",
-        badges: [{ text: "-$6,000", type: "money-neg" }, { text: "聲望 +20", type: "growth" }, { text: "下月訂單增長", type: "growth" }],
-        effects: { cash: -6000, expenses: 6000, reputation: 20, hasMarketing: true },
-        resultDesc: "精緻照片迅速在 IG 與在地社群洗版，附近園區都知道了這間講究的手作茶！",
-        accountingTaskId: "task_m1_marketing",
-        foreshadowing: "第二個月將有機會接獲科技大廠的大額訂單！"
-      },
-      {
-        id: "mkt_pass", text: "省下開支，純粹依靠自然過路客與回客",
-        badges: [{ text: "$0 支出", type: "neutral" }, { text: "保守穩健", type: "growth" }],
-        effects: { reputation: 2, hasMarketing: false },
-        resultDesc: "你決定將每一分現金保留在帳戶中。經營節奏較為平緩自然。",
-        accountingTaskId: null,
-        foreshadowing: "雖然減少了費用支出，但下個月較難迎來爆發性的大型訂單。"
-      }
-    ]
-  },
-  {
-    id: "evt_m2_consequence", chapter: 1, month: 2,
-    location: "店內吧台", character: "employee", title: "前置抉擇之連鎖效應",
-    description: "時光飛逝來到第二個月，你在開店前所做的重大決定，在此時浮現了深遠的連鎖反應...",
-    dynamicGen: true
-  },
-  {
-    id: "evt_m2_corp_order", chapter: 1, month: 2,
-    location: "門市電話", character: "customer", title: "科技園區大型茶會訂單",
-    description: "科技園區林組長來電：「我們全公司週年茶會想訂購 500 杯手作茶飲，總價 $25,000 元！但依公司請款流程，必須下個月底月結電匯。」",
-    options: [
-      {
-        id: "corp_accept", text: "接受 30 天期月結請款（賒銷出貨）",
-        badges: [{ text: "營收 +25,000", type: "growth" }, { text: "應收帳款 +25,000", type: "growth" }, { text: "暫無現金", type: "risk" }],
-        effects: { revenue: 25000, accountsReceivable: 25000, reputation: 15, transTempAmount: 25000 },
-        resultDesc: "500 杯茶飲如期交付，科技大廠極為滿意！雖然現金尚未落袋，但在會計上已實現了龐大收益。",
-        accountingTaskId: "task_m2_corp_ar",
-        foreshadowing: "第三個月將能如期收現，展現權責發生制之精髓！"
-      },
-      {
-        id: "corp_reject", text: "婉拒賒帳，堅持小店只收現金",
-        badges: [{ text: "零倒帳風險", type: "growth" }, { text: "錯失擴張", type: "risk" }],
-        effects: { reputation: -5 },
-        resultDesc: "對方因為流程受阻只能轉向連鎖品牌訂購。雖然零資金風險，但也失去了打入大企業的敲門磚。",
-        accountingTaskId: null,
-        foreshadowing: "現金流維持穩定，但營收成長趨緩。"
-      }
-    ]
-  },
-  {
-    id: "evt_m2_payroll", chapter: 1, month: 2,
-    location: "店員休息室", character: "employee", title: "員工薪資發放與士氣激勵",
-    description: "小萱工作認真勤奮，即使在繁忙時段也始終保持親切微笑。月底發薪日到了。",
-    options: [{
-      id: "pay_bonus", text: "發放本俸及績效獎金 ($20,000 現金)",
-      badges: [{ text: "-$20,000", type: "money-neg" }, { text: "薪資費用 +20,000", type: "risk" }, { text: "士氣 +25", type: "growth" }],
-      effects: { cash: -20000, expenses: 20000, morale: 25 },
-      resultDesc: "小萱收下紅包感動萬分，主動研發了私房茶特調，店面服務水準大幅提升！",
-      accountingTaskId: "task_m2_salary",
-      foreshadowing: "高昂士氣使第三個月的銷售出錯率降到最低。"
-    }]
-  },
-  {
-    id: "evt_m3_collect_ar", chapter: 1, month: 3,
-    location: "銀行對帳", character: "acctAdvisor", title: "科技大廠帳款到期匯入",
-    description: "叮咚！手機網銀響起入帳通知。上個月承接的園區茶會 $25,000 元款項已順利結清匯入。",
-    options: [{
-      id: "ar_collect", text: "登記入帳：沖銷應收帳款，確認現金入袋",
-      badges: [{ text: "+$25,000", type: "money-pos" }, { text: "應收帳款 -25,000", type: "growth" }],
-      effects: { cash: 25000, accountsReceivable: -25000 },
-      resultDesc: "款項順利回收！流動現金瞬間大補血，完美體驗了「應收帳款轉化為現金」的真實商業循環。",
-      accountingTaskId: "task_m3_collect_ar",
-      foreshadowing: "充沛現金讓你有底氣迎接第三個月最後的商業挑戰！"
-    }]
-  },
-  {
-    id: "evt_m3_competition", chapter: 1, month: 3,
-    location: "對街店面", character: "bankOfficer", title: "連鎖品牌強勢進駐對街",
-    description: "對街掛起了知名手搖飲加盟大品牌的裝潢布條，並祭出全品項八折優惠。誠信銀行王副理前來拜訪，詢問是否需要融資進行旗艦店升級。",
-    options: [
-      {
-        id: "strat_loan", text: "向銀行借款 $40,000 打造特色內用茶空間",
-        badges: [{ text: "+$40,000", type: "money-pos" }, { text: "銀行借款 +40,000", type: "risk" }, { text: "聲望 +30", type: "growth" }],
-        effects: { cash: 40000, bankLoan: 40000, reputation: 30 },
-        resultDesc: "王副理迅速核貸！手握充足銀彈升級質感內用吧台，成功在連鎖巨頭夾殺下樹立高級品牌護城河。",
-        accountingTaskId: "task_m3_loan",
-        foreshadowing: "晉升為高槓桿成長型事業，期末財務結構大幅擴展！"
-      },
-      {
-        id: "strat_niche", text: "堅守職人小店定位，推出季節限量私房茶",
-        badges: [{ text: "零負債", type: "growth" }, { text: "聲望 +10", type: "growth" }],
-        effects: { reputation: 10 },
-        resultDesc: "你以精緻的手工現泡打動老饕，雖然排隊人龍不如連鎖店長，但每一杯的忠誠度極高。",
-        accountingTaskId: null,
-        foreshadowing: "保持零負債的純淨資產負債表，穩健獲利。"
-      }
-    ]
-  },
-  {
-    id: "evt_m3_final_rush", chapter: 1, month: 3,
-    location: "熱鬧門市", character: "customer", title: "第三個月品牌爆發營收",
-    description: "經過整整三個月的用心灌溉，你的茶飲店已成為街坊的驕傲。旺季營收正式出爐！",
-    options: [{
-      id: "m3_sales_collect", text: "清點全月門市現銷營收",
-      badges: [{ text: "現銷 $60,000", type: "money-pos" }, { text: "營收 +60,000", type: "growth" }],
-      effects: { cash: 60000, revenue: 60000, transTempAmount: 60000 },
-      resultDesc: "收銀機的清脆聲響不絕於耳！整整六萬元的現銷收入，為初級篇的創業歷程劃下完美的驚嘆號。",
-      accountingTaskId: "task_m3_grand_sales",
-      foreshadowing: "即將迎來最終章結算與商業帝國晉級考核！"
-    }]
-  }
-];
-
-/* ============================================================
-   遊戲狀態
-   ============================================================ */
-const gameState = {
-  playerName: "林掌櫃",
-  storeName: "禾香茗茶",
-  currentMonth: 0,
-  currentChapter: 1,
-  eventIndex: 0,
-  activeEvent: null,
-  activeChoice: null,
-  transTempAmount: 0,
-
-  fin: {
-    cash: 100000, accountsReceivable: 0, inventory: 0, refundableDeposit: 0,
-    equipment: 0, accountsPayable: 0, bankLoan: 0, ownerCapital: 100000,
-    revenue: 0, expenses: 0, netIncome: 0
-  },
-
-  monthlyRecords: [
-    { month: 1, revenue: 0, expenses: 0, netIncome: 0 },
-    { month: 2, revenue: 0, expenses: 0, netIncome: 0 },
-    { month: 3, revenue: 0, expenses: 0, netIncome: 0 }
-  ],
-
-  biz: {
-    reputation: 50, customerSatisfaction: 80, morale: 80,
-    eqType: "brand_new", locationType: "prime", hasMarketing: false
-  },
-
-  edu: {
-    tasksCompleted: 0, correctCount: 0, wrongCount: 0, hintsUsed: 0, errorLogs: []
-  },
-
-  ledger: [],
-  settings: { soundEnabled: true }
-};
-
-/* ============================================================
-   音效
-   ============================================================ */
-class SoundEngine {
-  constructor() { this.ctx = null; }
-  init() {
-    if (!this.ctx) {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) this.ctx = new AC();
-    }
-  }
-  playClick() {
-    if (!gameState.settings.soundEnabled) return;
-    this.init(); if (!this.ctx) return;
-    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-    o.type = "sine";
-    o.frequency.setValueAtTime(680, this.ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(220, this.ctx.currentTime + 0.06);
-    g.gain.setValueAtTime(0.12, this.ctx.currentTime);
-    g.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
-    o.connect(g); g.connect(this.ctx.destination);
-    o.start(); o.stop(this.ctx.currentTime + 0.06);
-  }
-  playSuccess() {
-    if (!gameState.settings.soundEnabled) return;
-    this.init(); if (!this.ctx) return;
-    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-      o.type = "triangle"; o.frequency.value = f;
-      const t = this.ctx.currentTime + i * 0.075;
-      g.gain.setValueAtTime(0.001, t);
-      g.gain.linearRampToValueAtTime(0.16, t + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      o.connect(g); g.connect(this.ctx.destination);
-      o.start(t); o.stop(t + 0.3);
-    });
-  }
-  playWrong() {
-    if (!gameState.settings.soundEnabled) return;
-    this.init(); if (!this.ctx) return;
-    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-    o.type = "sawtooth";
-    o.frequency.setValueAtTime(240, this.ctx.currentTime);
-    o.frequency.setValueAtTime(180, this.ctx.currentTime + 0.12);
-    g.gain.setValueAtTime(0.14, this.ctx.currentTime);
-    g.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.32);
-    o.connect(g); g.connect(this.ctx.destination);
-    o.start(); o.stop(this.ctx.currentTime + 0.32);
-  }
-  playCoins() {
-    if (!gameState.settings.soundEnabled) return;
-    this.init(); if (!this.ctx) return;
-    [1200, 1500, 1800].forEach((f, i) => {
-      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-      o.type = "sine";
-      const t = this.ctx.currentTime + i * 0.065;
-      o.frequency.setValueAtTime(f, t);
-      g.gain.setValueAtTime(0.11, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-      o.connect(g); g.connect(this.ctx.destination);
-      o.start(t); o.stop(t + 0.12);
-    });
-  }
-}
-const audio = new SoundEngine();
-
-/* ============================================================
-   畫面工具
-   ============================================================ */
-function showScreen(id) {
-  document.querySelectorAll(".screen-view").forEach(el => el.classList.remove("active"));
-  const t = document.getElementById(id);
-  if (t) { t.classList.add("active"); t.scrollTop = 0; }
-  updateHUD();
-}
-
-function updateHUD() {
-  const monthMap = { 0: "籌備期", 1: "第 1 月", 2: "第 2 月", 3: "第 3 月" };
-  const elMonth = document.getElementById("hud-month-tag");
-  const elShop  = document.getElementById("hud-shop-name");
-  const elCash  = document.getElementById("hud-cash");
-  const elRep   = document.getElementById("hud-reputation");
-
-  if (elMonth) elMonth.textContent = monthMap[gameState.currentMonth] || `第 ${gameState.currentMonth} 月`;
-  if (elShop)  elShop.textContent  = gameState.storeName;
-  if (elCash)  elCash.textContent  = "$" + gameState.fin.cash.toLocaleString();
-  if (elRep)   elRep.textContent   = gameState.biz.reputation;
-}
-
-function spawnFloatingDelta(text, positive = true) {
-  const d = document.createElement("div");
-  d.className = "floating-delta";
-  d.style.color = positive ? "#34C759" : "#FF3B30";
-  d.textContent = text;
-  document.body.appendChild(d);
-  setTimeout(() => d.remove(), 1400);
-}
-
-/* ============================================================
-   說明頁
-   ============================================================ */
-const GUIDE_PAGES = [
-  {
-    title: "遊戲目標",
-    content: `
-      <p>歡迎來到《創業帳本》。你將扮演一位懷抱熱忱的創業者，從手頭一筆積蓄開始，親手打造屬於自己的手作茶飲店。</p>
-      <p style="margin-top:12px;">在這趟三個月的創業考驗中，你必須同時兼顧：</p>
-      <ul style="margin-top:8px;">
-        <li><strong>商業經營決策</strong><br>挑選店面、採購設備原料、經營顧客關係、因應市場競爭。</li>
-        <li><strong>標準會計紀律</strong><br>正確分類科目、登載借貸複式傳票、檢視損益表與資產負債表。</li>
-      </ul>
-      <p style="margin-top:12px;font-weight:600;color:var(--ios-blue);">唯有獲利與財務紀律兼具，才能晉級更宏大的商業帝國。</p>
-    `
-  },
-  {
-    title: "進行流程",
-    content: `
-      <p>遊戲採沉浸式地圖推進，每一個營業月份都遵循真實商業循環：</p>
-      <ol style="margin-top:10px;">
-        <li><strong>在地圖上移動</strong><br>點擊藍色節點進入下一個商業情境。</li>
-        <li><strong>商業決策</strong><br>權衡現金成本、負債風險與成長潛力。</li>
-        <li><strong>連鎖影響</strong><br>觀察決策帶來的即時數值變化與後續伏筆。</li>
-        <li><strong>會計任務</strong><br>為交易編製正確的借貸分錄。</li>
-        <li><strong>月底結算</strong><br>編製損益表與資產負債表，接受雙重考核。</li>
-      </ol>
-    `
-  },
-  {
-    title: "雙重評分",
-    content: `
-      <p>本遊戲揚棄傳統「答題加減分」的考試形式，全面導入分軌考核：</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
-        <div style="background:rgba(0,122,255,0.07);border-radius:14px;padding:14px;">
-          <div style="font-weight:700;color:var(--ios-blue);font-size:14px;margin-bottom:6px;">商業經營評價</div>
-          <div style="font-size:12.5px;color:var(--label-2);line-height:1.6;">累計淨利、可用現金、品牌聲望、顧客滿意度與財務槓桿風險控制。</div>
-        </div>
-        <div style="background:rgba(255,149,0,0.08);border-radius:14px;padding:14px;">
-          <div style="font-weight:700;color:#B26700;font-size:14px;margin-bottom:6px;">會計學習評價</div>
-          <div style="font-size:12.5px;color:var(--label-2);line-height:1.6;">科目判斷、借貸方向準確度與金額正確率。</div>
-        </div>
-      </div>
-      <p style="margin-top:14px;font-size:13px;color:var(--label-2);line-height:1.7;">你可能是一位獲利豐厚但帳務馬虎的冒險家，也可能是一位精打細算、帳目分明的穩健經營者。</p>
-    `
-  },
-  {
-    title: "選擇與會計",
-    content: `
-      <p style="font-weight:600;">經營決策沒有標準答案</p>
-      <p style="margin-top:6px;">選擇全額現金買設備能免除負債，但可能手頭缺現；選擇賒購雖保留現金，卻會在下個月帶來償債壓力。每一種選擇都承載著代價與契機。</p>
-      <div style="border-top:1px dashed var(--separator);margin:14px 0;"></div>
-      <p style="font-weight:600;">會計處理則遵循嚴格原則</p>
-      <p style="margin-top:6px;">無論你做出何種選擇，發生的經濟實況都必須依「借貸平衡」與「客觀性原則」入帳。即使作答錯誤，會計顧問也會親自拆解解析，並以正確分錄登入總分類帳，確保報表衡平無誤。</p>
-    `
-  },
-  {
-    title: "晉級標準",
-    content: `
-      <p>初級篇將進行三個營業月份的考驗。第三個月底結算完成時，系統將綜合判定：</p>
-      <ul style="margin-top:10px;">
-        <li><strong>成功晉級</strong>（商業帝國之星）<br>累計淨利 &gt; $30,000、期末現金充裕，且會計總正確率達 <strong>75% 以上</strong>。</li>
-        <li><strong>平穩經營</strong>（溫馨小店長）<br>持續營運且無跳票倒閉，會計總正確率達 <strong>60% 以上</strong>。</li>
-        <li><strong>經營清算</strong>（財務危機）<br>現金周轉斷裂為負值，或重大虧損致資不抵債。</li>
-      </ul>
-      <p style="margin-top:12px;font-weight:600;color:var(--ios-blue);">成功晉級者將取得第二篇「連鎖擴張」的經營入場券！</p>
-    `
-  }
-];
-
-let currentGuideTab = 0;
-function renderGuideTab(i) {
-  currentGuideTab = i;
-  document.querySelectorAll(".seg-btn").forEach((b, idx) => b.classList.toggle("active", idx === i));
-  const d = GUIDE_PAGES[i];
-  const box = document.getElementById("guide-body-content");
-  box.innerHTML = `<h3>${d.title}</h3>${d.content}`;
-  box.style.animation = "none";
-  void box.offsetWidth;
-  box.style.animation = "screenIn 0.3s var(--ease-smooth)";
-}
-
-/* ============================================================
-   地圖渲染 — 壯觀化重製
-   ============================================================ */
-const MONTH_GROUPS = [
-  {
-    month: 0, label: "籌備期", shortLabel: "籌備",
-    color1: "#E8F2FF", color2: "#F2F8FF",
-    accent: "#007AFF", emoji: "📋", deco: "🏪",
-    pattern: "radial-gradient(circle at 30% 30%, rgba(0,122,255,0.12) 0, transparent 55%)"
-  },
-  {
-    month: 1, label: "第一個月", shortLabel: "第 1 月",
-    color1: "#E6FBED", color2: "#F2FFF7",
-    accent: "#34C759", emoji: "🎉", deco: "☕",
-    pattern: "radial-gradient(circle at 30% 30%, rgba(52,199,89,0.12) 0, transparent 55%)"
-  },
-  {
-    month: 2, label: "第二個月", shortLabel: "第 2 月",
-    color1: "#FFF5E0", color2: "#FFFBF0",
-    accent: "#FF9500", emoji: "💡", deco: "📈",
-    pattern: "radial-gradient(circle at 30% 30%, rgba(255,149,0,0.12) 0, transparent 55%)"
-  },
-  {
-    month: 3, label: "第三個月", shortLabel: "第 3 月",
-    color1: "#F0E9FF", color2: "#F9F5FF",
-    accent: "#AF52DE", emoji: "🚀", deco: "🏆",
-    pattern: "radial-gradient(circle at 30% 30%, rgba(175,82,222,0.12) 0, transparent 55%)"
-  }
-];
-
-const LOCATION_ICONS = {
-  "創業起點": "💼", "城市街道走訪": "🏘️", "設備展示中心": "⚙️", "茗香茶行倉庫": "🍃",
-  "門市櫃檯": "🎉", "辦公桌": "💡", "在地街坊": "📱", "店內吧台": "🔧",
-  "門市電話": "📞", "店員休息室": "👥", "銀行對帳": "💰", "對街店面": "🏦", "熱鬧門市": "🎊"
-};
-
-function renderMap() {
-  const canvas = document.getElementById("map-canvas");
-  const svg = document.getElementById("map-svg");
-  if (!canvas || !svg) return;
-
-  canvas.querySelectorAll(".map-node, .map-zone").forEach(n => n.remove());
-
-  const W = canvas.clientWidth || 400;
-
-  const groups = MONTH_GROUPS.map(g => ({ ...g, indices: [] }));
-  BUSINESS_EVENTS.forEach((e, i) => {
-    const g = groups.find(x => x.month === e.month);
-    if (g) g.indices.push(i);
-  });
-
-  // ===== 佈局（加大間距，修掉節點重疊） =====
-  const FIRST_TOP = 50;
-  const NODE_SPACING = 220;       // 由 150 加大到 220
-  const ZONE_TOP_PAD = 130;       // 由 100 加大到 130
-  const ZONE_BOTTOM_PAD = 110;
-  const ZONE_GAP = 56;
-
-  let cursorY = FIRST_TOP;
-  const layouts = [];
-
-  groups.forEach(g => {
-    if (g.indices.length === 0) return;
-    g.zoneTop = cursorY;
-    g.zoneH = ZONE_TOP_PAD + (g.indices.length - 1) * NODE_SPACING + ZONE_BOTTOM_PAD;
-
-    g.indices.forEach((idx, j) => {
-      const y = g.zoneTop + ZONE_TOP_PAD + j * NODE_SPACING;
-      const x = (j % 2 === 0) ? W * 0.32 : W * 0.68;
-      layouts.push({ index: idx, x, y, month: g.month, group: g });
-    });
-
-    cursorY = g.zoneTop + g.zoneH + ZONE_GAP;
-  });
-
-  const H = cursorY + 80;
-  canvas.style.height = H + "px";
-
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  svg.setAttribute("width", W);
-  svg.setAttribute("height", H);
-  svg.innerHTML = "";
-
-  const NS = "http://www.w3.org/2000/svg";
-
-  // ===== 月份區域卡片 =====
-  groups.forEach(g => {
-    if (g.indices.length === 0) return;
-    const zone = document.createElement("div");
-    zone.className = "map-zone";
-    if (g.month === gameState.currentMonth) zone.classList.add("active");
-    zone.style.top = g.zoneTop + "px";
-    zone.style.height = g.zoneH + "px";
-    zone.style.background = `linear-gradient(160deg, ${g.color1} 0%, ${g.color2} 100%)`;
-
-    const isActive = g.month === gameState.currentMonth;
-
-    zone.innerHTML = `
-      <div class="zone-deco">${g.deco}</div>
-      <div class="zone-label" style="color:${g.accent};">
-        <span class="zone-emoji">${g.emoji}</span>
-        <span>${g.label}</span>
-        ${isActive ? `<span class="zone-badge" style="color:${g.accent};"><span>現在</span></span>` : ""}
-      </div>
-    `;
-    canvas.appendChild(zone);
-  });
-
-  // ===== SVG 裝飾 =====
-  // 太陽
-  const sunG = document.createElementNS(NS, "g");
-  const sunGlow = document.createElementNS(NS, "circle");
-  sunGlow.setAttribute("cx", W - 70);
-  sunGlow.setAttribute("cy", 78);
-  sunGlow.setAttribute("r", 60);
-  sunGlow.setAttribute("fill", "#FFD60A");
-  sunGlow.setAttribute("opacity", "0.15");
-  sunG.appendChild(sunGlow);
-  const sunCircle = document.createElementNS(NS, "circle");
-  sunCircle.setAttribute("cx", W - 70);
-  sunCircle.setAttribute("cy", 78);
-  sunCircle.setAttribute("r", 32);
-  sunCircle.setAttribute("fill", "url(#sunGrad)");
-  sunG.appendChild(sunCircle);
-
-  const defs = document.createElementNS(NS, "defs");
-  const sunGrad = document.createElementNS(NS, "radialGradient");
-  sunGrad.setAttribute("id", "sunGrad");
-  const s1 = document.createElementNS(NS, "stop");
-  s1.setAttribute("offset", "0%");
-  s1.setAttribute("stop-color", "#FFF5B8");
-  const s2 = document.createElementNS(NS, "stop");
-  s2.setAttribute("offset", "100%");
-  s2.setAttribute("stop-color", "#FFD60A");
-  sunGrad.appendChild(s1); sunGrad.appendChild(s2);
-  defs.appendChild(sunGrad);
-  svg.appendChild(defs);
-  svg.appendChild(sunG);
-
-  // 雲朵
-  const cloudPositions = [
-    { px: 0.20, py: 0.06, scale: 0.9, opacity: 0.85 },
-    { px: 0.55, py: 0.14, scale: 0.6, opacity: 0.6 },
-    { px: 0.85, py: 0.28, scale: 0.7, opacity: 0.6 },
-    { px: 0.10, py: 0.42, scale: 0.75, opacity: 0.65 },
-    { px: 0.60, py: 0.55, scale: 0.65, opacity: 0.6 },
-    { px: 0.88, py: 0.68, scale: 0.8, opacity: 0.65 },
-    { px: 0.22, py: 0.78, scale: 0.7, opacity: 0.6 },
-    { px: 0.52, py: 0.90, scale: 0.75, opacity: 0.65 }
-  ];
-
-  cloudPositions.forEach(c => {
-    const g = document.createElementNS(NS, "g");
-    g.setAttribute("opacity", c.opacity);
-    const x = W * c.px;
-    const y = H * c.py;
-    const s = c.scale;
-
-    [
-      { dx: 0,   dy: 0,   r: 28 },
-      { dx: 32,  dy: 8,   r: 22 },
-      { dx: -30, dy: 6,   r: 20 },
-      { dx: 12,  dy: -16, r: 18 }
-    ].forEach(cc => {
-      const circle = document.createElementNS(NS, "circle");
-      circle.setAttribute("cx", x + cc.dx * s);
-      circle.setAttribute("cy", y + cc.dy * s);
-      circle.setAttribute("r", cc.r * s);
-      circle.setAttribute("fill", "#FFFFFF");
-      g.appendChild(circle);
-    });
-    svg.appendChild(g);
-  });
-
-  // 星星
-  [
-    { px: 0.08, py: 0.04 }, { px: 0.94, py: 0.12 }, { px: 0.05, py: 0.32 },
-    { px: 0.92, py: 0.48 }, { px: 0.06, py: 0.62 }, { px: 0.95, py: 0.82 },
-    { px: 0.10, py: 0.96 }
-  ].forEach(s => {
-    const star = document.createElementNS(NS, "circle");
-    star.setAttribute("cx", W * s.px);
-    star.setAttribute("cy", H * s.py);
-    star.setAttribute("r", 2.5);
-    star.setAttribute("fill", "#FFD60A");
-    star.setAttribute("opacity", "0.55");
-    svg.appendChild(star);
-  });
-
-  // ===== 道路 =====
-  for (let i = 1; i < layouts.length; i++) {
-    const a = layouts[i - 1], b = layouts[i];
-    const midY = (a.y + b.y) / 2;
-    const d = `M ${a.x} ${a.y} C ${a.x} ${midY}, ${b.x} ${midY}, ${b.x} ${b.y}`;
-    const done = i <= gameState.eventIndex;
-
-    // 外層陰影
-    const shadowPath = document.createElementNS(NS, "path");
-    shadowPath.setAttribute("d", d);
-    shadowPath.setAttribute("fill", "none");
-    shadowPath.setAttribute("stroke", "#000");
-    shadowPath.setAttribute("stroke-width", "20");
-    shadowPath.setAttribute("stroke-linecap", "round");
-    shadowPath.setAttribute("opacity", "0.04");
-    shadowPath.setAttribute("transform", "translate(0, 4)");
-    svg.appendChild(shadowPath);
-
-    // 底層路
-    const road = document.createElementNS(NS, "path");
-    road.setAttribute("d", d);
-    road.setAttribute("fill", "none");
-    road.setAttribute("stroke", done ? "#A8E0BC" : "#E8EAF0");
-    road.setAttribute("stroke-width", "18");
-    road.setAttribute("stroke-linecap", "round");
-    svg.appendChild(road);
-
-    // 上層線
-    const line = document.createElementNS(NS, "path");
-    line.setAttribute("d", d);
-    line.setAttribute("fill", "none");
-    line.setAttribute("stroke", done ? "#34C759" : "#C7C7CC");
-    line.setAttribute("stroke-width", "4.5");
-    line.setAttribute("stroke-linecap", "round");
-    line.setAttribute("stroke-dasharray", done ? "none" : "10 14");
-    svg.appendChild(line);
-  }
-
-  // ===== 節點 =====
-  const monthLabels = ["籌備期", "第一個月", "第二個月", "第三個月"];
-
-  layouts.forEach((n) => {
-    const idx = n.index;
-    const evt = BUSINESS_EVENTS[idx];
-
-    const el = document.createElement("div");
-    el.className = "map-node";
-    if (idx < gameState.eventIndex) el.classList.add("done");
-    else if (idx === gameState.eventIndex) el.classList.add("current");
-    else el.classList.add("locked");
-
-    el.style.left = n.x + "px";
-    el.style.top = n.y + "px";
-
-    const icon = LOCATION_ICONS[evt.location] || "📍";
-    const isCurrent = idx === gameState.eventIndex;
-
-    el.innerHTML = `
-      ${isCurrent ? `<div class="node-float-tag">你在這裡</div>` : ""}
-      <div class="node-wrapper">
-        <div class="node-halo"></div>
-        ${isCurrent ? '<div class="node-avatar">🧑‍🍳</div>' : ''}
-        <div class="node-dot">
-          <span class="node-icon">${icon}</span>
-          <span class="node-check">✓</span>
-        </div>
-      </div>
-      <div class="node-caption">
-        <div class="node-title">${evt.title}</div>
-        <div class="node-meta">${monthLabels[n.month]}</div>
-      </div>
-    `;
-
-    if (isCurrent) {
-      el.addEventListener("click", () => {
-        audio.playClick();
-        loadEvent(idx);
-      });
-    }
-
-    canvas.appendChild(el);
-  });
-
-  // ===== 進度 =====
-  const total = BUSINESS_EVENTS.length - 1;
-  const pct = total > 0 ? Math.min(100, Math.round((gameState.eventIndex / total) * 100)) : 0;
-  document.getElementById("map-progress").style.width = pct + "%";
-  document.getElementById("map-pct-num").textContent = pct;
-
-  const cur = BUSINESS_EVENTS[gameState.eventIndex];
-  const sub = document.getElementById("map-subtitle");
-  if (sub && cur) {
-    sub.textContent = gameState.eventIndex === 0
-      ? "點擊藍色節點，開始你的第一個決策"
-      : `下一站：${cur.title}`;
-  }
-
-  setTimeout(() => {
-    const curEl = canvas.querySelector(".map-node.current");
-    if (curEl) {
-      const scrollWrap = document.getElementById("map-scroll");
-      const target = curEl.offsetTop - scrollWrap.clientHeight / 2 + 80;
-      scrollWrap.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
-    }
-  }, 100);
-}
-
-function showMap() {
-  showScreen("screen-map");
-  setTimeout(renderMap, 40);
-}
-
-/* ============================================================
-   事件載入
-   ============================================================ */
-function loadEvent(index) {
-  if (index >= BUSINESS_EVENTS.length) { triggerFinalEnding(); return; }
-
-  const evt = BUSINESS_EVENTS[index];
-  gameState.activeEvent = evt;
-  gameState.eventIndex = index;
-
-  if (evt.dynamicGen) {
-    if (gameState.biz.eqType === "second_hand") {
-      evt.title = "二手設備零件嚴重磨損漏水";
-      evt.description = "小萱驚呼：「老闆，二手封口機加熱片短路冒煙了，茶杯無法密封！」這正是當時節省設備開銷的代價。";
-      evt.character = "employee";
-      evt.options = [{
-        id: "fix_pay", text: "緊急支付現金 $4,000 元聘請專業技工更換原廠零件",
-        badges: [{ text: "-$4,000", type: "money-neg" }, { text: "維修費用 +4,000", type: "risk" }],
-        effects: { cash: -4000, expenses: 4000 },
-        resultDesc: "技師迅速修復了封口機，門市恢復出杯，但四千元維修費直接侵蝕了本月利潤。",
-        accountingTaskId: "task_m2_repair",
-        foreshadowing: "設備修復後運轉無虞。"
-      }];
-    } else if (gameState.biz.eqType === "credit") {
-      evt.title = "賒購設備之應付帳款到期";
-      evt.description = "設備商張經理帶著請款單上門：「林掌櫃，上個月簽約賒購的 $32,000 元設備款今天到期囉！」";
-      evt.character = "supplier";
-      evt.options = [{
-        id: "pay_ap", text: "依照合約全額開立現金支付",
-        badges: [{ text: "-$32,000", type: "money-neg" }, { text: "應付帳款 -32,000", type: "growth" }],
-        effects: { cash: -32000, accountsPayable: -32000 },
-        resultDesc: "你遵守商業承諾全額付清！廠商盛讚你的信用，應付帳款全數沖銷歸零。",
-        accountingTaskId: "task_m2_repay_ap",
-        foreshadowing: "成功化解負債危機，信用評級良好。"
-      }];
-    } else {
-      evt.title = "原廠工程師例行巡檢";
-      evt.description = "原廠設備技師前來例行回訪：「全新旗艦機運作順暢吧！目前各項數據非常完美。」";
-      evt.character = "businessAdvisor";
-      evt.options = [{
-        id: "routine_ok", text: "感謝工程師，設備效能極佳",
-        badges: [{ text: "運作安穩", type: "growth" }, { text: "$0 支出", type: "neutral" }],
-        effects: { customerSatisfaction: 5 },
-        resultDesc: "當初全額投資新設備的決定得到了回報！小店得以全神貫注在茶飲推廣上。",
-        accountingTaskId: null,
-        foreshadowing: "品質可靠，營運順遂。"
-      }];
-    }
-  }
-
-  const char = CHARACTERS[evt.character] || CHARACTERS.businessAdvisor;
-
-  document.getElementById("scene-emoji-bg").textContent = LOCATION_ICONS[evt.location] || "🏪";
-  document.getElementById("scene-char").textContent = char.emoji;
-  document.getElementById("event-location-text").textContent = evt.location;
-  document.getElementById("speaker-title").textContent = char.name;
-  document.getElementById("speaker-role").textContent = char.role;
-  document.getElementById("speaker-content").textContent = evt.description;
-
-  const container = document.getElementById("choices-container");
-  container.innerHTML = "";
-
-  evt.options.forEach((opt, idx) => {
-    const card = document.createElement("div");
-    card.className = "choice-item";
-    const tags = opt.badges.map(b => `<span class="tag ${b.type}">${b.text}</span>`).join("");
-    card.innerHTML = `
-      <div class="choice-head">
-        <div class="choice-letter">${String.fromCharCode(65 + idx)}</div>
-        <div class="choice-title">${opt.text}</div>
-      </div>
-      <div class="choice-tags">${tags}</div>
-    `;
-    card.addEventListener("click", () => selectChoice(opt));
-    container.appendChild(card);
-  });
-
-  showScreen("screen-event");
-}
-
-/* ============================================================
-   選擇處理
-   ============================================================ */
-function selectChoice(opt) {
-  audio.playClick();
-  gameState.activeChoice = opt;
-
-  if (opt.effects) {
-    const e = opt.effects;
-    if (e.cash) {
-      gameState.fin.cash += e.cash;
-      spawnFloatingDelta((e.cash > 0 ? "+" : "") + e.cash.toLocaleString(), e.cash > 0);
-    }
-    if (e.revenue) {
-      gameState.fin.revenue += e.revenue;
-      if (gameState.currentMonth > 0) gameState.monthlyRecords[gameState.currentMonth - 1].revenue += e.revenue;
-    }
-    if (e.expenses) {
-      gameState.fin.expenses += e.expenses;
-      if (gameState.currentMonth > 0) gameState.monthlyRecords[gameState.currentMonth - 1].expenses += e.expenses;
-    }
-    if (e.accountsReceivable) gameState.fin.accountsReceivable += e.accountsReceivable;
-    if (e.accountsPayable)    gameState.fin.accountsPayable    += e.accountsPayable;
-    if (e.equipment)          gameState.fin.equipment          += e.equipment;
-    if (e.inventory)          gameState.fin.inventory          += e.inventory;
-    if (e.bankLoan)           gameState.fin.bankLoan           += e.bankLoan;
-
-    if (e.reputation !== undefined)
-      gameState.biz.reputation = Math.max(0, gameState.biz.reputation + e.reputation);
-    if (e.morale !== undefined)
-      gameState.biz.morale = Math.max(0, Math.min(100, gameState.biz.morale + e.morale));
-    if (e.customerSatisfaction !== undefined)
-      gameState.biz.customerSatisfaction = Math.max(0, Math.min(100, gameState.biz.customerSatisfaction + e.customerSatisfaction));
-
-    if (e.eqType)       gameState.biz.eqType = e.eqType;
-    if (e.locationType) gameState.biz.locationType = e.locationType;
-    if (e.hasMarketing !== undefined) gameState.biz.hasMarketing = e.hasMarketing;
-    if (e.transTempAmount) gameState.transTempAmount = e.transTempAmount;
-  }
-
-  document.getElementById("result-choice-title").textContent = opt.text.split("（")[0].split(" (")[0];
-  document.getElementById("result-desc").textContent = opt.resultDesc;
-
-  const list = document.getElementById("result-impact-list");
-  list.innerHTML = "";
-  opt.badges.forEach(b => {
-    const li = document.createElement("li");
-    li.className = "impact-row";
-    const isPos = b.type === "growth" || b.type === "money-pos" || (b.type === "money" && b.text.includes("+"));
-    li.innerHTML = `
-      <span class="k">${b.text.replace(/^[+-]/, "").trim()}</span>
-      <span class="v ${isPos ? "pos" : "neg"}">${isPos ? "▲ 增益" : "▼ 影響"}</span>
-    `;
-    list.appendChild(li);
-  });
-
-  const fs = document.getElementById("result-foreshadowing");
-  if (opt.foreshadowing) {
-    fs.style.display = "flex";
-    document.getElementById("foreshadow-text").textContent = opt.foreshadowing;
-  } else {
-    fs.style.display = "none";
-  }
-
-  showScreen("screen-result");
-}
-
-document.getElementById("btn-proceed-accounting").addEventListener("click", () => {
-  audio.playClick();
-  const taskId = gameState.activeChoice ? gameState.activeChoice.accountingTaskId : null;
-  if (!taskId || !ACCOUNTING_TASKS[taskId]) { advanceEvent(); return; }
-  setupAccountingTask(ACCOUNTING_TASKS[taskId]);
-});
-
-/* ============================================================
-   會計任務
-   ============================================================ */
-let currentTaskObj = null;
-let currentAmount = 0;
-let currentSlots = { debit: null, credit: null };
-let currentPool = [];
-
-function setupAccountingTask(task) {
-  currentTaskObj = task;
-  currentSlots = { debit: null, credit: null };
-
-  document.getElementById("acct-task-title").textContent = task.title;
-  document.getElementById("acct-task-prompt").textContent = task.prompt;
-  document.getElementById("acct-task-num").textContent = `任務 ${gameState.edu.tasksCompleted + 1}`;
-
-  currentAmount = typeof task.amountFormula === "function" ? task.amountFormula(gameState) : 0;
-  document.getElementById("journal-amount-badge").textContent = "$" + currentAmount.toLocaleString();
-
-  document.getElementById("acct-feedback-box").style.display = "none";
-  document.getElementById("btn-submit-accounting").style.display = "flex";
-  document.getElementById("btn-show-hint").style.display = "flex";
-
-  renderSlots();
-  buildAccountPool(task);
-  showScreen("screen-accounting");
-}
-
-function renderSlots() {
-  ["debit", "credit"].forEach(side => {
-    const slot = document.getElementById(side + "-slot");
-    const val = currentSlots[side];
-    if (val) {
-      slot.innerHTML = `
-        <span class="slot-chip">
-          ${val}
-          <span class="x">✕</span>
-        </span>
-        <span class="slot-amount">$${currentAmount.toLocaleString()}</span>
-      `;
-      slot.classList.add("filled");
-      slot.onclick = () => {
-        audio.playClick();
-        currentSlots[side] = null;
-        renderSlots();
-        refreshPool();
-      };
-    } else {
-      slot.innerHTML = `<span class="slot-placeholder">點擊下方科目放入</span>`;
-      slot.classList.remove("filled");
-      slot.onclick = null;
-    }
-  });
-}
-
-function buildAccountPool(task) {
-  const correct = [task.debitAccount, task.creditAccount];
-  const allNames = ACCOUNT_CATALOG.map(a => a.name);
-  const distractors = allNames.filter(n => !correct.includes(n));
-  const shuffled = distractors.slice().sort(() => Math.random() - 0.5);
-  currentPool = [...correct, ...shuffled.slice(0, 6)].sort(() => Math.random() - 0.5);
-  refreshPool();
-}
-
-function refreshPool() {
-  const pool = document.getElementById("account-pool");
-  pool.innerHTML = "";
-  const used = [currentSlots.debit, currentSlots.credit].filter(Boolean);
-
-  currentPool.forEach(name => {
-    const chip = document.createElement("button");
-    chip.className = "account-chip";
-    if (used.includes(name)) chip.classList.add("used");
-    chip.textContent = name;
-    chip.addEventListener("click", () => {
-      if (chip.classList.contains("used")) return;
-      audio.playClick();
-      if (!currentSlots.debit) currentSlots.debit = name;
-      else if (!currentSlots.credit) currentSlots.credit = name;
-      else return;
-      renderSlots();
-      refreshPool();
-    });
-    pool.appendChild(chip);
-  });
-}
-
-document.getElementById("btn-submit-accounting").addEventListener("click", () => {
-  if (!currentTaskObj) return;
-  if (!currentSlots.debit || !currentSlots.credit) {
-    audio.playWrong();
-    alert("請先將兩個科目分別放入借方與貸方！");
-    return;
-  }
-
-  gameState.edu.tasksCompleted++;
-
-  const isCorrect =
-    currentSlots.debit === currentTaskObj.debitAccount &&
-    currentSlots.credit === currentTaskObj.creditAccount;
-
-  const fb = document.getElementById("acct-feedback-box");
-  const badge = document.getElementById("feedback-badge");
-  const title = document.getElementById("feedback-status-title");
-  const expl = document.getElementById("feedback-explanation-text");
-  const std = document.getElementById("feedback-standard-entry");
-
-  fb.style.display = "block";
-  document.getElementById("btn-submit-accounting").style.display = "none";
-  document.getElementById("btn-show-hint").style.display = "none";
-
-  if (isCorrect) {
-    audio.playSuccess();
-    gameState.edu.correctCount++;
-    fb.className = "feedback-card correct";
-    badge.textContent = "✓";
-    title.textContent = "會計處理完全正確";
-    expl.textContent = currentTaskObj.detailedExplanation;
-  } else {
-    audio.playWrong();
-    gameState.edu.wrongCount++;
-    gameState.edu.errorLogs.push({
-      taskTitle: currentTaskObj.title,
-      playerAnswer: `借：${currentSlots.debit} / 貸：${currentSlots.credit}`,
-      correctAnswer: `借：${currentTaskObj.debitAccount} / 貸：${currentTaskObj.creditAccount}`
-    });
-    fb.className = "feedback-card wrong";
-    badge.textContent = "✕";
-    title.textContent = "分錄需要修正";
-    expl.innerHTML = `
-      你的作答：借記【${currentSlots.debit}】、貸記【${currentSlots.credit}】。<br><br>
-      <strong>顧問解析：</strong>${currentTaskObj.shortExplanation}<br>
-      <span style="font-size:12px;color:var(--label-2);">系統已自動以標準正確分錄記入總分類帳，確保期末報表衡平；但本次作答已列入學習評價記錄。</span>
-    `;
-  }
-
-  std.innerHTML = `
-    <div><span class="dr">借：</span>${currentTaskObj.debitAccount}　　<span style="font-family:var(--mono);">$${currentAmount.toLocaleString()}</span></div>
-    <div><span class="cr">貸：</span>${currentTaskObj.creditAccount}　　<span style="font-family:var(--mono);">$${currentAmount.toLocaleString()}</span></div>
-  `;
-
-  recordLedgerEntry(currentTaskObj.title, currentTaskObj.debitAccount, currentAmount,
-                    currentTaskObj.creditAccount, currentAmount, isCorrect);
-
-  fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
-});
-
-document.getElementById("btn-show-hint").addEventListener("click", () => {
-  if (!currentTaskObj) return;
-  audio.playClick();
-  gameState.edu.hintsUsed++;
-  alert(`【林會計師提示】\n\n${currentTaskObj.shortExplanation}`);
-});
-
-document.getElementById("btn-continue-next-event").addEventListener("click", () => {
-  audio.playClick();
-  advanceEvent();
-});
-
-function recordLedgerEntry(desc, drAcc, drAmt, crAcc, crAmt, isCorrect) {
-  gameState.ledger.push({
-    month: gameState.currentMonth === 0 ? "籌備" : `M${gameState.currentMonth}`,
-    desc, drAcc, drAmt, crAcc, crAmt, isCorrect
-  });
-}
-
-/* ============================================================
-   事件推進 & 月結算
-   ============================================================ */
-function advanceEvent() {
-  gameState.eventIndex++;
-  if (gameState.eventIndex >= BUSINESS_EVENTS.length) { triggerFinalEnding(); return; }
-
-  const nextEvt = BUSINESS_EVENTS[gameState.eventIndex];
-
-  if (nextEvt.month > gameState.currentMonth && gameState.currentMonth > 0) {
-    triggerMonthSettlement(gameState.currentMonth);
-    return;
-  }
-  if (nextEvt.month > gameState.currentMonth) {
-    gameState.currentMonth = nextEvt.month;
-  }
-
-  showMap();
-}
-
-function triggerMonthSettlement(month) {
-  audio.playCoins();
-  document.getElementById("settlement-title").textContent = `第 ${month} 個月營運結算`;
-
-  const m = gameState.monthlyRecords[month - 1] || { revenue: 0, expenses: 0 };
-  const net = m.revenue - m.expenses;
-  m.netIncome = net;
-
-  document.getElementById("sheet-income-statement").innerHTML = `
-    <div class="sheet-row">
-      <span class="label">營業銷貨收入</span>
-      <span class="value" style="color:var(--ios-green-dark);">$${m.revenue.toLocaleString()}</span>
+/* ================= 記帳引擎 ================= */
+function post(entry){S.ledger.push({m:S.mi+1,d:entry.d,lines:entry.lines});
+  entry.lines.forEach(l=>{const deb=l.s==='借'?1:-1;
+    const sign=['資產','費用'].includes(ACCTS[l.a].t)?deb:-deb;
+    S.bal[l.a]+=sign*l.amt;
+    if(l.a==='銷貨收入'&&l.s==='貸')S.cur.rev+=l.amt;
+    if(l.a==='銷貨成本'&&l.s==='借')S.cur.cogs+=l.amt;
+    if(ACCTS[l.a].t==='費用'&&l.s==='借')S.cur.exp[l.a]=(S.cur.exp[l.a]||0)+l.amt;});}
+
+let JQ=[],JI=0,J=null,Jthen=null,tries=0,hintUsed=false,activeSide='借',jBusy=false;
+function startQueue(list,cb){JQ=list;JI=0;Jthen=cb;show('sc-journal');nextEntry();}
+function nextEntry(){if(JI>=JQ.length){Jthen();return;}
+  const [d,lines]=JQ[JI];
+  J={d,slots:lines.map(l=>({side:l.s,amt:l.amt,need:l.a,val:null}))};
+  tries=0;hintUsed=false;activeSide='借';jBusy=false;renderJ();}
+function renderJ(msg){
+  const deb=J.slots.map((s,i)=>({...s,i})).filter(s=>s.side==='借');
+  const cre=J.slots.map((s,i)=>({...s,i})).filter(s=>s.side==='貸');
+  const dtot=deb.reduce((a,s)=>a+s.amt,0),ctot=cre.reduce((a,s)=>a+s.amt,0);
+  const slotH=s=>s.val
+    ?`<div class="slot filled ${s.wrong?'wrong':''} ${s.hinted?'hinted':''}" data-i="${s.i}"><span class="acct">${s.val}</span><span class="amt">${fmt(s.amt)}</span></div>`
+    :`<div class="slot" data-i="${s.i}"><span class="ph">＋ 選擇科目</span><span class="amt">${fmt(s.amt)}</span></div>`;
+  $('#jBody').innerHTML=`
+  <div class="j-top"><span class="pill dim">任務 ${JI+1}／${JQ.length}　分錄表</span>
+    <span class="j-streak">${S.streak>=2?'🔥 連擊 ×'+S.streak:''}</span></div>
+  <div class="voucher">
+    <div class="vh"><b>轉帳傳票</b><span class="tiny">${MONTHS[S.mi].name}</span></div>
+    <div class="vd">📄 ${J.d}</div>
+    <div class="j-cols">
+      <div class="j-col deb ${activeSide==='借'?'active':''}" data-side="借"><h4>借 方</h4>${deb.map(slotH).join('')}</div>
+      <div class="j-col cre ${activeSide==='貸'?'active':''}" data-side="貸"><h4>貸 方</h4>${cre.map(slotH).join('')}</div>
     </div>
-    <div class="sheet-row">
-      <span class="label">減：營業費用</span>
-      <span class="value" style="color:var(--ios-red);">($${m.expenses.toLocaleString()})</span>
+    <div class="j-total"><span>借方合計 ${fmt(dtot)}</span><span>貸方合計 ${fmt(ctot)}</span></div>
+    <div class="stamp" id="jStamp">過帳</div>
+  </div>
+  <div class="lin"><span class="ava">👩‍💼</span><span>${msg||linMsg()}</span></div>
+  <div class="chips">${Object.keys(ACCTS).map(a=>
+    `<button class="chip" data-a="${a}"><span class="dotc" style="background:${TCOL[ACCTS[a].t]}"></span>${a}<span class="tiny dim">${ACCTS[a].t}</span></button>`).join('')}</div>
+  <div class="j-actions">
+    <button class="btn ghost" id="jClear" style="flex:1">↺ 重填</button>
+    <button class="btn" id="jSubmit" style="flex:2">✓ 確認登記入帳</button>
+  </div>`;
+  $$('#jBody .slot').forEach(el=>el.onclick=()=>{const s=J.slots[el.dataset.i];
+    if(s.val){s.val=null;s.wrong=false;s.hinted=false;SFX.chip();renderJ();}
+    else{activeSide=s.side;renderJ();}});
+  $$('#jBody .chip').forEach(el=>el.onclick=()=>{const a=el.dataset.a;
+    const t=J.slots.find(s=>s.side===activeSide&&!s.val);
+    if(!t){toast(activeSide+'已滿，換另一邊試試');return;}
+    t.val=a;t.wrong=false;SFX.place();renderJ();});
+  $('#jClear').onclick=()=>{J.slots.forEach(s=>{s.val=null;s.wrong=false;s.hinted=false});SFX.chip();renderJ();};
+  $('#jSubmit').onclick=submitJ;}
+function linMsg(){
+  if(JI===0&&S.ledger.length===0)return '第一張傳票！店的現金增加記「借方」，錢的來源是業主資本，記「貸方」。';
+  const base=['想想：錢去了哪裡（借方）？錢從哪裡來（貸方）？','科目放對位置，借貸自然相等。'];
+  return base[JI%base.length];}
+function submitJ(){if(jBusy)return;
+  const empty=J.slots.some(s=>!s.val);
+  if(empty){toast('還有欄位空著喔');SFX.error();return;}
+  const wrongs=J.slots.map((s,i)=>({s,i})).filter(x=>x.s.val!==x.s.need);
+  if(wrongs.length===0){ /* 成功 */
+    jBusy=true;const acc=Math.max(20,100-tries*15-(hintUsed?10:0));
+    S.accSum+=acc;S.accN++;
+    if(acc===100){S.streak++;S.stars+=2;}else{S.streak=0;S.stars+=1;}
+    if(S.streak>=5)unlock('streak5');
+    post({d:J.d,lines:J.slots.map(s=>({s:s.side,a:s.val,amt:s.amt}))});
+    if(S.ledger.length===1||S.accN===1)unlock('first');
+    updateHUD();save();
+    $('#jStamp').classList.add('show');SFX.stamp();
+    const r=$('#jStamp').getBoundingClientRect();coinBurst(r.left+r.width/2,r.top,12);SFX.coin();
+    toast(acc===100?'✓ 完美過帳！+2⭐':'✓ 過帳成功（準確度 '+acc+'）+1⭐');
+    setTimeout(()=>{JI++;nextEntry();},950);
+  }else{
+    tries++;S.streak=0;SFX.error();wrongs.forEach(w=>J.slots[w.i].wrong=true);
+    let msg='這裡不太對……再看一次：資金運用在借方、資金來源在貸方。';
+    if(tries>=2){const w=wrongs[0];J.slots[w.i].val=w.s.need;J.slots[w.i].wrong=false;J.slots[w.i].hinted=true;hintUsed=true;
+      msg='林會計師悄悄幫你補上了「'+w.s.need+'」—— 記住它的位置。';}
+    renderJ(msg);}}
+
+/* ================= 地圖 ================= */
+function renderMap(){
+  const w=$('#mapWrap');let done=0,total=0,h='';
+  h+=`<div class="quote" style="margin-bottom:20px">🧑‍💼 蘇先生：「${S.mi===0?'從今天起，這間店就是你的了。點亮著的節點，就是下一步。':S.mi===1?'撐過開張了，現在要讓它站穩。':'最後一個月，怎麼收尾，決定你是什麼樣的掌櫃。'}」</div>`;
+  MONTHS.forEach((m,mi)=>{
+    if(mi>S.mi)return;
+    h+=`<div class="m-month"><div class="m-banner">🗺️ ${m.name}</div><div class="m-nodes">`;
+    m.nodes.forEach((n,ni)=>{total++;
+      const isDone=mi<S.mi||(mi===S.mi&&ni<S.ni);
+      const isCur=mi===S.mi&&ni===S.ni;
+      if(isDone)done++;
+      const cls=isDone?'done':isCur?'cur':'lock';
+      h+=`<div class="node ${cls}" data-mi="${mi}" data-ni="${ni}">
+        <div class="dot">${isDone?'✓':n[3]}</div>
+        <div><div class="lbl">${n[2]}</div><div class="sub">${isDone?'已完成':isCur?'▶ 點擊進行':'未解鎖'}</div></div></div>`;});
+    h+=`</div></div>`;});
+  const lanterns='🏮'.repeat(Math.max(1,S.months.filter(x=>x.p>0).length+1));
+  h+=`<div class="shopscene"><div class="sign">${S.shop}</div><div class="lanterns">${lanterns}</div>
+      <div class="small dim" style="margin-top:6px">獲利月份越多，門前燈籠越亮</div></div>`;
+  w.innerHTML=h;
+  $$('#mapWrap .node.cur').forEach(el=>el.onclick=()=>{
+    const mi=+el.dataset.mi,ni=+el.dataset.ni,n=MONTHS[mi].nodes[ni];
+    if(n[0]==='ev')openEvent(n[1]);else doSettlement();});
+  updateHUD();}
+function advance(){S.ni++;
+  if(S.ni>=MONTHS[S.mi].nodes.length){S.mi++;S.ni=0;resetCur();
+    if(S.mi>=MONTHS.length){showResult();return;}
+    toast('🌅 '+MONTHS[S.mi].name+' 開始了');}
+  save();renderMap();show('sc-map');}
+
+/* ================= 決策流程 ================= */
+function openEvent(id){const ev=EV[id];const chs=ev.choices();
+  let h=`<div class="card"><div class="ev-head"><span class="ic">${ev.ic}</span><h2>${ev.title}</h2></div>
+  <div class="quote">🧑‍💼 ${ev.quote}</div>`;
+  chs.forEach((c,i)=>{const dis=c.cost>0&&c.cost>S.bal['現金'];
+    h+=`<button class="choice" data-i="${i}" ${dis?'disabled':''}>
+      <div class="ct"><span>${c.t}</span><span class="gold">${c.cost>0?'−'+fmt(c.cost):''}</span></div>
+      <div class="cs">${c.s}${dis?'<br><b class="rose">⚠️ 現金不足</b>':''}</div>
+      <div class="tags">${c.tags.map(t=>`<span class="tag ${/↑|◦◦◦|\+/g.test(t)?'good':/−|⚠|欠款|借款/.test(t)?'bad':'gold'}">${t}</span>`).join('')}</div>
+    </button>`;});
+  h+=`</div>`;$('#evBody').innerHTML=h;show('sc-event');
+  $$('#evBody .choice').forEach(el=>el.onclick=()=>{if(el.disabled)return;choose(chs[+el.dataset.i]);});}
+function choose(ch){PEND=[];NOTES=[];ch.apply();
+  $('#miQuote').textContent='🧑‍💼 '+ch.res;
+  $('#miList').innerHTML=(NOTES.length?NOTES:[]).map((t,i)=>
+    `<div class="imp-item" style="animation-delay:${i*.08}s"><span>🔮</span><span>${t}</span></div>`).join('')
+    +`<div class="imp-item" style="animation-delay:${NOTES.length*.08}s"><span>🖋️</span><span>產生 <b class="gold">${PEND.length}</b> 張傳票待登記</span></div>`;
+  openM('mImpact');
+  $('#miGo').onclick=()=>{closeM('mImpact');
+    startQueue(PEND,()=>{updateHUD();save();advance();});};}
+
+/* ================= 月末結算 ================= */
+function buildSettlement(){
+  const list=[];const base=[42000,56000,70000][S.mi];
+  let mkt=S.mkt;if(S.flags.blogger){mkt*=1.15;delete S.flags.blogger;}
+  let demand=Math.round(base*S.traffic*S.quality*mkt*rnd(.93,1.07)*(S.diff==='tight'?.92:1));
+  let cap=Math.floor(S.bal['原料庫存']/S.cogsRate);
+  let revenue=Math.round(Math.min(demand,cap)/100)*100;
+  let cogs=Math.round(revenue*S.cogsRate);
+  const soldOut=demand>cap;
+  list.push(['本月茶飲銷售收入',[D('現金',revenue),C('銷貨收入',revenue)]]);
+  list.push(['結轉已售茶葉成本',[D('銷貨成本',cogs),C('原料庫存',cogs)]]);
+  if(S.flags.installDue){list.push(['償還設備分期款',[D('應付帳款',20000),C('現金',20000)]]);S.flags.installDue=0;}
+  if(S.bal['銀行借款']>0)list.push(['支付銀行借款利息',[D('利息費用',600),C('現金',600)]]);
+  list.push(['支付本月店面租金',[D('租金費用',S.rent),C('現金',S.rent)]]);
+  list.push(['支付員工薪資',[D('薪資費用',S.wages),C('現金',S.wages)]]);
+  list.push(['支付水電雜支',[D('水電費用',S.util),C('現金',S.util)]]);
+  return {list,revenue,cogs,soldOut,demand};}
+function doSettlement(){const st=buildSettlement();
+  startQueue(st.list,()=>openSettle(st));}
+function openSettle(st){
+  const exps=Object.entries(S.cur.exp);
+  const profit=S.cur.rev-S.cur.cogs-exps.reduce((a,e)=>a+e[1],0);
+  S.cumProfit+=profit;
+  S.months.push({rev:S.cur.rev,cogs:S.cur.cogs,exps,profit,soldOut:st.soldOut});
+  if(st.soldOut)unlock('soldout');
+  if(profit>=8000)unlock('profit8');
+  S.stars+=profit>0?2:0;
+  updateHUD();save();
+  const rows=[];
+  rows.push({l:'銷貨收入',v:S.cur.rev,c:'pos'});
+  rows.push({l:'減：銷貨成本',v:-S.cur.cogs,c:'neg',in:1});
+  rows.push({l:'銷貨毛利',v:S.cur.rev-S.cur.cogs,strong:1});
+  exps.forEach(([k,v])=>rows.push({l:'減：'+k,v:-v,c:'neg',in:1}));
+  rows.push({l:'本月淨利',v:profit,final:1});
+  let dl=0;
+  const rowH=r=>{dl+=.09;return `<div class="st-row ${r.in?'indent':''} ${r.strong?'strong':''} ${r.final?'final':''}" style="animation-delay:${dl}s">
+    <span>${r.l}</span><span class="${r.c||''}">${r.v<0?'(':''}${fmt(Math.abs(r.v)).slice(1)}${r.v<0?')':''}</span></div>`;};
+  const A=k=>S.bal[k];
+  const assets=[['現金',A('現金')],['存出保證金',A('存出保證金')],['原料庫存',A('原料庫存')],['設備',A('設備')]].filter(x=>x[1]>0);
+  const liab=[['應付帳款',A('應付帳款')],['銀行借款',A('銀行借款')]].filter(x=>x[1]>0);
+  const aT=assets.reduce((a,x)=>a+x[1],0),lT=liab.reduce((a,x)=>a+x[1],0),eT=aT-lT;
+  const isLast=S.mi===MONTHS.length-1;
+  $('#stBody').innerHTML=`
+  <div class="st-title"><div class="small dim">🌙 櫃檯燈下，算盤與帳本正無聲述說這個月的成果</div>
+    <h2>${MONTHS[S.mi].name}・營運結算</h2>
+    ${st.soldOut?'<div class="small gold" style="margin-top:6px">🔥 本月茶葉完售，一位難求！</div>':''}</div>
+  <div class="card st-card"><div class="small gold" style="letter-spacing:3px;margin-bottom:8px">一、損益表 Income Statement</div>
+    ${rows.map(rowH).join('')}</div>
+  <div class="card st-card" style="animation:rowIn .5s ${dl+.1}s both">
+    <div class="small gold" style="letter-spacing:3px;margin-bottom:10px">二、資產負債表 Balance Sheet</div>
+    <div class="bs-grid">
+      <div><div class="small dim" style="margin-bottom:6px">資產</div>
+        ${assets.map(x=>`<div class="st-row"><span>${x[0]}</span><span>${fmt(x[1])}</span></div>`).join('')}
+        <div class="st-row strong"><span>資產合計</span><span>${fmt(aT)}</span></div></div>
+      <div><div class="small dim" style="margin-bottom:6px">負債</div>
+        ${liab.length?liab.map(x=>`<div class="st-row"><span>${x[0]}</span><span>${fmt(x[1])}</span></div>`).join(''):'<div class="st-row dim"><span>無負債</span><span>$0</span></div>'}
+        <div class="st-row strong"><span>負債合計</span><span>${fmt(lT)}</span></div>
+        <div class="small dim" style="margin:10px 0 6px">權益</div>
+        <div class="st-row"><span>業主資本</span><span>${fmt(S.bal['業主資本'])}</span></div>
+        <div class="st-row"><span>累積淨利</span><span class="${S.cumProfit>=0?'pos':'neg'}">${fmt(S.cumProfit)}</span></div>
+        <div class="st-row strong"><span>權益合計</span><span>${fmt(eT)}</span></div></div>
     </div>
-    <div class="sheet-row total">
-      <span class="label">本月營業淨利</span>
-      <span class="value" style="color:${net >= 0 ? "var(--ios-green-dark)" : "var(--ios-red)"};">
-        ${net < 0 ? "-" : ""}$${Math.abs(net).toLocaleString()}
-      </span>
-    </div>
-  `;
+    <div class="balance-eq">⚖️ 資產 ${fmt(aT)} ＝ 負債 ${fmt(lT)} ＋ 權益 ${fmt(eT)}</div>
+  </div>
+  <div class="card st-card" style="animation:rowIn .5s ${dl+.3}s both">
+    <div class="lin" style="margin-top:0;background:rgba(226,180,95,.06);border-color:var(--line)">
+      <span class="ava">🧑‍💼</span><span>${settleComment(profit,st.soldOut)}</span></div>
+  </div>
+  <button class="btn big" id="stNext">${isLast?'🏆 展開最終評價 →':'🌅 展開下個月挑戰 →'}</button>`;
+  show('sc-settle');SFX.ok();
+  $('#stNext').onclick=()=>{ if(isLast){showResult();}else{advance();} };}
+function settleComment(p,sold){
+  if(sold&&p>0)return '「完售加上獲利 —— 這本帳，漂亮得像剛沏開的第一巡茶。」';
+  if(p>6000)return '「利潤扎扎實實。照這個節奏，帳本會替你說話。」';
+  if(p>0)return '「有賺，但還薄。想想哪一筆費用可以再省，哪一杯茶可以多賣。」';
+  return '「這個月虧了些。別怕，帳本從不騙人 —— 它在告訴你下個月該怎麼走。」';}
 
-  const cumulativeNet = gameState.monthlyRecords.reduce((s, r) => s + (r.netIncome || 0), 0);
-  gameState.fin.netIncome = cumulativeNet;
+/* ================= 結局 ================= */
+function letterAcc(){const avg=S.accN?S.accSum/S.accN:0;return avg>=95?'S':avg>=85?'A':avg>=70?'B':'C';}
+function letterBiz(){const nw=S.bal['現金']+S.bal['存出保證金']+S.bal['原料庫存']+S.bal['設備']-S.bal['應付帳款']-S.bal['銀行借款'];
+  const th=S.diff==='tight'?-15000:0;const allP=S.months.every(m=>m.p>0);
+  if(nw>=135000+th&&allP)return 'S';if(nw>=120000+th)return 'A';if(nw>=102000+th)return 'B';return 'C';}
+function finalTitle(b,a){
+  if(b==='S'&&a==='S')return '商業王國的傳奇掌櫃';
+  if(b==='S')return '開疆拓土的商業奇才';
+  if(b==='A')return a==='S'?'穩健精算的模範店長':'步步為營的出色掌櫃';
+  if(b==='B')return '腳踏實地的創業新秀';
+  return '風雨成長中的見習掌櫃';}
+function showResult(){
+  const a=letterAcc(),b=letterBiz();
+  if(a==='S')unlock('accS');if(b==='S')unlock('bizS');
+  const nw=S.bal['現金']+S.bal['存出保證金']+S.bal['原料庫存']+S.bal['設備']-S.bal['應付帳款']-S.bal['銀行借款'];
+  const totRev=S.months.reduce((x,m)=>x+m.rev,0),totP=S.months.reduce((x,m)=>x+m.profit,0);
+  const mx=Math.max(...S.months.map(m=>m.rev),1);
+  const avg=S.accN?Math.round(S.accSum/S.accN):0;
+  $('#rsBody').innerHTML=`
+  <div style="text-align:center;font-size:46px;margin-top:8px">🏆</div>
+  <div class="rs-title serif">【 ${finalTitle(b,a)} 】</div>
+  <div class="small dim" style="text-align:center;margin-top:4px">${S.shop}・${S.owner}・三個月創業旅程</div>
+  <div class="rate-row" style="margin-top:22px">
+    <div class="seal ${b}" style="animation:stampIn .5s .3s both"><span class="g">${b}</span><span class="l">經營評價</span></div>
+    <div class="seal ${a}" style="animation:stampIn .5s .55s both"><span class="g">${a}</span><span class="l">會計評價</span></div>
+  </div>
+  <div class="card st-card"><div class="small gold" style="letter-spacing:3px;margin-bottom:8px">三月營運軌跡</div>
+    <div class="bars">${S.months.map((m,i)=>`<div class="bar-col">
+      <div class="bar" style="height:${m.rev/mx*110}px;animation-delay:${.2+i*.15}s"></div>
+      <div class="bar p" style="height:${Math.max(4,m.profit/mx*110)}px;animation-delay:${.3+i*.15}s"></div>
+      <div class="tiny dim">${['一','二','三'][i]}月</div></div>`).join('')}</div>
+    <div class="tiny dim" style="text-align:center">■ 營收　<span class="jade">■</span> 淨利</div></div>
+  <div class="card st-card">
+    <div class="st-row"><span>累計營收</span><span class="gold">${fmt(totRev)}</span></div>
+    <div class="st-row"><span>累計淨利</span><span class="${totP>=0?'pos':'neg'}">${fmt(totP)}</span></div>
+    <div class="st-row"><span>期末資產淨值</span><span class="gold">${fmt(nw)}</span></div>
+    <div class="st-row"><span>記帳準確率</span><span class="jade">${avg}%</span></div>
+    <div class="st-row"><span>評分成</span><span class="gold">⭐ ${S.stars}</span></div>
+  </div>
+  <div class="card st-card"><div class="small gold" style="letter-spacing:3px">成就一覽</div>
+    <div class="ach-grid">${Object.keys(ACH).map(k=>
+      `<div class="ach ${S.ach[k]?'on':''}"><span class="ai">${ACH[k].i}</span><b>${ACH[k].n}</b><br>${ACH[k].d}</div>`).join('')}
+    </div></div>
+  <div class="lin" style="margin-bottom:16px"><span class="ava">🧑‍💼</span>
+    <span>${b==='S'?'「三個月前你還握著一張資本傳票發抖，現在這本帳，已經是一個王國的雛形了。」':b==='A'?'「穩，是你最大的武器。再大胆一點，下個王國就是你的。」':b==='B'?'「店活下來了，這比什麼都難。帶著這本帳，下次會更好。」':'「帳本上有虧損，也有教訓 —— 教訓，是創業最貴的資產。」'}</span></div>
+  <button class="btn big" id="rsRestart">🔁 重啟新局</button>
+  <button class="btn ghost big" id="rsShare" style="margin-top:10px">📋 複製戰報分享</button>`;
+  show('sc-result');SFX.fanfare();confetti();
+  $('#rsRestart').onclick=()=>{localStorage.removeItem('cyb_save');S=fresh();dispCash=0;
+    $('#hud').classList.add('hide');show('sc-title');initTitleBtn();};
+  $('#rsShare').onclick=()=>{const txt=`🏮我在【創業帳本】經營「${S.shop}」三個月，獲封「${finalTitle(b,a)}」！經營評價 ${b}・會計評價 ${a}・期末淨值 ${fmt(nw)}。你也來試試？`;
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('戰報已複製！')).catch(()=>toast(txt));};}
 
-  const totalAssets = gameState.fin.cash + gameState.fin.accountsReceivable +
-                      gameState.fin.inventory + gameState.fin.equipment;
-  const totalLiab = gameState.fin.accountsPayable + gameState.fin.bankLoan;
-  const totalEquity = gameState.fin.ownerCapital + cumulativeNet;
+/* ================= 總分類帳 ================= */
+function openLedger(){let h='<table class="tbl"><tr><th>月</th><th>摘要</th><th>科目</th><th style="text-align:right">借</th><th style="text-align:right">貸</th><th style="text-align:right">現金餘額</th></tr>';
+  let cash=0;
+  if(!S.ledger.length)h+='<tr><td colspan="6" style="color:var(--dim);text-align:center;padding:20px">還沒有任何分錄</td></tr>';
+  S.ledger.forEach(e=>e.lines.forEach(l=>{
+    if(l.a==='現金')cash+=(l.s==='借'?1:-1)*l.amt;
+    h+=`<tr><td>${e.m}</td><td>${e.d}</td><td>${l.a}</td>
+      <td class="num">${l.s==='借'?fmt(l.amt):''}</td><td class="num">${l.s==='貸'?fmt(l.amt):''}</td>
+      <td class="num gold">${l.a==='現金'?fmt(cash):''}</td></tr>`;}));
+  h+='</table>';$('#mlBody').innerHTML=h;openM('mLedger');}
 
-  document.getElementById("sheet-balance-statement").innerHTML = `
-    <div class="balance-col assets">
-      <h5>資產 Assets</h5>
-      <div class="sheet-row"><span class="label">庫存現金</span><span class="value">$${gameState.fin.cash.toLocaleString()}</span></div>
-      <div class="sheet-row"><span class="label">應收帳款</span><span class="value">$${gameState.fin.accountsReceivable.toLocaleString()}</span></div>
-      <div class="sheet-row"><span class="label">原料存貨</span><span class="value">$${gameState.fin.inventory.toLocaleString()}</span></div>
-      <div class="sheet-row"><span class="label">生財設備</span><span class="value">$${gameState.fin.equipment.toLocaleString()}</span></div>
-      <div class="sheet-row total"><span class="label">合計</span><span class="value">$${totalAssets.toLocaleString()}</span></div>
-    </div>
-    <div class="balance-col liab">
-      <h5>負債與權益 L & E</h5>
-      <div class="sheet-row"><span class="label">應付帳款</span><span class="value">$${gameState.fin.accountsPayable.toLocaleString()}</span></div>
-      <div class="sheet-row"><span class="label">銀行借款</span><span class="value">$${gameState.fin.bankLoan.toLocaleString()}</span></div>
-      <div class="sheet-row"><span class="label">業主資本</span><span class="value">$${gameState.fin.ownerCapital.toLocaleString()}</span></div>
-      <div class="sheet-row"><span class="label">累計損益</span><span class="value" style="color:${cumulativeNet >= 0 ? "var(--ios-green-dark)" : "var(--ios-red)"};">$${cumulativeNet.toLocaleString()}</span></div>
-      <div class="sheet-row total"><span class="label">合計</span><span class="value">$${(totalLiab + totalEquity).toLocaleString()}</span></div>
-    </div>
-  `;
+/* ================= 創立／標題 ================= */
+function initTitleBtn(){$('#btnContinue').classList.toggle('hide',!localStorage.getItem('cyb_save'));}
+$('#btnStart').onclick=()=>{S=fresh();dispCash=0;$('#hud').classList.remove('hide');show('sc-found');};
+$('#btnContinue').onclick=()=>{if(load()){$('#hud').classList.remove('hide');dispCash=S.bal['現金'];
+  renderMap();show('sc-map');toast('📖 已接續進度');}};
+$('#btnHelp1').onclick=()=>openM('mHelp');
+$$('#capCards .capcard').forEach(c=>c.onclick=()=>{
+  $$('#capCards .capcard').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');
+  S=S||fresh();S.capital=+c.dataset.cap;S.diff=S.capital<100000?'tight':'std';});
+$('#btnFound').onclick=()=>{
+  S.owner=$('#inOwner').value.trim()||'掌櫃';S.shop=$('#inShop').value.trim()||'禾香茗茶';
+  const cap=+$$('#capCards .capcard')[0].classList.contains('sel')?100000:0;
+  const sel=$$('#capCards .capcard').find(x=>x.classList.contains('sel'));
+  S.capital=+sel.dataset.cap;S.diff=S.capital<100000?'tight':'std';
+  S.wages=S.diff==='tight'?6500:6000;
+  resetCur();save();
+  const go=()=>startQueue([['業主投入創業資本',[D('現金',S.capital),C('業主資本',S.capital)]]],
+    ()=>{updateHUD();save();renderMap();show('sc-map');toast('🏮 「'+S.shop+'」正式籌備！');});
+  if(!S.tut){S.tut=true;openM('mTut');$('#tutGo').onclick=()=>{closeM('mTut');go();};}else go();};
 
-  const badge = document.getElementById("balance-check-badge");
-  if (Math.abs(totalAssets - (totalLiab + totalEquity)) < 5) {
-    badge.style.display = "block";
-    badge.textContent = `✓ 會計恆等式驗證通過　資產 $${totalAssets.toLocaleString()} ＝ 負債及權益 $${(totalLiab + totalEquity).toLocaleString()}`;
-  } else {
-    badge.style.display = "none";
-  }
+/* ================= 設定 ================= */
+$('#btnLedger').onclick=openLedger;
+$('#btnSet').onclick=()=>{$('#setSnd').textContent=sndOn?'🔊 音效：開':'🔇 音效：關';openM('mSet');};
+$('#setSnd').onclick=()=>{sndOn=!sndOn;if(sndOn)SFX.ok();$('#setSnd').textContent=sndOn?'🔊 音效：開':'🔇 音效：關';};
+$('#setSave').onclick=()=>{save();toast('💾 進度已儲存');};
+$('#setHelp').onclick=()=>{closeM('mSet');openM('mHelp');};
+$('#setReset').onclick=()=>{if(confirm('確定要刪除所有存檔、重新開始嗎？')){
+  localStorage.removeItem('cyb_save');location.reload();}};
 
-  const bizEval = document.getElementById("eval-business-text");
-  if (net > 10000) bizEval.textContent = "獲利亮眼！客源湧入且成本控管得宜，經營體質非常優良。";
-  else if (net >= 0) bizEval.textContent = "收支平衡，穩定維持日常營運，需伺機拓展高毛利新品。";
-  else bizEval.textContent = "本月處於擴張虧損期，必須注意手頭流動性，嚴防資金鏈斷裂。";
-
-  const acctEval = document.getElementById("eval-accounting-text");
-  const rate = gameState.edu.tasksCompleted > 0 ? gameState.edu.correctCount / gameState.edu.tasksCompleted : 1;
-  if (rate >= 0.8) acctEval.textContent = `分錄準確率 ${(rate * 100).toFixed(0)}%！借貸觀念非常扎實，堪稱模範會計掌櫃。`;
-  else acctEval.textContent = `分錄準確率 ${(rate * 100).toFixed(0)}%。顧問已協助修正錯題，請多留意資產與費用之區別。`;
-
-  showScreen("screen-settlement");
-}
-
-document.getElementById("btn-next-month-flow").addEventListener("click", () => {
-  audio.playClick();
-  gameState.currentMonth++;
-  showMap();
-});
-
-/* ============================================================
-   結局
-   ============================================================ */
-function triggerFinalEnding() {
-  audio.playSuccess();
-
-  const totalNet = gameState.monthlyRecords.reduce((a, b) => a + (b.netIncome || 0), 0);
-  const finalCash = gameState.fin.cash;
-  const acctRate = gameState.edu.tasksCompleted > 0 ? gameState.edu.correctCount / gameState.edu.tasksCompleted : 1;
-
-  let endingTitle, playerTitle, story, bizGrade, acctGrade, emoji;
-
-  if (acctRate >= 0.85) acctGrade = "S";
-  else if (acctRate >= 0.70) acctGrade = "A";
-  else if (acctRate >= 0.50) acctGrade = "B";
-  else acctGrade = "C";
-
-  if (finalCash >= 30000 && totalNet >= 30000 && gameState.biz.reputation >= 70) {
-    bizGrade = "S"; emoji = "🏆";
-    endingTitle = "成功晉級商業王國";
-    playerTitle = acctRate >= 0.8 ? "【 商業王國全能領航者 】" : "【 膽大心細的創業家 】";
-    story = "歷經三個月的披荊斬棘，你的手作茶飲店不僅在商圈屹立不搖，更累積了超過三萬元的實質盈餘與極佳口碑！你用嚴格的商業嗅覺打破了大品牌的壟斷，並以清晰的帳本贏得了銀行與供應商的絕對信賴。";
-  } else if (finalCash > 0 && totalNet >= 0) {
-    bizGrade = "A"; emoji = "🌱";
-    endingTitle = "穩健立足，小店長青";
-    playerTitle = acctRate >= 0.8 ? "【 精打細算的穩健掌櫃 】" : "【 人氣爆棚的街角店長 】";
-    story = "三個月來，你以誠信與職人精神守護著這間茶飲店。雖然未曾掀起狂風巨浪般的擴張，但手頭現金充裕、客源穩定，是街坊鄰里不可或缺的溫暖存在。";
-  } else {
-    bizGrade = "D"; emoji = "🌧️";
-    endingTitle = "財務震盪，險象環生";
-    playerTitle = "【 帳務混亂的新手掌櫃 】";
-    story = "劇烈的市場競爭與沉重的各項支出，讓手頭現金流陷入吃緊邊緣。雖然小店勉強支撐，但帳目與負債管理暴露出嚴重隱憂，需要重新整頓財務紀律。";
-  }
-
-  let advice;
-  if (gameState.edu.errorLogs.length === 0) {
-    advice = "令人讚嘆！你在初級篇中展現了完美的會計素養，無論現銷、賒購或折舊均無懈可擊，隨時可挑戰中級進階篇！";
-  } else {
-    advice = `本次挑戰中最值得留意的核心盲點為【${gameState.edu.errorLogs[0].taskTitle}】。請謹記：資產帶來未來經濟效益，而費用則代表當期效益的耗用。`;
-  }
-
-  document.getElementById("ending-emoji").textContent = emoji;
-  document.getElementById("ending-title-text").textContent = endingTitle;
-  document.getElementById("ending-player-title").textContent = playerTitle;
-  document.getElementById("ending-story-summary").textContent = story;
-  document.getElementById("ending-business-grade").textContent = bizGrade;
-  document.getElementById("ending-acct-grade").textContent = acctGrade;
-  document.getElementById("ending-business-metrics").textContent =
-    `累計淨利 $${totalNet.toLocaleString()} · 現金 $${finalCash.toLocaleString()} · 聲望 ${gameState.biz.reputation}`;
-  document.getElementById("ending-acct-metrics").textContent =
-    `正確率 ${(acctRate * 100).toFixed(0)}% (${gameState.edu.correctCount}/${gameState.edu.tasksCompleted}) · 提示 ${gameState.edu.hintsUsed} 次`;
-  document.getElementById("ending-advice-text").textContent = advice;
-
-  showScreen("screen-ending");
-}
-
-document.getElementById("btn-ending-restart").addEventListener("click", () => {
-  if (confirm("確定要重啟嶄新的創業旅程嗎？")) location.reload();
-});
-document.getElementById("btn-ending-menu").addEventListener("click", () => showScreen("screen-splash"));
-
-/* ============================================================
-   Sheet
-   ============================================================ */
-document.querySelectorAll(".sheet-close").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.getElementById(btn.dataset.close).classList.remove("show");
-  });
-});
-document.querySelectorAll(".sheet-overlay").forEach(ov => {
-  ov.addEventListener("click", e => { if (e.target === ov) ov.classList.remove("show"); });
-});
-
-document.getElementById("btn-toggle-ledger").addEventListener("click", () => {
-  audio.playClick();
-  const box = document.getElementById("ledger-rows-container");
-
-  if (gameState.ledger.length === 0) {
-    box.innerHTML = `<div class="ledger-empty">尚未發生任何經濟交易記錄</div>`;
-  } else {
-    let rows = "";
-    gameState.ledger.forEach(r => {
-      rows += `
-        <tr>
-          <td style="color:var(--label-3);font-size:10.5px;white-space:nowrap;">${r.month}</td>
-          <td style="font-weight:600;">${r.desc}</td>
-          <td class="dr">${r.drAcc}</td>
-          <td class="num dr">$${r.drAmt.toLocaleString()}</td>
-          <td class="cr">${r.crAcc}</td>
-          <td class="num cr">$${r.crAmt.toLocaleString()}</td>
-        </tr>
-      `;
-    });
-    box.innerHTML = `
-      <table class="ledger-table">
-        <thead>
-          <tr>
-            <th>期</th><th>交易說明</th><th>借方</th>
-            <th style="text-align:right;">金額</th>
-            <th>貸方</th><th style="text-align:right;">金額</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `;
-  }
-  document.getElementById("ledger-sheet").classList.add("show");
-});
-
-document.getElementById("btn-toggle-settings").addEventListener("click", () => {
-  audio.playClick();
-  document.getElementById("settings-sheet").classList.add("show");
-});
-
-document.getElementById("btn-toggle-sound").addEventListener("click", () => {
-  gameState.settings.soundEnabled = !gameState.settings.soundEnabled;
-  document.getElementById("btn-toggle-sound").classList.toggle("on", gameState.settings.soundEnabled);
-  audio.playClick();
-});
-
-document.getElementById("btn-manual-save").addEventListener("click", () => {
-  try {
-    localStorage.setItem("AGY_ACCOUNTING_SAVE_V2", JSON.stringify(gameState));
-    alert("進度已儲存！");
-  } catch (e) {
-    alert("儲存失敗：" + e.message);
-  }
-});
-
-document.getElementById("btn-clear-save").addEventListener("click", () => {
-  if (confirm("確定清除存檔並重新開始？")) {
-    localStorage.removeItem("AGY_ACCOUNTING_SAVE_V2");
-    location.reload();
-  }
-});
-
-/* ============================================================
-   初始化
-   ============================================================ */
-window.addEventListener("DOMContentLoaded", () => {
-
-  document.getElementById("btn-splash-start").addEventListener("click", () => {
-    audio.playClick();
-    showScreen("screen-setup");
-  });
-
-  const saved = localStorage.getItem("AGY_ACCOUNTING_SAVE_V2");
-  const btnContinue = document.getElementById("btn-splash-continue");
-  if (saved) {
-    btnContinue.style.display = "flex";
-    btnContinue.addEventListener("click", () => {
-      try {
-        const data = JSON.parse(saved);
-        Object.assign(gameState, data);
-        updateHUD();
-        showMap();
-      } catch (e) { alert("讀取存檔失敗"); }
-    });
-  }
-
-  document.getElementById("btn-splash-guide").addEventListener("click", () => {
-    audio.playClick();
-    renderGuideTab(0);
-    showScreen("screen-guide");
-  });
-
-  document.querySelectorAll(".seg-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      audio.playClick();
-      renderGuideTab(parseInt(btn.dataset.tab, 10));
-    });
-  });
-  document.getElementById("btn-guide-prev").addEventListener("click", () => {
-    audio.playClick();
-    if (currentGuideTab > 0) renderGuideTab(currentGuideTab - 1);
-  });
-  document.getElementById("btn-guide-next").addEventListener("click", () => {
-    audio.playClick();
-    if (currentGuideTab < GUIDE_PAGES.length - 1) renderGuideTab(currentGuideTab + 1);
-    else showScreen("screen-setup");
-  });
-  document.getElementById("btn-close-guide").addEventListener("click", () => {
-    audio.playClick();
-    showScreen("screen-splash");
-  });
-
-  document.querySelectorAll(".capital-card").forEach(c => {
-    c.addEventListener("click", () => {
-      audio.playClick();
-      document.querySelectorAll(".capital-card").forEach(x => x.classList.remove("selected"));
-      c.classList.add("selected");
-    });
-  });
-
-  document.getElementById("btn-confirm-setup").addEventListener("click", () => {
-    audio.playClick();
-    const owner = document.getElementById("input-owner-name").value.trim() || "林掌櫃";
-    const store = document.getElementById("input-store-name").value.trim() || "禾香茗茶";
-    const card = document.querySelector(".capital-card.selected");
-    const cap = card ? parseInt(card.dataset.amount, 10) : 100000;
-
-    gameState.playerName = owner;
-    gameState.storeName = store;
-    gameState.fin.cash = cap;
-    gameState.fin.ownerCapital = cap;
-
-    updateHUD();
-    showMap();
-  });
-
-  updateHUD();
-  renderGuideTab(0);
-});
-
-let resizeTimer;
-window.addEventListener("resize", () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (document.getElementById("screen-map").classList.contains("active")) renderMap();
-  }, 200);
-});
+/* ================= 啟動 ================= */
+S=fresh();initTitleBtn();
 </script>
 </body>
 </html>
